@@ -12,6 +12,7 @@ package Vista;
 
 import Modelo.Granja;
 import java.util.ArrayList;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -22,6 +23,7 @@ public class GUIGranja extends Interfaz {
     private GUIPrincipal p;
     private ArrayList<String> depar;
     private ArrayList<String[]> muni;
+    private javax.swing.table.DefaultTableModel model;
     
     /** Creates new form GUIGranja */
     public GUIGranja(GUIPrincipal principal) {
@@ -31,6 +33,9 @@ public class GUIGranja extends Interfaz {
             muni = new ArrayList<String[]>();
             p.forms.add(this);
             initComponents();
+            model = (DefaultTableModel) tblGalpon.getModel();
+            tblGalpon.getColumn("Otra").setCellRenderer(new ButtonRenderer());
+            tblGalpon.getColumn("Otra").setCellEditor(new ButtonEditor());
             cargar();
         } else {
             salir();
@@ -90,6 +95,11 @@ public class GUIGranja extends Interfaz {
 
         cmdAgregarGalpon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/addGalpon.png"))); // NOI18N
         cmdAgregarGalpon.setText("Agregar");
+        cmdAgregarGalpon.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdAgregarGalponActionPerformed(evt);
+            }
+        });
 
         jLabel10.setText("<html> m<sup style='font-size:8px'>2</sup></html>");
 
@@ -296,7 +306,7 @@ public class GUIGranja extends Interfaz {
                 java.lang.Integer.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, true
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -424,6 +434,12 @@ public class GUIGranja extends Interfaz {
             cmbTemp.setSelectedIndex(0);
         }
     }//GEN-LAST:event_cmbMpioActionPerformed
+
+    private void cmdAgregarGalponActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdAgregarGalponActionPerformed
+        // TODO add your handling code here:
+        Object[] rowData = new Object[]{"hola", "mundo", "desde", "java"};
+        model.addRow(rowData);
+    }//GEN-LAST:event_cmdAgregarGalponActionPerformed
 
     @Override
     public java.awt.Image getIconImage() {
