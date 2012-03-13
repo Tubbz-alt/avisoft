@@ -24,14 +24,14 @@ public class GUIGranja extends Interfaz {
     private ArrayList<String[]> muni;
     private javax.swing.table.DefaultTableModel model;
     private int cont;
-    private int areaGranja;
+    private int areaGalpones;
     
     /** Creates new form GUIGranja */
     public GUIGranja(GUIPrincipal principal) {
         if(log != null) {
             this.p = principal;
             this.cont = 1;
-            this.areaGranja = 0;
+            this.areaGalpones = 0;
             this.depar = new ArrayList<String>();
             this.muni = new ArrayList<String[]>();
             this.p.forms.add(this);
@@ -99,6 +99,11 @@ public class GUIGranja extends Interfaz {
         txtAreaGalpon.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 txtAreaGalponFocusLost(evt);
+            }
+        });
+        txtAreaGalpon.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtAreaGalponKeyTyped(evt);
             }
         });
 
@@ -218,6 +223,11 @@ public class GUIGranja extends Interfaz {
         txtArea.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 txtAreaFocusLost(evt);
+            }
+        });
+        txtArea.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtAreaKeyTyped(evt);
             }
         });
 
@@ -348,7 +358,7 @@ public class GUIGranja extends Interfaz {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addGap(0, 527, Short.MAX_VALUE)
                                 .addComponent(cmdRegistrar))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -360,7 +370,7 @@ public class GUIGranja extends Interfaz {
                                 .addComponent(jLabel1)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE))
+                                .addGap(0, 495, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -463,9 +473,7 @@ public class GUIGranja extends Interfaz {
         if(validarGalpon()) {
             int area = Integer.parseInt(txtAreaGalpon.getText());
             int resp = (cmbTemp.getSelectedIndex()==1)?area*8:area*10;
-
-            areaGranja += area;
-            System.out.println(cont);
+            
             Object[] rowData = new Object[]{cont++,txtAreaGalpon.getText(), resp, "Agregar Lote"};
             model.addRow(rowData);
         }
@@ -498,6 +506,16 @@ public class GUIGranja extends Interfaz {
         }
     }//GEN-LAST:event_txtAreaGalponFocusLost
 
+    private void txtAreaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAreaKeyTyped
+        // TODO add your handling code here:
+        soloNum(evt);
+    }//GEN-LAST:event_txtAreaKeyTyped
+
+    private void txtAreaGalponKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAreaGalponKeyTyped
+        // TODO add your handling code here:
+        soloNum(evt);
+    }//GEN-LAST:event_txtAreaGalponKeyTyped
+
     @Override
     public java.awt.Image getIconImage() {
         java.awt.Image retValue = java.awt.Toolkit.getDefaultToolkit().
@@ -513,10 +531,7 @@ public class GUIGranja extends Interfaz {
         String areaGalpon = txtAreaGalpon.getText();
         String area = txtArea.getText();
 
-        if(cmbTemp.getSelectedIndex() == 0) {
-            showError(cmbTemp, "No ha Seleccionado Tipo de Clima");
-            error = true;
-        }
+        
         if(txtArea.getText().isEmpty()) {
             showError(txtArea, "No ha Ingresado Area de la Granja");
             error = true;
@@ -525,18 +540,26 @@ public class GUIGranja extends Interfaz {
             showError(txtAreaGalpon, "No ha Ingresado Area del Galpon");
             error = true;
         }
-
-        if(area.compareTo(areaGalpon) > 0) {
+        if(!error && Integer.parseInt(areaGalpon)>Integer.parseInt(area)) {
             showError(txtAreaGalpon, "El Tamaño del Galpon Excede el Tamaño de la Granja");
+            error = true;
+        }
+        if(cmbTemp.getSelectedIndex() == 0) {
+            showError(cmbTemp, "No ha Seleccionado Tipo de Clima");
             error = true;
         }
         
         if(error) {
             javax.swing.JOptionPane.showMessageDialog(this, "Por favor revise los campos", "Error en el formulario", javax.swing.JOptionPane.ERROR_MESSAGE);
-        } else if(areaGranja == Integer.parseInt(area)){
-            javax.swing.JOptionPane.showMessageDialog(this, "Has Alcanzado el Limite de Galpones");
-            cmdAgregarGalpon.setEnabled(false);
-            error = true;
+        } else {
+            int intArea = Integer.parseInt(areaGalpon);
+            System.err.println(areaGalpones+intArea);
+            areaGalpones += intArea;
+            if(areaGalpones > Integer.parseInt(area)){
+                javax.swing.JOptionPane.showMessageDialog(this, "Has Alcanzado el Limite de Galpones");
+                error = true;
+                areaGalpones -= intArea;
+            }
         }
         
         return !error;
