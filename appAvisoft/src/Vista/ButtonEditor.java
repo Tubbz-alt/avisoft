@@ -12,11 +12,12 @@ public class ButtonEditor extends javax.swing.DefaultCellEditor {
     protected javax.swing.JButton button;
     private String    label;
     private boolean   isPushed;
-    private javax.swing.JTable tabla;
-    private int fila;
+    private Object[] fila;
+    private GUIGranja g;
     
-    public ButtonEditor( ) {
+    public ButtonEditor( GUIGranja parent ) {
         super(new javax.swing.JCheckBox());
+        this.g = parent;
         button = new javax.swing.JButton();
         button.setOpaque(true);
         button.addActionListener(new java.awt.event.ActionListener() {
@@ -39,20 +40,20 @@ public class ButtonEditor extends javax.swing.DefaultCellEditor {
         label = (value ==null) ? "" : value.toString();
         button.setText( label );
         isPushed = true;
-        tabla = table;
-        fila = row;
+        fila = new Object[3];
+        for(short i=0; i<3; i++) {
+            fila[i] = table.getModel().getValueAt(row, i);
+        }
         return button;
     }
  
     @Override
     public Object getCellEditorValue() {
-        String cod = tabla.getModel().getValueAt(fila, 0).toString();
         if (isPushed)  {
-            System.out.println("Pulsado");
-            javax.swing.JOptionPane.showMessageDialog(button ,cod + ": Ouch!");
+            new ModalLote(this.g, true, fila).setVisible(true);
         }
         isPushed = false;
-        return new String( label ) ;
+        return label ;
     }
    
     @Override

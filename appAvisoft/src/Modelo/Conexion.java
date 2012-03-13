@@ -22,12 +22,12 @@ public class Conexion {
     //Contructor...
     public Conexion() {
         String bd = "avicola";
-        String user = "avicola";
-        String pass = "qwe123";
-        String url = "jdbc:mysql://localhost/"+bd; //postgres = jdbc:postgresql://localhost:5432/+bd
+        String user = "postgres";
+        String pass = "mai1991";
+        String url = "jdbc:postgresql://localhost:5432/"+bd; //postgres = jdbc:postgresql://localhost:5432/+bd
         
         try {
-            java.lang.Class.forName("com.mysql.jdbc.Driver").newInstance();// postgres = org.postgresql.Driver
+            java.lang.Class.forName("org.postgresql.Driver").newInstance();// postgres = org.postgresql.Driver
             this.conexion = DriverManager.getConnection(url,user,pass);
             
             /* Datos del producto, version de mysql, etc. No es necesario por eso esta comentado...

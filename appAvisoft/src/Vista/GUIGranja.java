@@ -11,7 +11,15 @@
 package Vista;
 
 import Modelo.Granja;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Graphics;
+import java.awt.Insets;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
+import javax.swing.border.Border;
+import javax.swing.plaf.basic.BasicBorders;
+import javax.swing.plaf.metal.MetalBorders;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -24,6 +32,8 @@ public class GUIGranja extends Interfaz {
     private ArrayList<String> depar;
     private ArrayList<String[]> muni;
     private javax.swing.table.DefaultTableModel model;
+    private int cont=1;
+    private int tamañoGranja=0;
     
     /** Creates new form GUIGranja */
     public GUIGranja(GUIPrincipal principal) {
@@ -35,7 +45,7 @@ public class GUIGranja extends Interfaz {
             initComponents();
             model = (DefaultTableModel) tblGalpon.getModel();
             tblGalpon.getColumn("Otra").setCellRenderer(new ButtonRenderer());
-            tblGalpon.getColumn("Otra").setCellEditor(new ButtonEditor());
+            tblGalpon.getColumn("Otra").setCellEditor(new ButtonEditor(this));
             cargar();
         } else {
             salir();
@@ -92,6 +102,12 @@ public class GUIGranja extends Interfaz {
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Galpon"));
 
         jLabel7.setText("Area:");
+
+        txtAreaGalpon.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtAreaGalponFocusLost(evt);
+            }
+        });
 
         cmdAgregarGalpon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/addGalpon.png"))); // NOI18N
         cmdAgregarGalpon.setText("Agregar");
@@ -161,6 +177,11 @@ public class GUIGranja extends Interfaz {
         jLabel11.setText("Clima:");
 
         cmbTemp.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Elija clima", "Calida", "Fria" }));
+        cmbTemp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbTempActionPerformed(evt);
+            }
+        });
 
         jLabel12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/info.png"))); // NOI18N
         jLabel12.setToolTipText("Al cambiar este valor se cambiara en todas las granjas del municipio");
@@ -201,6 +222,11 @@ public class GUIGranja extends Interfaz {
         jLabel3.setText("Area:");
 
         txtArea.setMaximumSize(new java.awt.Dimension(6, 20));
+        txtArea.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtAreaFocusLost(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -237,16 +263,14 @@ public class GUIGranja extends Interfaz {
                                     .addComponent(jLabel8))))
                         .addGap(10, 10, 10)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(cmbTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(txtArea, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(16, 16, 16))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                                 .addComponent(txtProp, javax.swing.GroupLayout.DEFAULT_SIZE, 89, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(cmbProp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton1)))
+                                .addComponent(jButton1))
+                            .addComponent(cmbTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtArea, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(21, 21, 21))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(cmbTemp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -299,7 +323,7 @@ public class GUIGranja extends Interfaz {
 
             },
             new String [] {
-                "Número", "Area", "Capacidad", "Otra"
+                "Número", "Area", "Cantidad (Pollos)", "Otra"
             }
         ) {
             Class[] types = new Class [] {
@@ -330,18 +354,25 @@ public class GUIGranja extends Interfaz {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(cmdRegistrar, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(cmdRegistrar))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 1, Short.MAX_VALUE)))
+                        .addContainerGap(102, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jScrollPane1, 0, 0, Short.MAX_VALUE))
-                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(101, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(503, Short.MAX_VALUE))))
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -437,9 +468,69 @@ public class GUIGranja extends Interfaz {
 
     private void cmdAgregarGalponActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdAgregarGalponActionPerformed
         // TODO add your handling code here:
-        Object[] rowData = new Object[]{"hola", "mundo", "desde", "java"};
+        if(cmbTemp.getSelectedIndex() ==0 || txtArea.getText().isEmpty() || txtAreaGalpon.getText().isEmpty()){
+            if(cmbTemp.getSelectedIndex() == 0) {
+                javax.swing.JOptionPane.showMessageDialog(this, "No ha Seleccionado Tipo de clima");
+                cmbTemp.setBackground(Color.red);
+            }
+            if(txtArea.getText().isEmpty()) {
+                javax.swing.JOptionPane.showMessageDialog(this, "No ha Ingresado Area de la Granja");
+                //txtArea.setBackground(Color.red);
+                Border b = new BasicBorders.ButtonBorder(Color.red, Color.red, Color.red, Color.red);
+                txtArea.setBorder(b);
+            } 
+            if(txtAreaGalpon.getText().isEmpty()) {
+                javax.swing.JOptionPane.showMessageDialog(this, "No ha Ingresado Area del Galpon");
+                //txtAreaGalpon.setBackground(Color.red);
+                Border b = new BasicBorders.ButtonBorder(Color.red, Color.red, Color.red, Color.red);
+                txtAreaGalpon.setBorder(b);
+            }
+            return;
+        }
+        int areaGranja = Integer.parseInt(txtArea.getText());
+        int area = Integer.parseInt(txtAreaGalpon.getText());
+        
+        if(area>areaGranja) {
+            javax.swing.JOptionPane.showMessageDialog(this, "El Tamaño del Galpon Excede el Tamaño de la Granja");
+            Border b = new BasicBorders.ButtonBorder(Color.orange, Color.orange, Color.orange, Color.orange);
+            txtAreaGalpon.setBorder(b);
+            return;
+        }
+        int resp = (cmbTemp.getSelectedIndex()==1)?area*8:area*10;
+        
+        if(tamañoGranja == areaGranja){
+            javax.swing.JOptionPane.showMessageDialog(this, "Has Alcanzado el Limite de Galpones");
+            cmdAgregarGalpon.setEnabled(false);
+            return;
+        }
+        tamañoGranja=tamañoGranja+area;
+        
+        Object[] rowData = new Object[]{cont++,txtAreaGalpon.getText(), resp, "Agregar Lote"};
         model.addRow(rowData);
     }//GEN-LAST:event_cmdAgregarGalponActionPerformed
+
+    private void cmbTempActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbTempActionPerformed
+        // TODO add your handling code here:
+        if(cmbTemp.getSelectedIndex() !=0){
+            cmbTemp.setBackground(Color.LIGHT_GRAY);
+        }
+    }//GEN-LAST:event_cmbTempActionPerformed
+
+    private void txtAreaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtAreaFocusLost
+        // TODO add your handling code here:
+        if(!txtArea.getText().isEmpty()){
+            Border b = new BasicBorders.ButtonBorder(Color.lightGray, Color.lightGray, Color.lightGray, Color.lightGray);
+            txtArea.setBorder(b);
+        }
+    }//GEN-LAST:event_txtAreaFocusLost
+
+    private void txtAreaGalponFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtAreaGalponFocusLost
+        // TODO add your handling code here:
+        if(!txtAreaGalpon.getText().isEmpty()){
+            Border b = new BasicBorders.ButtonBorder(Color.lightGray, Color.lightGray, Color.lightGray, Color.lightGray);
+            txtAreaGalpon.setBorder(b);
+        }
+    }//GEN-LAST:event_txtAreaGalponFocusLost
 
     @Override
     public java.awt.Image getIconImage() {
