@@ -4,7 +4,7 @@
  */
 
 /*
- * modalAcerca.java
+ * ModalAcerca.java
  *
  * Created on 19/01/2012, 01:17:53 PM
  */
@@ -14,10 +14,10 @@ package Vista;
  *
  * @author Kraken
  */
-public class modalAcerca extends javax.swing.JDialog {
+public class ModalAcerca extends javax.swing.JDialog {
 
-    /** Creates new form modalAcerca */
-    public modalAcerca(java.awt.Frame parent, boolean modal) {
+    /** Creates new form ModalAcerca */
+    public ModalAcerca(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         setLocationRelativeTo(null);

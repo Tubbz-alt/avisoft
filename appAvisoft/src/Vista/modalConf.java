@@ -4,7 +4,7 @@
  */
 
 /*
- * modalConf.java
+ * ModalConf.java
  *
  * Created on 10/02/2012, 11:28:07 AM
  */
@@ -15,11 +15,11 @@ package Vista;
  *
  * @author Kraken
  */
-public class modalConf extends javax.swing.JDialog {
+public class ModalConf extends javax.swing.JDialog {
 
     private Log log;
-    /** Creates new form modalConf */
-    public modalConf(java.awt.Frame parent, boolean modal) {
+    /** Creates new form ModalConf */
+    public ModalConf(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         this.log = Log.check();
         if(log != null) {

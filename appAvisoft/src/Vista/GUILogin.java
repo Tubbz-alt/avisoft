@@ -209,7 +209,7 @@ public class GUILogin extends Interfaz {
 
     private void cmbClaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbClaveActionPerformed
         // TODO add your handling code here:
-        new modalClave(this, true).setVisible(true);
+        new ModalClave(this, true).setVisible(true);
     }//GEN-LAST:event_cmbClaveActionPerformed
 
     private void formKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyReleased
@@ -257,9 +257,9 @@ public class GUILogin extends Interfaz {
             String hostname = "localhost";
             java.net.ServerSocket socket = new java.net.ServerSocket();
             socket.bind(new java.net.InetSocketAddress(hostname, port));
-            return true;
-        } catch (IOException ex) {
             return false;
+        } catch (IOException ex) {
+            return true;
         }
     }
     
@@ -292,7 +292,7 @@ public class GUILogin extends Interfaz {
 
             @Override
             public void run() {
-                if(GUILogin.isBlock()) {
+                if(!isBlock()) {
                     new GUILogin().setVisible(true);
                 } else {
                     javax.swing.JOptionPane.showMessageDialog(null, "La aplicación esta en ejecución", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);

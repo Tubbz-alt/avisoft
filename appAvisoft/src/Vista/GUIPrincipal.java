@@ -124,7 +124,7 @@ public class GUIPrincipal extends Interfaz {
 
     private void menuAcercaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuAcercaActionPerformed
         // TODO add your handling code here:
-        new modalAcerca(this, true).setVisible(true);
+        new ModalAcerca(this, true).setVisible(true);
     }//GEN-LAST:event_menuAcercaActionPerformed
 
     private void menuSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuSalirActionPerformed
@@ -134,7 +134,7 @@ public class GUIPrincipal extends Interfaz {
 
     private void menuConfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuConfActionPerformed
         // TODO add your handling code here:
-        new modalConf(this, true).setVisible(true);
+        new ModalConf(this, true).setVisible(true);
     }//GEN-LAST:event_menuConfActionPerformed
 
     class ManejadorEventos extends java.awt.event.WindowAdapter {

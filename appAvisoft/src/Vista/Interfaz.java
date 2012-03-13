@@ -4,6 +4,7 @@
  */
 package Vista;
 
+import java.awt.Color;
 import java.util.ArrayList;
 
 /**
@@ -40,6 +41,26 @@ public abstract class Interfaz extends javax.swing.JFrame {
         if (!(Character.isLetter(c) || c == ' ' || c == 8)) {
             evt.consume();
         }
+    }
+    
+    public static void showError(javax.swing.JTextField txt, String msj) {
+        txt.setBorder(javax.swing.BorderFactory.createEtchedBorder(Color.lightGray, Color.red));
+        txt.setToolTipText(msj);
+    }
+    
+    public static void showError(javax.swing.JComboBox cmb, String msj) {
+        cmb.setBackground(Color.red);
+        cmb.setToolTipText(msj);
+    }
+    
+    public static void normalizeInput(javax.swing.JTextField txt) {
+            txt.setBorder(new javax.swing.JTextField().getBorder());
+            txt.setToolTipText(null);
+    }
+    
+    public static void normalizeInput(javax.swing.JComboBox cmb) {
+            cmb.setBackground(new javax.swing.JComboBox().getBackground());
+            cmb.setToolTipText(null);
     }
     
 }

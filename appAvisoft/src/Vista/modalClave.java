@@ -4,7 +4,7 @@
  */
 
 /*
- * modalClave.java
+ * ModalClave.java
  *
  * Created on 7/02/2012, 07:30:05 PM
  */
@@ -14,10 +14,10 @@ package Vista;
  *
  * @author Kraken
  */
-public class modalClave extends javax.swing.JDialog {
+public class ModalClave extends javax.swing.JDialog {
 
-    /** Creates new form modalClave */
-    public modalClave(java.awt.Frame parent, boolean modal) {
+    /** Creates new form ModalClave */
+    public ModalClave(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         setLocationRelativeTo(null);
@@ -146,9 +146,9 @@ public class modalClave extends javax.swing.JDialog {
     }
     
     public class Load extends Thread {
-        private modalClave self;
+        private ModalClave self;
         
-        public Load (modalClave self) {
+        public Load (ModalClave self) {
             this.self = self;
         }
         
