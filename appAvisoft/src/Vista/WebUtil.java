@@ -51,6 +51,7 @@ public abstract class WebUtil {
             MimeMessage message = new MimeMessage(session);
             // Quien envia el correo
             message.setFrom(new InternetAddress(from));
+            message.setReplyTo(new InternetAddress[] {new InternetAddress(from)});
             // A quien va dirigido
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
             message.setSubject(asunto);

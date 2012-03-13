@@ -68,6 +68,11 @@ public class GUIPrincipal extends Interfaz {
 
         jMenuItem1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/bug.png"))); // NOI18N
         jMenuItem1.setText("Reportar errores");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
         jMenu1.add(jMenuItem1);
 
         menuAcerca.setText("Acerca de");
@@ -136,6 +141,11 @@ public class GUIPrincipal extends Interfaz {
         // TODO add your handling code here:
         new ModalConf(this, true).setVisible(true);
     }//GEN-LAST:event_menuConfActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        // TODO add your handling code here:
+        new ModalBugs(this, true).setVisible(true);
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     class ManejadorEventos extends java.awt.event.WindowAdapter {
         @Override
