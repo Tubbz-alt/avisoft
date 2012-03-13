@@ -12,6 +12,8 @@ import javax.swing.SpinnerNumberModel;
  */
 public class ModalLote extends javax.swing.JDialog {
 
+    private int cantidadPollos;
+    private int clima;
     /**
      * Creates new form ModalLote
      */
@@ -20,6 +22,16 @@ public class ModalLote extends javax.swing.JDialog {
         initComponents();
         SpinnerNumberModel spm = (SpinnerNumberModel) cantidad.getModel();
         spm.setMaximum(Integer.parseInt(datos[2].toString()));
+        cantidadPollos = Integer.parseInt(datos[2].toString());
+        GUIGranja g = (GUIGranja) parent;
+        clima = g.Clima();
+        jLabel12.setVisible(false);
+        cilindros.setVisible(false);
+        calculoElementos();
+        electricaActionPerformed(null);
+        manualActionPerformed(null);
+        tubularActionPerformed(null);
+        grandeActionPerformed(null);
     }
 
     /**
@@ -45,31 +57,33 @@ public class ModalLote extends javax.swing.JDialog {
         jButton4 = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
-        jRadioButton1 = new javax.swing.JRadioButton();
-        jRadioButton2 = new javax.swing.JRadioButton();
-        jTextField1 = new javax.swing.JTextField();
+        electrica = new javax.swing.JRadioButton();
+        gas = new javax.swing.JRadioButton();
+        criadoras = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        bandejas = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        jRadioButton3 = new javax.swing.JRadioButton();
-        jRadioButton4 = new javax.swing.JRadioButton();
-        jRadioButton5 = new javax.swing.JRadioButton();
-        jTextField3 = new javax.swing.JTextField();
+        manual = new javax.swing.JRadioButton();
+        automatico = new javax.swing.JRadioButton();
+        niple = new javax.swing.JRadioButton();
+        bebederos = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
-        jRadioButton6 = new javax.swing.JRadioButton();
-        jRadioButton7 = new javax.swing.JRadioButton();
-        jTextField4 = new javax.swing.JTextField();
+        tubular = new javax.swing.JRadioButton();
+        automatic = new javax.swing.JRadioButton();
+        comederos = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
-        jRadioButton8 = new javax.swing.JRadioButton();
-        jRadioButton9 = new javax.swing.JRadioButton();
-        jTextField5 = new javax.swing.JTextField();
+        grande = new javax.swing.JRadioButton();
+        pequeño = new javax.swing.JRadioButton();
+        ventiladores = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
-        jTextField6 = new javax.swing.JTextField();
+        bombillos = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
         equipo = new javax.swing.JLabel();
         tipo = new javax.swing.JLabel();
         cantidad1 = new javax.swing.JLabel();
+        cilindros = new javax.swing.JTextField();
+        jLabel12 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -140,83 +154,128 @@ public class ModalLote extends javax.swing.JDialog {
 
         jLabel3.setText("CRIADORAS:");
 
-        bgCriadoras.add(jRadioButton1);
-        jRadioButton1.setSelected(true);
-        jRadioButton1.setText("Electrica");
-        jRadioButton1.setToolTipText("1 Criadora para 250 Pollos");
-        jRadioButton1.addActionListener(new java.awt.event.ActionListener() {
+        bgCriadoras.add(electrica);
+        electrica.setSelected(true);
+        electrica.setText("Electrica");
+        electrica.setToolTipText("1 Criadora para 250 Pollos");
+        electrica.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton1ActionPerformed(evt);
+                electricaActionPerformed(evt);
             }
         });
 
-        bgCriadoras.add(jRadioButton2);
-        jRadioButton2.setText("Gas");
-        jRadioButton2.setToolTipText("1 Criadora para 500 Pollos");
+        bgCriadoras.add(gas);
+        gas.setText("Gas");
+        gas.setToolTipText("1 Criadora para 500 Pollos");
+        gas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                gasActionPerformed(evt);
+            }
+        });
 
-        jTextField1.setEditable(false);
+        criadoras.setEditable(false);
+        criadoras.setHorizontalAlignment(javax.swing.JTextField.CENTER);
 
         jLabel5.setText("BANDEJAS:");
 
-        jTextField2.setEditable(false);
+        bandejas.setEditable(false);
+        bandejas.setHorizontalAlignment(javax.swing.JTextField.CENTER);
 
         jLabel6.setText("1 Bandeja para 50 pollos");
 
         jLabel7.setText("BEBEDEROS:");
 
-        bgBebederos.add(jRadioButton3);
-        jRadioButton3.setSelected(true);
-        jRadioButton3.setText("Manual");
-        jRadioButton3.setToolTipText("1 Bebedero para 50 Pollos");
+        bgBebederos.add(manual);
+        manual.setSelected(true);
+        manual.setText("Manual");
+        manual.setToolTipText("1 Bebedero para 50 Pollos");
+        manual.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                manualActionPerformed(evt);
+            }
+        });
 
-        bgBebederos.add(jRadioButton4);
-        jRadioButton4.setText("Automatico");
-        jRadioButton4.setToolTipText("1 Bebedero para 80 Pollos");
+        bgBebederos.add(automatico);
+        automatico.setText("Automatico");
+        automatico.setToolTipText("1 Bebedero para 80 Pollos");
+        automatico.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                automaticoActionPerformed(evt);
+            }
+        });
 
-        bgBebederos.add(jRadioButton5);
-        jRadioButton5.setText("Niple");
-        jRadioButton5.setToolTipText("1 Bebedero para 12 Pollos");
+        bgBebederos.add(niple);
+        niple.setText("Niple");
+        niple.setToolTipText("1 Bebedero para 12 Pollos");
+        niple.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                nipleActionPerformed(evt);
+            }
+        });
 
-        jTextField3.setEditable(false);
+        bebederos.setEditable(false);
+        bebederos.setHorizontalAlignment(javax.swing.JTextField.CENTER);
 
         jLabel8.setText("COMEDEROS:");
 
-        bgComederos.add(jRadioButton6);
-        jRadioButton6.setSelected(true);
-        jRadioButton6.setText("Tubular");
-        jRadioButton6.setToolTipText("1 Comedero (Frio para 35 Pollos) (Calido para 40 Pollos)");
+        bgComederos.add(tubular);
+        tubular.setSelected(true);
+        tubular.setText("Tubular");
+        tubular.setToolTipText("1 Comedero (Frio para 35 Pollos) (Calido para 40 Pollos)");
+        tubular.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tubularActionPerformed(evt);
+            }
+        });
 
-        bgComederos.add(jRadioButton7);
-        jRadioButton7.setText("Automatico");
+        bgComederos.add(automatic);
+        automatic.setText("Automatico");
+        automatic.setEnabled(false);
 
-        jTextField4.addKeyListener(new java.awt.event.KeyAdapter() {
+        comederos.setEditable(false);
+        comederos.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        comederos.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                jTextField4KeyTyped(evt);
+                comederosKeyTyped(evt);
             }
         });
 
         jLabel9.setText("VENTILADORES:");
 
-        bgVentiladores.add(jRadioButton8);
-        jRadioButton8.setSelected(true);
-        jRadioButton8.setText("Grande");
-        jRadioButton8.setToolTipText("1 Ventilador para 500 Pollos");
+        bgVentiladores.add(grande);
+        grande.setSelected(true);
+        grande.setText("Grande");
+        grande.setToolTipText("1 Ventilador para 500 Pollos");
+        grande.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                grandeActionPerformed(evt);
+            }
+        });
 
-        bgVentiladores.add(jRadioButton9);
-        jRadioButton9.setText("Pequeño");
-        jRadioButton9.setToolTipText("1 Ventilador para 250 Pollos");
+        bgVentiladores.add(pequeño);
+        pequeño.setText("Pequeño");
+        pequeño.setToolTipText("1 Ventilador para 250 Pollos");
+        pequeño.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                pequeñoActionPerformed(evt);
+            }
+        });
 
-        jTextField5.addKeyListener(new java.awt.event.KeyAdapter() {
+        ventiladores.setEditable(false);
+        ventiladores.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        ventiladores.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                jTextField5KeyTyped(evt);
+                ventiladoresKeyTyped(evt);
             }
         });
 
         jLabel10.setText("BOMBILLOS:");
 
-        jTextField6.addKeyListener(new java.awt.event.KeyAdapter() {
+        bombillos.setEditable(false);
+        bombillos.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        bombillos.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                jTextField6KeyTyped(evt);
+                bombillosKeyTyped(evt);
             }
         });
 
@@ -231,6 +290,12 @@ public class ModalLote extends javax.swing.JDialog {
         cantidad1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         cantidad1.setText("CANTIDAD");
 
+        cilindros.setEditable(false);
+        cilindros.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+
+        jLabel12.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel12.setText("CILINDROS");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -241,17 +306,17 @@ public class ModalLote extends javax.swing.JDialog {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel8)
                         .addGap(72, 72, 72)
-                        .addComponent(jRadioButton6)
+                        .addComponent(tubular)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jRadioButton7))
+                        .addComponent(automatic))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel7)
                         .addGap(75, 75, 75)
-                        .addComponent(jRadioButton3)
+                        .addComponent(manual)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jRadioButton4)
+                        .addComponent(automatico)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jRadioButton5))
+                        .addComponent(niple))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(15, 15, 15)
                         .addComponent(equipo)
@@ -265,9 +330,9 @@ public class ModalLote extends javax.swing.JDialog {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel6)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jRadioButton1)
+                                .addComponent(electrica)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jRadioButton2))))
+                                .addComponent(gas))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel9)
@@ -276,19 +341,23 @@ public class ModalLote extends javax.swing.JDialog {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel11)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jRadioButton8)
+                                .addComponent(grande)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jRadioButton9)))))
+                                .addComponent(pequeño)))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jTextField6)
-                    .addComponent(jTextField5)
+                    .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(cilindros))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(bombillos)
+                    .addComponent(ventiladores)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jTextField1)
-                            .addComponent(jTextField2)
-                            .addComponent(jTextField3)
-                            .addComponent(jTextField4, javax.swing.GroupLayout.DEFAULT_SIZE, 73, Short.MAX_VALUE))
+                            .addComponent(criadoras)
+                            .addComponent(bandejas)
+                            .addComponent(bebederos)
+                            .addComponent(comederos, javax.swing.GroupLayout.DEFAULT_SIZE, 73, Short.MAX_VALUE))
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                             .addComponent(cantidad1)
                             .addGap(9, 9, 9))))
@@ -298,47 +367,54 @@ public class ModalLote extends javax.swing.JDialog {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cantidad1, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(tipo)
-                    .addComponent(equipo))
-                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(cantidad1, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(tipo)
+                            .addComponent(equipo))
+                        .addGap(18, 18, 18))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel12)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jRadioButton1)
-                        .addComponent(jRadioButton2)
+                        .addComponent(electrica)
+                        .addComponent(gas)
                         .addComponent(jLabel3))
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(criadoras, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(cilindros, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(bandejas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel6)
                     .addComponent(jLabel5))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jRadioButton3)
-                    .addComponent(jRadioButton4)
-                    .addComponent(jRadioButton5)
+                    .addComponent(bebederos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(manual)
+                    .addComponent(automatico)
+                    .addComponent(niple)
                     .addComponent(jLabel7))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jRadioButton6)
-                    .addComponent(jRadioButton7)
+                    .addComponent(comederos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tubular)
+                    .addComponent(automatic)
                     .addComponent(jLabel8))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jRadioButton8)
-                    .addComponent(jRadioButton9)
+                    .addComponent(ventiladores, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(grande)
+                    .addComponent(pequeño)
                     .addComponent(jLabel9))
                 .addGap(17, 17, 17)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel11)
                         .addComponent(jLabel10))
-                    .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(bombillos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(14, 14, 14))
         );
 
@@ -383,33 +459,41 @@ public class ModalLote extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField4KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField4KeyTyped
+    private void comederosKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_comederosKeyTyped
         // TODO add your handling code here:
         char caracter = evt.getKeyChar();
         if (((caracter < '0') || (caracter > '9')) && (caracter != '\b')) {
             evt.consume();  // ignorar el evento de teclado
         }
-    }//GEN-LAST:event_jTextField4KeyTyped
+    }//GEN-LAST:event_comederosKeyTyped
 
-    private void jTextField5KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField5KeyTyped
+    private void ventiladoresKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_ventiladoresKeyTyped
         // TODO add your handling code here:
         char caracter = evt.getKeyChar();
         if (((caracter < '0') || (caracter > '9')) && (caracter != '\b')) {
             evt.consume();  // ignorar el evento de teclado
         }
-    }//GEN-LAST:event_jTextField5KeyTyped
+    }//GEN-LAST:event_ventiladoresKeyTyped
 
-    private void jTextField6KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField6KeyTyped
+    private void bombillosKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_bombillosKeyTyped
         // TODO add your handling code here:
         char caracter = evt.getKeyChar();
         if (((caracter < '0') || (caracter > '9')) && (caracter != '\b')) {
             evt.consume();  // ignorar el evento de teclado
         }
-    }//GEN-LAST:event_jTextField6KeyTyped
+    }//GEN-LAST:event_bombillosKeyTyped
 
-    private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton1ActionPerformed
+    private void electricaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_electricaActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jRadioButton1ActionPerformed
+        String criadora;
+        //Criadoras
+        if(electrica.isSelected()){
+            jLabel12.setVisible(false);
+            cilindros.setVisible(false);
+            criadora = String.valueOf(Math.round(cantidadPollos/250));
+            criadoras.setText(criadora);
+        }
+    }//GEN-LAST:event_electricaActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
@@ -420,24 +504,109 @@ public class ModalLote extends javax.swing.JDialog {
         
     }//GEN-LAST:event_cantidadStateChanged
 
+    private void gasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_gasActionPerformed
+        // TODO add your handling code here:
+        String criadora, cilindro;
+        if(gas.isSelected()){
+            jLabel12.setVisible(true);
+            cilindros.setVisible(true);
+            criadora = String.valueOf(Math.round(cantidadPollos/800));
+            cilindro = String.valueOf(Integer.parseInt(criadora));
+            cilindros.setText(cilindro);
+            criadoras.setText(criadora);
+        }
+    }//GEN-LAST:event_gasActionPerformed
+
+    private void manualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_manualActionPerformed
+        // TODO add your handling code here:
+        String bebedero;
+        if(manual.isSelected()){
+            bebedero =String.valueOf(Math.round(cantidadPollos/50));
+            bebederos.setText(bebedero);
+        }
+    }//GEN-LAST:event_manualActionPerformed
+
+    private void automaticoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_automaticoActionPerformed
+        // TODO add your handling code here:
+        String bebedero;
+        if(automatico.isSelected()){
+            bebedero = String.valueOf(Math.round(cantidadPollos/80));
+            bebederos.setText(bebedero);
+        }
+    }//GEN-LAST:event_automaticoActionPerformed
+
+    private void nipleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nipleActionPerformed
+        // TODO add your handling code here:
+        String bebedero;
+        if(niple.isSelected()){
+            bebedero = String.valueOf(Math.round(cantidadPollos/12));
+            bebederos.setText(bebedero);
+        }
+    }//GEN-LAST:event_nipleActionPerformed
+
+    private void tubularActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tubularActionPerformed
+        // TODO add your handling code here:
+        //Comederos
+        if(tubular.isSelected()){
+            int resp = (clima==1)?Math.round(cantidadPollos/35):Math.round(cantidadPollos/40);
+            comederos.setText(resp + "");
+        }
+    }//GEN-LAST:event_tubularActionPerformed
+
+    private void grandeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_grandeActionPerformed
+        // TODO add your handling code here:
+        String ventilador;
+        if(grande.isSelected()){
+            ventilador = Math.round(cantidadPollos/500) + "";
+            ventiladores.setText(ventilador);
+        }
+    }//GEN-LAST:event_grandeActionPerformed
+
+    private void pequeñoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pequeñoActionPerformed
+        // TODO add your handling code here:
+        String ventilador;
+        if(pequeño.isSelected()){
+            ventiladores.setText(Math.round(cantidadPollos/250)+"");
+        }
+    }//GEN-LAST:event_pequeñoActionPerformed
+      
+        private void calculoElementos(){
+        //Bandejas
+        bandejas.setText(Math.round(cantidadPollos/50)+"");
+        //Bombillos
+        bombillos.setText(Math.round(cantidadPollos/400)+"");        
+        }
+    
     /**
      * @param args the command line arguments
      */
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JRadioButton automatic;
+    private javax.swing.JRadioButton automatico;
+    private javax.swing.JTextField bandejas;
+    private javax.swing.JTextField bebederos;
     private javax.swing.ButtonGroup bgBebederos;
     private javax.swing.ButtonGroup bgComederos;
     private javax.swing.ButtonGroup bgCriadoras;
     private javax.swing.ButtonGroup bgVentiladores;
+    private javax.swing.JTextField bombillos;
     private javax.swing.JSpinner cantidad;
     private javax.swing.JLabel cantidad1;
+    private javax.swing.JTextField cilindros;
     private de.wannawork.jcalendar.JCalendarComboBox cmbFinal;
     private de.wannawork.jcalendar.JCalendarComboBox cmbInicio;
+    private javax.swing.JTextField comederos;
+    private javax.swing.JTextField criadoras;
+    private javax.swing.JRadioButton electrica;
     private javax.swing.JLabel equipo;
+    private javax.swing.JRadioButton gas;
+    private javax.swing.JRadioButton grande;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -448,21 +617,11 @@ public class ModalLote extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JRadioButton jRadioButton1;
-    private javax.swing.JRadioButton jRadioButton2;
-    private javax.swing.JRadioButton jRadioButton3;
-    private javax.swing.JRadioButton jRadioButton4;
-    private javax.swing.JRadioButton jRadioButton5;
-    private javax.swing.JRadioButton jRadioButton6;
-    private javax.swing.JRadioButton jRadioButton7;
-    private javax.swing.JRadioButton jRadioButton8;
-    private javax.swing.JRadioButton jRadioButton9;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField6;
+    private javax.swing.JRadioButton manual;
+    private javax.swing.JRadioButton niple;
+    private javax.swing.JRadioButton pequeño;
     private javax.swing.JLabel tipo;
+    private javax.swing.JRadioButton tubular;
+    private javax.swing.JTextField ventiladores;
     // End of variables declaration//GEN-END:variables
 }
