@@ -53,6 +53,11 @@ public abstract class Interfaz extends javax.swing.JFrame {
         cmb.setToolTipText(msj);
     }
     
+    public static void showError(javax.swing.JTextArea txt, String msj) {
+        txt.setBorder(javax.swing.BorderFactory.createEtchedBorder(Color.lightGray, Color.red));
+        txt.setToolTipText(msj);
+    }
+    
     public static void normalizeInput(javax.swing.JTextField txt) {
             txt.setBorder(new javax.swing.JTextField().getBorder());
             txt.setToolTipText(null);
@@ -61,6 +66,11 @@ public abstract class Interfaz extends javax.swing.JFrame {
     public static void normalizeInput(javax.swing.JComboBox cmb) {
             cmb.setBackground(new javax.swing.JComboBox().getBackground());
             cmb.setToolTipText(null);
+    }
+    
+    public static void normalizeInput(javax.swing.JTextArea txt) {
+            txt.setBorder(new javax.swing.JTextArea().getBorder());
+            txt.setToolTipText(null);
     }
     
 }
