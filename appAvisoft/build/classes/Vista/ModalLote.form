@@ -153,6 +153,9 @@
           </Properties>
         </Component>
         <Component class="de.wannawork.jcalendar.JCalendarComboBox" name="cmbInicio">
+          <Events>
+            <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="cmbInicioStateChanged"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel2">
           <Properties>

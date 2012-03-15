@@ -13,7 +13,7 @@ import javax.swing.SpinnerNumberModel;
 public class ModalLote extends javax.swing.JDialog {
 
     private int cantidadPollos;
-    private int clima;
+    private int clima, tipoGranja;
     /**
      * Creates new form ModalLote
      */
@@ -25,6 +25,7 @@ public class ModalLote extends javax.swing.JDialog {
         cantidadPollos = Integer.parseInt(datos[2].toString());
         GUIGranja g = (GUIGranja) parent;
         clima = g.Clima();
+        tipoGranja=g.getTipo();
         jLabel12.setVisible(false);
         cilindros.setVisible(false);
         calculoElementos();
@@ -102,6 +103,12 @@ public class ModalLote extends javax.swing.JDialog {
         });
 
         jLabel1.setText("Fecha Inicio:");
+
+        cmbInicio.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                cmbInicioStateChanged(evt);
+            }
+        });
 
         jLabel2.setText("Fecha Final:");
 
@@ -501,7 +508,6 @@ public class ModalLote extends javax.swing.JDialog {
 
     private void cantidadStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_cantidadStateChanged
         // TODO add your handling code here:
-        
     }//GEN-LAST:event_cantidadStateChanged
 
     private void gasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_gasActionPerformed
@@ -557,7 +563,7 @@ public class ModalLote extends javax.swing.JDialog {
         // TODO add your handling code here:
         String ventilador;
         if(grande.isSelected()){
-            ventilador = Math.round(cantidadPollos/500) + "";
+            ventilador = Math.nextUp(cantidadPollos/500) + "";
             ventiladores.setText(ventilador);
         }
     }//GEN-LAST:event_grandeActionPerformed
@@ -569,6 +575,15 @@ public class ModalLote extends javax.swing.JDialog {
             ventiladores.setText(Math.round(cantidadPollos/250)+"");
         }
     }//GEN-LAST:event_pequeñoActionPerformed
+
+    private void cmbInicioStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_cmbInicioStateChanged
+        // TODO add your handling code here:
+        if(tipoGranja == 1){
+           java.util.Calendar calendar = cmbInicio.getCalendar();
+           calendar.add(5, java.util.Calendar.WEEK_OF_MONTH);
+           cmbFinal.setCalendar(calendar);
+        }
+    }//GEN-LAST:event_cmbInicioStateChanged
       
         private void calculoElementos(){
         //Bandejas

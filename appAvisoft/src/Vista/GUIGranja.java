@@ -44,7 +44,11 @@ public class GUIGranja extends Interfaz {
             salir();
         }
     }
-
+    
+    public int getTipo(){
+        return cmbTipo.getSelectedIndex();
+    }
+    
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -209,6 +213,11 @@ public class GUIGranja extends Interfaz {
         });
 
         cmbTipo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Elija Tipo", "Engorde (Carne)", "Ponedor (Huevo)" }));
+        cmbTipo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbTipoActionPerformed(evt);
+            }
+        });
 
         jLabel8.setText("Tipo:");
 
@@ -496,6 +505,15 @@ public class GUIGranja extends Interfaz {
         }
     }//GEN-LAST:event_txtAreaGalponFocusLost
 
+    private void cmbTipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbTipoActionPerformed
+        // TODO add your handling code here:
+        if(cmbTipo.getSelectedIndex()==0){
+            showError(cmbTemp, "No ha Seleccionado Tipo de Granja");
+        } else {
+            normalizeInput(cmbTipo);
+        }
+    }//GEN-LAST:event_cmbTipoActionPerformed
+
     @Override
     public java.awt.Image getIconImage() {
         java.awt.Image retValue = java.awt.Toolkit.getDefaultToolkit().
@@ -510,8 +528,12 @@ public class GUIGranja extends Interfaz {
         boolean error = false;
         String areaGalpon = txtAreaGalpon.getText();
         String area = txtArea.getText();
-
-        if(cmbTemp.getSelectedIndex() == 0) {
+        
+        if(cmbTipo.getSelectedIndex()==0){
+            showError(cmbTipo, "No ha Seleccionado Tipo de Granja");
+            error=true;
+        }
+        if(cmbTemp.getSelectedIndex() == 0){
             showError(cmbTemp, "No ha Seleccionado Tipo de Clima");
             error = true;
         }
