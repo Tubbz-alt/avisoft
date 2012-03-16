@@ -37,6 +37,7 @@ public class GUIGranja extends Interfaz {
             this.areaGalpones= 0;
             this.depar = new ArrayList<String>();
             this.muni = new ArrayList<String[]>();
+            this.lotes = new HashMap();
             this.p.forms.add(this);
             initComponents();
             this.model = (DefaultTableModel) tblGalpon.getModel();
@@ -66,7 +67,7 @@ public class GUIGranja extends Interfaz {
             String cBebederos, String cComederos, String cVentiladores, String cBombillos) {
         int i = tblGalpon.getSelectedRow();
         //Esto se debe validar antes de guardar en memoria que es lo que voy a hacer a continuación
-        lotes.put(i+1, new Object[]{fInit, fEnd, cantInit, tCriadera, tBebedero, tComedero, tVentilador, cCilindros,
+        lotes.put((i+1), new Object[]{fInit, fEnd, cantInit, tCriadera, tBebedero, tComedero, tVentilador, cCilindros,
         cCriadoras, cBandejas, cBebederos, cComederos, cVentiladores, cBombillos});
         ButtonEditor btnEdit = (ButtonEditor) tblGalpon.getCellEditor(i, 3);
         btnEdit.setLabel("block");
@@ -112,6 +113,7 @@ public class GUIGranja extends Interfaz {
         jScrollPane1 = new javax.swing.JScrollPane();
         tblGalpon = new javax.swing.JTable();
         cmdRegistrar = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Crear Granja");
@@ -128,6 +130,11 @@ public class GUIGranja extends Interfaz {
         txtAreaGalpon.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 txtAreaGalponFocusLost(evt);
+            }
+        });
+        txtAreaGalpon.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtAreaGalponKeyTyped(evt);
             }
         });
 
@@ -246,6 +253,11 @@ public class GUIGranja extends Interfaz {
         txtArea.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 txtAreaFocusLost(evt);
+            }
+        });
+        txtArea.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtAreaKeyTyped(evt);
             }
         });
 
@@ -376,6 +388,8 @@ public class GUIGranja extends Interfaz {
 
         cmdRegistrar.setText("Registrar");
 
+        jButton2.setText("Limpiar");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -396,6 +410,8 @@ public class GUIGranja extends Interfaz {
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 402, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jButton2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(cmdRegistrar)
                         .addContainerGap())))
         );
@@ -413,7 +429,9 @@ public class GUIGranja extends Interfaz {
                         .addGap(17, 17, 17)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cmdRegistrar))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(cmdRegistrar)
+                            .addComponent(jButton2)))
                     .addGroup(layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -454,7 +472,7 @@ public class GUIGranja extends Interfaz {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        new GUIPropietario(this, true).setVisible(true);
+        new ModalPropietario(this, true).setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void cmbDptoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbDptoActionPerformed
@@ -491,12 +509,19 @@ public class GUIGranja extends Interfaz {
     }//GEN-LAST:event_cmbMpioActionPerformed
 
     private void cmdAgregarGalponActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdAgregarGalponActionPerformed
-        if(validarGalpon()) {
-            int area = Integer.parseInt(txtAreaGalpon.getText());
-            int resp = (cmbTemp.getSelectedIndex()==1)?area*8:area*10;
-            
-            model.addRow(new Object[]{cont++,area, resp, "add"});
+        if(txtArea.isEnabled()) {
+            if(validarGalpon()) {
+                txtArea.setEnabled(false);
+                cmbTemp.setEnabled(false);
+                cmbTipo.setEnabled(false);
+            } else {
+                return;
+            }
         }
+        int area = Integer.parseInt(txtAreaGalpon.getText());
+        int resp = (cmbTemp.getSelectedIndex()==1)?area*8:area*10;
+
+        model.addRow(new Object[]{cont++,area, resp, "add"});
     }//GEN-LAST:event_cmdAgregarGalponActionPerformed
 
     private void cmbTempActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbTempActionPerformed
@@ -527,8 +552,22 @@ public class GUIGranja extends Interfaz {
     }//GEN-LAST:event_cmbTipoActionPerformed
 
     private void txtAreaGalponFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtAreaGalponFocusLost
-
+        if(txtAreaGalpon.getText().isEmpty()) {
+            showError(txtAreaGalpon, "No ha Ingresado Area de la Granja");
+        } else {
+            normalizeInput(txtAreaGalpon);
+        }
     }//GEN-LAST:event_txtAreaGalponFocusLost
+
+    private void txtAreaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAreaKeyTyped
+        // TODO add your handling code here:
+        soloNum(evt);
+    }//GEN-LAST:event_txtAreaKeyTyped
+
+    private void txtAreaGalponKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAreaGalponKeyTyped
+        // TODO add your handling code here:
+        soloNum(evt);
+    }//GEN-LAST:event_txtAreaGalponKeyTyped
 
     @Override
     public java.awt.Image getIconImage() {
@@ -538,9 +577,6 @@ public class GUIGranja extends Interfaz {
     }
     
     private boolean validarGalpon() {
-        normalizeInput(cmbTemp);
-        normalizeInput(txtArea);
-        normalizeInput(txtAreaGalpon);
         boolean error = false;
         String areaGalpon = txtAreaGalpon.getText();
         String area = txtArea.getText();
@@ -603,6 +639,7 @@ public class GUIGranja extends Interfaz {
     private javax.swing.JButton cmdAgregarGalpon;
     private javax.swing.JButton cmdRegistrar;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;

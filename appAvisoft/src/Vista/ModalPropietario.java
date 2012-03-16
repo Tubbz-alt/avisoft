@@ -15,12 +15,13 @@ package Vista;
  *
  * @author Adobe
  */
-public class GUIPropietario extends javax.swing.JDialog {
+public class ModalPropietario extends javax.swing.JDialog {
 
     /** Creates new form registroCliente */
-    public GUIPropietario(java.awt.Frame parent, boolean modal) {
+    public ModalPropietario(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        setLocationRelativeTo(null);
     }
 
     /** This method is called from within the constructor to
