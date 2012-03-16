@@ -274,7 +274,7 @@ public class GUIProveedor extends Interfaz {
             }
         });
 
-        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/Save.png"))); // NOI18N
+        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/Save_1.png"))); // NOI18N
         jButton4.setText("Aceptar");
         jButton4.setToolTipText("Guarda empresa y proveedor");
         jButton4.addActionListener(new java.awt.event.ActionListener() {

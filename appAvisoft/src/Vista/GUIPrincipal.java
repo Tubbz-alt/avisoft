@@ -41,6 +41,8 @@ public class GUIPrincipal extends Interfaz {
         jMenuBar3 = new javax.swing.JMenuBar();
         jMenu4 = new javax.swing.JMenu();
         menuNuevaGranja = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
+        jMenuItem2 = new javax.swing.JMenuItem();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
         menuAcerca = new javax.swing.JMenuItem();
@@ -63,6 +65,18 @@ public class GUIPrincipal extends Interfaz {
         jMenu4.add(menuNuevaGranja);
 
         jMenuBar3.add(jMenu4);
+
+        jMenu2.setText("Financiera");
+
+        jMenuItem2.setText("Proveedores");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem2);
+
+        jMenuBar3.add(jMenu2);
 
         jMenu1.setText("Ayuda");
 
@@ -147,6 +161,11 @@ public class GUIPrincipal extends Interfaz {
         new ModalBugs(this, true).setVisible(true);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        // TODO add your handling code here:
+        new GUIProveedor(this).setVisible(true);
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
+
     class ManejadorEventos extends java.awt.event.WindowAdapter {
         @Override
         public void windowClosing(java.awt.event.WindowEvent e) {
@@ -166,9 +185,11 @@ public class GUIPrincipal extends Interfaz {
      */
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenuBar jMenuBar3;
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem menuAcerca;
     private javax.swing.JMenuItem menuConf;
     private javax.swing.JMenu menuLog;
