@@ -27,9 +27,14 @@ public class ButtonEditor extends javax.swing.DefaultCellEditor {
             }
         });
     }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
     
     @Override
     public java.awt.Component getTableCellEditorComponent(javax.swing.JTable table, Object value, boolean isSelected, int row, int column) {
+        button.setEnabled(true);
         if (isSelected) {
             button.setForeground(table.getSelectionForeground());
             button.setBackground(table.getSelectionBackground());
@@ -37,19 +42,24 @@ public class ButtonEditor extends javax.swing.DefaultCellEditor {
             button.setForeground(table.getForeground());
             button.setBackground(table.getBackground());
         }
-        label = (value ==null) ? "" : value.toString();
-        button.setText( label );
-        isPushed = true;
-        fila = new Object[3];
-        for(short i=0; i<3; i++) {
-            fila[i] = table.getModel().getValueAt(row, i);
+        if(value.equals("add")) {
+            button.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/plus.png")));
+            label = "add";
+        } else if (value.equals("block")) {
+            button.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/block.png")));
+            button.setEnabled(false);
+            label = "block";
         }
+        
+        isPushed = true;
+        javax.swing.table.TableModel model = table.getModel();
+        fila = new Object[] {model.getValueAt(row, 0), model.getValueAt(row, 1), model.getValueAt(row, 2)};
         return button;
     }
  
     @Override
     public Object getCellEditorValue() {
-        if (isPushed)  {
+        if (isPushed && !label.equals("block"))  {
             new ModalLote(this.g, true, fila).setVisible(true);
         }
         isPushed = false;
