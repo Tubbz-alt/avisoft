@@ -20,7 +20,7 @@ public class ModalLote extends javax.swing.JDialog {
     public ModalLote(java.awt.Frame parent, boolean modal, Object[] datos) {
         super(parent, modal);
         initComponents();
-        SpinnerNumberModel spm = (SpinnerNumberModel) cantidad.getModel();
+        SpinnerNumberModel spm = (SpinnerNumberModel) spnCantidad.getModel();
         spm.setMaximum(Integer.parseInt(datos[2].toString()));
         cantidadPollos = Integer.parseInt(datos[2].toString());
         GUIGranja g = (GUIGranja) parent;
@@ -29,10 +29,6 @@ public class ModalLote extends javax.swing.JDialog {
         jLabel12.setVisible(false);
         cilindros.setVisible(false);
         calculoElementos();
-        electricaActionPerformed(null);
-        manualActionPerformed(null);
-        tubularActionPerformed(null);
-        grandeActionPerformed(null);
     }
 
     /**
@@ -50,7 +46,7 @@ public class ModalLote extends javax.swing.JDialog {
         bgVentiladores = new javax.swing.ButtonGroup();
         jPanel3 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
-        cantidad = new javax.swing.JSpinner();
+        spnCantidad = new javax.swing.JSpinner();
         jLabel1 = new javax.swing.JLabel();
         cmbInicio = new de.wannawork.jcalendar.JCalendarComboBox();
         jLabel2 = new javax.swing.JLabel();
@@ -94,11 +90,11 @@ public class ModalLote extends javax.swing.JDialog {
 
         jLabel4.setText("Cantidad Inicial:");
 
-        cantidad.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(0), Integer.valueOf(0), null, Integer.valueOf(1)));
-        cantidad.setAutoscrolls(true);
-        cantidad.addChangeListener(new javax.swing.event.ChangeListener() {
+        spnCantidad.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(0), Integer.valueOf(0), null, Integer.valueOf(1)));
+        spnCantidad.setAutoscrolls(true);
+        spnCantidad.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                cantidadStateChanged(evt);
+                spnCantidadStateChanged(evt);
             }
         });
 
@@ -125,7 +121,7 @@ public class ModalLote extends javax.swing.JDialog {
                     .addComponent(jLabel1))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(cantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(spnCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(cmbInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -146,7 +142,7 @@ public class ModalLote extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(cantidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(spnCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -288,19 +284,19 @@ public class ModalLote extends javax.swing.JDialog {
 
         jLabel11.setText("40 W (1 Bombillo para 400 Pollos)");
 
-        equipo.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        equipo.setFont(new java.awt.Font("Tahoma", 1, 11));
         equipo.setText("EQUIPO");
 
-        tipo.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        tipo.setFont(new java.awt.Font("Tahoma", 1, 11));
         tipo.setText("TIPO");
 
-        cantidad1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        cantidad1.setFont(new java.awt.Font("Tahoma", 1, 11));
         cantidad1.setText("CANTIDAD");
 
         cilindros.setEditable(false);
         cilindros.setHorizontalAlignment(javax.swing.JTextField.CENTER);
 
-        jLabel12.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel12.setFont(new java.awt.Font("Tahoma", 1, 11));
         jLabel12.setText("CILINDROS");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -351,7 +347,7 @@ public class ModalLote extends javax.swing.JDialog {
                                 .addComponent(grande)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(pequeño)))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(cilindros))
@@ -468,112 +464,65 @@ public class ModalLote extends javax.swing.JDialog {
 
     private void comederosKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_comederosKeyTyped
         // TODO add your handling code here:
-        char caracter = evt.getKeyChar();
-        if (((caracter < '0') || (caracter > '9')) && (caracter != '\b')) {
-            evt.consume();  // ignorar el evento de teclado
-        }
+        Interfaz.soloNum(evt);
     }//GEN-LAST:event_comederosKeyTyped
 
     private void ventiladoresKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_ventiladoresKeyTyped
         // TODO add your handling code here:
-        char caracter = evt.getKeyChar();
-        if (((caracter < '0') || (caracter > '9')) && (caracter != '\b')) {
-            evt.consume();  // ignorar el evento de teclado
-        }
+        Interfaz.soloNum(evt);
     }//GEN-LAST:event_ventiladoresKeyTyped
 
     private void bombillosKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_bombillosKeyTyped
         // TODO add your handling code here:
-        char caracter = evt.getKeyChar();
-        if (((caracter < '0') || (caracter > '9')) && (caracter != '\b')) {
-            evt.consume();  // ignorar el evento de teclado
-        }
+        Interfaz.soloNum(evt);
     }//GEN-LAST:event_bombillosKeyTyped
 
     private void electricaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_electricaActionPerformed
-        // TODO add your handling code here:
-        String criadora;
-        //Criadoras
-        if(electrica.isSelected()){
-            jLabel12.setVisible(false);
-            cilindros.setVisible(false);
-            criadora = String.valueOf(Math.round(cantidadPollos/250));
-            criadoras.setText(criadora);
-        }
+        calcularCriadoras(0);
     }//GEN-LAST:event_electricaActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton4ActionPerformed
 
-    private void cantidadStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_cantidadStateChanged
+    private void spnCantidadStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_spnCantidadStateChanged
         // TODO add your handling code here:
-    }//GEN-LAST:event_cantidadStateChanged
+    }//GEN-LAST:event_spnCantidadStateChanged
 
     private void gasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_gasActionPerformed
         // TODO add your handling code here:
-        String criadora, cilindro;
-        if(gas.isSelected()){
-            jLabel12.setVisible(true);
-            cilindros.setVisible(true);
-            criadora = String.valueOf(Math.round(cantidadPollos/800));
-            cilindro = String.valueOf(Integer.parseInt(criadora));
-            cilindros.setText(cilindro);
-            criadoras.setText(criadora);
-        }
+        calcularCriadoras(1);
     }//GEN-LAST:event_gasActionPerformed
 
     private void manualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_manualActionPerformed
         // TODO add your handling code here:
-        String bebedero;
-        if(manual.isSelected()){
-            bebedero =String.valueOf(Math.round(cantidadPollos/50));
-            bebederos.setText(bebedero);
-        }
+        calcularBebederos(0);
     }//GEN-LAST:event_manualActionPerformed
 
     private void automaticoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_automaticoActionPerformed
         // TODO add your handling code here:
-        String bebedero;
-        if(automatico.isSelected()){
-            bebedero = String.valueOf(Math.round(cantidadPollos/80));
-            bebederos.setText(bebedero);
-        }
+        calcularBebederos(1);
     }//GEN-LAST:event_automaticoActionPerformed
 
     private void nipleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nipleActionPerformed
         // TODO add your handling code here:
-        String bebedero;
-        if(niple.isSelected()){
-            bebedero = String.valueOf(Math.round(cantidadPollos/12));
-            bebederos.setText(bebedero);
-        }
+        calcularBebederos(2);
     }//GEN-LAST:event_nipleActionPerformed
 
     private void tubularActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tubularActionPerformed
         // TODO add your handling code here:
         //Comederos
-        if(tubular.isSelected()){
-            int resp = (clima==1)?Math.round(cantidadPollos/35):Math.round(cantidadPollos/40);
-            comederos.setText(resp + "");
-        }
+        calcularComederos(0);
     }//GEN-LAST:event_tubularActionPerformed
 
     private void grandeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_grandeActionPerformed
         // TODO add your handling code here:
-        String ventilador;
-        if(grande.isSelected()){
-            ventilador = Math.nextUp(cantidadPollos/500) + "";
-            ventiladores.setText(ventilador);
-        }
+        calcularVentiladores(0);
     }//GEN-LAST:event_grandeActionPerformed
 
     private void pequeñoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pequeñoActionPerformed
         // TODO add your handling code here:
-        String ventilador;
-        if(pequeño.isSelected()){
-            ventiladores.setText(Math.round(cantidadPollos/250)+"");
-        }
+        calcularVentiladores(1);
     }//GEN-LAST:event_pequeñoActionPerformed
 
     private void cmbInicioStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_cmbInicioStateChanged
@@ -585,12 +534,51 @@ public class ModalLote extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_cmbInicioStateChanged
       
-        private void calculoElementos(){
-        //Bandejas
-        bandejas.setText(Math.round(cantidadPollos/50)+"");
-        //Bombillos
-        bombillos.setText(Math.round(cantidadPollos/400)+"");        
+    private void calcularCriadoras(int tipo) {
+        String criadora;
+        switch (tipo) {
+            case 0:
+                jLabel12.setVisible(false);
+                cilindros.setVisible(false);
+                criadoras.setText((int) Math.ceil((double)cantidadPollos/(double)250) + "");
+                break;
+            case 1:
+                criadora = (int) Math.ceil((double)cantidadPollos/(double)800) + "";
+                jLabel12.setVisible(true);
+                cilindros.setVisible(true);
+                cilindros.setText(criadora);
+                criadoras.setText(criadora);
+                break;
         }
+    }
+    
+    private void calcularBebederos(int tipo) {
+        int cantidad =  (tipo==0)?50:
+                        (tipo==1)?80:
+                        100;
+        bebederos.setText((int)Math.ceil((double)cantidadPollos/(double)cantidad)+"");
+    }
+    
+    public void calcularComederos(int tipo) {
+        int resp = (int) Math.ceil( (clima==1)?((double)cantidadPollos/(double)35):((double)cantidadPollos/(double)40) );
+        comederos.setText(resp + "");
+    }
+    
+    public void calcularVentiladores(int tipo) {
+        int cantidad = (tipo==0)?500:250;
+        ventiladores.setText((int) Math.ceil((double)cantidadPollos/(double)cantidad)+"");
+    }
+    
+    private void calculoElementos(){
+        //Bandejas
+        bandejas.setText((int) Math.ceil((double)cantidadPollos/(double)50)+"");
+        //Bombillos
+        bombillos.setText((int) Math.ceil( (double)cantidadPollos/(double)400)+"");
+        calcularCriadoras(0);
+        calcularBebederos(0);
+        calcularComederos(0);
+        calcularVentiladores(0);
+    }
     
     /**
      * @param args the command line arguments
@@ -605,7 +593,6 @@ public class ModalLote extends javax.swing.JDialog {
     private javax.swing.ButtonGroup bgCriadoras;
     private javax.swing.ButtonGroup bgVentiladores;
     private javax.swing.JTextField bombillos;
-    private javax.swing.JSpinner cantidad;
     private javax.swing.JLabel cantidad1;
     private javax.swing.JTextField cilindros;
     private de.wannawork.jcalendar.JCalendarComboBox cmbFinal;
@@ -635,6 +622,7 @@ public class ModalLote extends javax.swing.JDialog {
     private javax.swing.JRadioButton manual;
     private javax.swing.JRadioButton niple;
     private javax.swing.JRadioButton pequeño;
+    private javax.swing.JSpinner spnCantidad;
     private javax.swing.JLabel tipo;
     private javax.swing.JRadioButton tubular;
     private javax.swing.JTextField ventiladores;

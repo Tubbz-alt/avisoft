@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.1" encoding="UTF-8" ?>
 
-<Form version="1.5" maxVersion="1.8" type="org.netbeans.modules.form.forminfo.JDialogFormInfo">
+<Form version="1.5" maxVersion="1.7" type="org.netbeans.modules.form.forminfo.JDialogFormInfo">
   <NonVisualComponents>
     <Component class="javax.swing.ButtonGroup" name="bgCriadoras">
     </Component>
@@ -97,7 +97,7 @@
                   </Group>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="cantidad" min="-2" pref="68" max="-2" attributes="0"/>
+                      <Component id="spnCantidad" min="-2" pref="68" max="-2" attributes="0"/>
                       <Group type="102" attributes="0">
                           <Component id="cmbInicio" min="-2" pref="152" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
@@ -123,7 +123,7 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabel4" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="cantidad" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="spnCantidad" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="32767" attributes="0"/>
               </Group>
@@ -136,7 +136,7 @@
             <Property name="text" type="java.lang.String" value="Cantidad Inicial:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JSpinner" name="cantidad">
+        <Component class="javax.swing.JSpinner" name="spnCantidad">
           <Properties>
             <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
               <SpinnerModel initial="0" minimum="0" numberType="java.lang.Integer" stepSize="1" type="number"/>
@@ -144,7 +144,7 @@
             <Property name="autoscrolls" type="boolean" value="true"/>
           </Properties>
           <Events>
-            <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="cantidadStateChanged"/>
+            <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="spnCantidadStateChanged"/>
           </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel1">
@@ -245,7 +245,7 @@
                           </Group>
                       </Group>
                   </Group>
-                  <EmptySpace max="32767" attributes="0"/>
+                  <EmptySpace pref="30" max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
                       <Component id="jLabel12" max="32767" attributes="0"/>
                       <Component id="cilindros" max="32767" attributes="0"/>

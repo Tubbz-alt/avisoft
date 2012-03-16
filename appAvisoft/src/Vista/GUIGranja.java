@@ -37,8 +37,8 @@ public class GUIGranja extends Interfaz {
             this.p.forms.add(this);
             initComponents();
             this.model = (javax.swing.table.DefaultTableModel) tblGalpon.getModel();
-            this.tblGalpon.getColumn("Otra").setCellRenderer(new ButtonRenderer());
-            this.tblGalpon.getColumn("Otra").setCellEditor(new ButtonEditor(this));
+            this.tblGalpon.getColumn("Agregar Lote").setCellRenderer(new ButtonRenderer());
+            this.tblGalpon.getColumn("Agregar Lote").setCellEditor(new ButtonEditor(this));
             cargar();
         } else {
             salir();
@@ -126,11 +126,9 @@ public class GUIGranja extends Interfaz {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(txtAreaGalpon, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblcm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(16, 16, 16)
-                        .addComponent(cmdAgregarGalpon)))
+                .addComponent(lblcm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(cmdAgregarGalpon)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
@@ -329,7 +327,7 @@ public class GUIGranja extends Interfaz {
 
             },
             new String [] {
-                "Número", "Area", "Cantidad (Pollos)", "Otra"
+                "Número", "Area", "Cantidad (Pollos)", "Agregar Lote"
             }
         ) {
             Class[] types = new Class [] {
@@ -389,16 +387,15 @@ public class GUIGranja extends Interfaz {
                     .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(47, 47, 47))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(11, 11, 11)
+                        .addGap(17, 17, 17)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
-                .addComponent(cmdRegistrar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cmdRegistrar))
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
 
@@ -477,7 +474,7 @@ public class GUIGranja extends Interfaz {
             int area = Integer.parseInt(txtAreaGalpon.getText());
             int resp = (cmbTemp.getSelectedIndex()==1)?area*8:area*10;
 
-            Object[] rowData = new Object[]{cont++,txtAreaGalpon.getText(), resp, "Agregar Lote"};
+            Object[] rowData = new Object[]{cont++,txtAreaGalpon.getText(), resp};
             model.addRow(rowData);
         }
     }//GEN-LAST:event_cmdAgregarGalponActionPerformed

@@ -64,12 +64,12 @@ public abstract class Interfaz extends javax.swing.JFrame {
     }
     
     public static void normalizeInput(javax.swing.JComboBox cmb) {
-            cmb.setBackground(new javax.swing.JComboBox().getBackground());
+            cmb.setBackground(javax.swing.UIManager.getColor("comboBox.Background"));
             cmb.setToolTipText(null);
     }
     
     public static void normalizeInput(javax.swing.JTextArea txt) {
-            txt.setBorder(new javax.swing.JTextArea().getBorder());
+            txt.setBorder(javax.swing.UIManager.getBorder("textField.Border"));
             txt.setToolTipText(null);
     }
     
