@@ -1,4 +1,6 @@
-﻿INSERT INTO departamento (cod,nombre) VALUES 
+﻿
+
+INSERT INTO departamento (cod,nombre) VALUES 
 (1,'Amazonas'),
 (2,'Antioquia'),
 (3,'Arauca'),

@@ -459,7 +459,7 @@ public class GUIGranja extends Interfaz {
     private void txtDptoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtDptoFocusLost
         // TODO add your handling code here:
         try {
-            int cod = Integer.parseInt(txtDpto.getText());
+            int cod = Integer.parseInt(txtDpto.getText().trim());
             if(cod>0 && cod<depar.size()) {
                 cmbDpto.setSelectedIndex(cod);
             } else {
@@ -518,9 +518,16 @@ public class GUIGranja extends Interfaz {
                 return;
             }
         }
-        int area = Integer.parseInt(txtAreaGalpon.getText());
+        int area = Integer.parseInt(txtAreaGalpon.getText().trim());
         int resp = (cmbTemp.getSelectedIndex()==1)?area*8:area*10;
 
+        areaGalpones += area;
+        if(areaGalpones > Integer.parseInt(txtArea.getText().trim())){
+            javax.swing.JOptionPane.showMessageDialog(this, "Has Alcanzado el Limite de Galpones");
+            areaGalpones -= area;
+            return;
+        }
+        
         model.addRow(new Object[]{cont++,area, resp, "add"});
     }//GEN-LAST:event_cmdAgregarGalponActionPerformed
 
@@ -535,7 +542,7 @@ public class GUIGranja extends Interfaz {
 
     private void txtAreaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtAreaFocusLost
         // TODO add your handling code here:
-        if(txtArea.getText().isEmpty()) {
+        if(txtArea.getText().trim().isEmpty()) {
             showError(txtArea, "No ha Ingresado Area de la Granja");
         } else {
             normalizeInput(txtArea);
@@ -552,7 +559,7 @@ public class GUIGranja extends Interfaz {
     }//GEN-LAST:event_cmbTipoActionPerformed
 
     private void txtAreaGalponFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtAreaGalponFocusLost
-        if(txtAreaGalpon.getText().isEmpty()) {
+        if(txtAreaGalpon.getText().trim().isEmpty()) {
             showError(txtAreaGalpon, "No ha Ingresado Area de la Granja");
         } else {
             normalizeInput(txtAreaGalpon);
@@ -578,8 +585,8 @@ public class GUIGranja extends Interfaz {
     
     private boolean validarGalpon() {
         boolean error = false;
-        String areaGalpon = txtAreaGalpon.getText();
-        String area = txtArea.getText();
+        String areaGalpon = txtAreaGalpon.getText().trim();
+        String area = txtArea.getText().trim();
         
         if(cmbTipo.getSelectedIndex()==0){
             showError(cmbTipo, "No ha Seleccionado Tipo de Granja");
@@ -605,15 +612,6 @@ public class GUIGranja extends Interfaz {
         
         if(error) {
             javax.swing.JOptionPane.showMessageDialog(this, "Por favor revise los campos", "Error en el formulario", javax.swing.JOptionPane.ERROR_MESSAGE);
-        } else{         
-            int intArea = Integer.parseInt(areaGalpon);
-            
-            areaGalpones += intArea;
-            if(areaGalpones > Integer.parseInt(area)){
-                javax.swing.JOptionPane.showMessageDialog(this, "Has Alcanzado el Limite de Galpones");
-                error = true;
-                areaGalpones -= intArea;
-            }
         }
         
         return !error;

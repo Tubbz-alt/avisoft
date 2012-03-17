@@ -35,9 +35,10 @@ public class GUIInsumo extends Interfaz {
         this.txtNombre.setText(null);
         this.txtTipo.setText(null);
         this.txtCantidad.setText(null);
-        this.txtMedida.setText(null);
+        this.cmbMedida.setSelectedIndex(0);
         
         this.btnAceptar.setText("Guardar");
+        this.btnAceptar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/Save_1.png")));
         this.txtCodigo.setEditable(true);
         this.txtCantidad.setEditable(true);
         this.txtCodigo.requestFocus();
@@ -57,20 +58,21 @@ public class GUIInsumo extends Interfaz {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
         txtCodigo = new javax.swing.JTextField();
         txtNombre = new javax.swing.JTextField();
         txtTipo = new javax.swing.JTextField();
         txtCantidad = new javax.swing.JTextField();
-        txtMedida = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
+        cmbMedida = new javax.swing.JComboBox();
         btnLimpiar = new javax.swing.JButton();
         btnEliminar = new javax.swing.JButton();
         btnAceptar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Gestionar Insumos");
+        setIconImage(getIconImage());
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Datos"));
+        jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         jLabel1.setText("Código:");
 
@@ -79,8 +81,6 @@ public class GUIInsumo extends Interfaz {
         jLabel3.setText("Tipo:");
 
         jLabel4.setText("Cantidad:");
-
-        jLabel5.setText("Medida:");
 
         txtCodigo.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
@@ -102,39 +102,46 @@ public class GUIInsumo extends Interfaz {
         jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/info.png"))); // NOI18N
         jLabel6.setToolTipText("Sí ya existe un Insumo, automaticamente se cargara en el sistema");
 
+        cmbMedida.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Kg.", "gr.", "mts.", "cms." }));
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel5))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtMedida, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtNombre, javax.swing.GroupLayout.DEFAULT_SIZE, 262, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel4))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtNombre, javax.swing.GroupLayout.DEFAULT_SIZE, 270, Short.MAX_VALUE)
+                            .addComponent(txtTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(txtCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(cmbMedida, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(18, 18, 18)
                         .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(3, 3, 3)
-                        .addComponent(jLabel6))
-                    .addComponent(txtTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jLabel6)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel1)
-                        .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel1)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -145,11 +152,9 @@ public class GUIInsumo extends Interfaz {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(txtCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(txtMedida, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(txtCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cmbMedida, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         btnLimpiar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/Clear.png"))); // NOI18N
@@ -182,30 +187,30 @@ public class GUIInsumo extends Interfaz {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(24, 24, 24)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(btnLimpiar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnEliminar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnAceptar))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addComponent(btnAceptar)
+                        .addGap(25, 25, 25))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnEliminar)
                     .addComponent(btnAceptar)
                     .addComponent(btnLimpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addGap(39, 39, 39))
+                .addContainerGap())
         );
 
         pack();
@@ -223,26 +228,26 @@ public class GUIInsumo extends Interfaz {
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
         // TODO add your handling code here:
-        if(txtCodigo.getText().isEmpty() || txtNombre.getText().isEmpty() || 
-           txtTipo.getText().isEmpty() || txtCantidad.getText().isEmpty() ||
-           txtMedida.getText().isEmpty()){
+        //no repitamos tantas funciones si podemos almacenarlas y no usemos to upperCase
+        String codigo = txtCodigo.getText().trim();
+        String nombre = txtNombre.getText().trim();
+        String tipo = txtTipo.getText().trim();
+        String cantidad = txtCantidad.getText().trim();
+        String medida = cmbMedida.getSelectedItem().toString();
+        if(codigo.isEmpty() || nombre.isEmpty() || tipo.isEmpty() || cantidad.isEmpty() || medida.isEmpty()){
             JOptionPane.showMessageDialog(null, "Por favor digite todos los campos...");
             return;
         }
         if(this.btnAceptar.getText().equals("Guardar")){
-            Insumo ins= new Insumo(txtCodigo.getText().trim().toUpperCase(), 
-                                  txtNombre.getText().trim().toUpperCase(), 
-                                  txtTipo.getText().trim().toUpperCase(),
-                                  Integer.valueOf(txtCantidad.getText().trim()),
-                                  txtMedida.getText().trim().toUpperCase());
+            Insumo ins= new Insumo(codigo, nombre, tipo, Integer.parseInt(cantidad), medida);
             JOptionPane.showMessageDialog(null, "Exito: Se registro un nuevo insumo...");
             this.insumos.put(ins.getId(), ins);
             limpiar();
         }
         else{
-            in.setNombre(this.txtNombre.getText().trim().toUpperCase());
-            in.setTipo(this.txtTipo.getText().trim().toUpperCase());
-            in.setMedida(this.txtMedida.getText().trim().toUpperCase());
+            in.setNombre(nombre);
+            in.setTipo(codigo);
+            in.setMedida(medida);
             
             JOptionPane.showMessageDialog(null, "Exito: el insumo a sido actualizado...");
             limpiar();
@@ -287,15 +292,23 @@ public class GUIInsumo extends Interfaz {
                 txtNombre.setText(in.getNombre());
                 txtTipo.setText(in.getTipo());
                 txtCantidad.setText(in.getCantidad()+"");
-                txtMedida.setText(in.getMedida());
+                cmbMedida.setSelectedItem(in.getMedida());
                 
                 this.txtCodigo.setEditable(false);
                 this.txtCantidad.setEditable(false);
                 this.btnAceptar.setText("Actualizar");
+                this.btnAceptar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/update.png")));
             }
         
     }//GEN-LAST:event_txtCodigoFocusLost
 
+    @Override
+    public java.awt.Image getIconImage() {
+        java.awt.Image retValue = java.awt.Toolkit.getDefaultToolkit().
+                getImage(ClassLoader.getSystemResource("Images/product.png"));
+        return retValue;
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -304,16 +317,15 @@ public class GUIInsumo extends Interfaz {
     private javax.swing.JButton btnAceptar;
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnLimpiar;
+    private javax.swing.JComboBox cmbMedida;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JTextField txtCantidad;
     private javax.swing.JTextField txtCodigo;
-    private javax.swing.JTextField txtMedida;
     private javax.swing.JTextField txtNombre;
     private javax.swing.JTextField txtTipo;
     // End of variables declaration//GEN-END:variables

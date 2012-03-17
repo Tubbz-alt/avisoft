@@ -73,4 +73,14 @@ public abstract class Interfaz extends javax.swing.JFrame {
             txt.setToolTipText(null);
     }
     
+    public static boolean isPhone (String tel) {
+        try {
+            int tam = tel.length();
+            Integer.parseInt(tel);
+            return (tam>7 && tam<12);
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+    
 }
