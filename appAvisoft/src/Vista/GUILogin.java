@@ -209,7 +209,7 @@ public class GUILogin extends Interfaz {
 
     private void cmbClaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbClaveActionPerformed
         // TODO add your handling code here:
-        new ModalClave(this, true).setVisible(true);
+        //new ModalClave(this, true).setVisible(true);
     }//GEN-LAST:event_cmbClaveActionPerformed
 
     private void formKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyReleased

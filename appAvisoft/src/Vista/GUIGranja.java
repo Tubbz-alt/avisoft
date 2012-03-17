@@ -12,6 +12,8 @@ package Vista;
 
 import Modelo.Granja;
 import java.util.ArrayList;
+import java.util.HashMap;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -25,6 +27,7 @@ public class GUIGranja extends Interfaz {
     private javax.swing.table.DefaultTableModel model;
     private int cont;
     private int areaGalpones;
+    private HashMap lotes;
     
     /** Creates new form GUIGranja */
     public GUIGranja(GUIPrincipal principal) {
@@ -36,17 +39,37 @@ public class GUIGranja extends Interfaz {
             this.muni = new ArrayList<String[]>();
             this.p.forms.add(this);
             initComponents();
-            this.model = (javax.swing.table.DefaultTableModel) tblGalpon.getModel();
-            this.tblGalpon.getColumn("Agregar Lote").setCellRenderer(new ButtonRenderer());
-            this.tblGalpon.getColumn("Agregar Lote").setCellEditor(new ButtonEditor(this));
+            this.model = (DefaultTableModel) tblGalpon.getModel();
             cargar();
+            javax.swing.table.TableColumn addLote = tblGalpon.getColumn("Agregar Lote");
+            addLote.setCellEditor(new ButtonEditor(this));
+            addLote.setCellRenderer(new ButtonRenderer());
         } else {
             salir();
         }
     }
+
+    public HashMap getLotes() {
+        return lotes;
+    }
     
     public int getTipo(){
         return cmbTipo.getSelectedIndex();
+    }
+    
+    public int getClima () {
+        return cmbTemp.getSelectedIndex();
+    }
+    
+    public void addLote(java.util.Date fInit, java.util.Date fEnd, int cantInit, String tCriadera, String tBebedero,
+            String tComedero, String tVentilador, String cCilindros, String cCriadoras, String cBandejas,
+            String cBebederos, String cComederos, String cVentiladores, String cBombillos) {
+        int i = tblGalpon.getSelectedRow();
+        //Esto se debe validar antes de guardar en memoria que es lo que voy a hacer a continuación
+        lotes.put(i+1, new Object[]{fInit, fEnd, cantInit, tCriadera, tBebedero, tComedero, tVentilador, cCilindros,
+        cCriadoras, cBandejas, cBebederos, cComederos, cVentiladores, cBombillos});
+        ButtonEditor btnEdit = (ButtonEditor) tblGalpon.getCellEditor(i, 3);
+        btnEdit.setLabel("block");
     }
     
     /** This method is called from within the constructor to
@@ -346,6 +369,10 @@ public class GUIGranja extends Interfaz {
             }
         });
         jScrollPane1.setViewportView(tblGalpon);
+        tblGalpon.getColumnModel().getColumn(2).setMinWidth(150);
+        tblGalpon.getColumnModel().getColumn(3).setMinWidth(100);
+        tblGalpon.getColumnModel().getColumn(3).setCellEditor(null);
+        tblGalpon.getColumnModel().getColumn(3).setCellRenderer(null);
 
         cmdRegistrar.setText("Registrar");
 
@@ -358,24 +385,18 @@ public class GUIGranja extends Interfaz {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGap(0, 527, Short.MAX_VALUE)
-                                .addComponent(cmdRegistrar))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 1, Short.MAX_VALUE)))
-                        .addContainerGap(102, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel1)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 495, Short.MAX_VALUE))
+                                .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 402, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(cmdRegistrar)
                         .addContainerGap())))
         );
         layout.setVerticalGroup(
@@ -388,7 +409,7 @@ public class GUIGranja extends Interfaz {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(17, 17, 17)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -473,9 +494,8 @@ public class GUIGranja extends Interfaz {
         if(validarGalpon()) {
             int area = Integer.parseInt(txtAreaGalpon.getText());
             int resp = (cmbTemp.getSelectedIndex()==1)?area*8:area*10;
-
-            Object[] rowData = new Object[]{cont++,txtAreaGalpon.getText(), resp};
-            model.addRow(rowData);
+            
+            model.addRow(new Object[]{cont++,area, resp, "add"});
         }
     }//GEN-LAST:event_cmdAgregarGalponActionPerformed
 
@@ -497,23 +517,18 @@ public class GUIGranja extends Interfaz {
         }
     }//GEN-LAST:event_txtAreaFocusLost
 
-    private void txtAreaGalponFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtAreaGalponFocusLost
-        // TODO add your handling code here:
-        if(txtAreaGalpon.getText().isEmpty()) {
-            showError(txtAreaGalpon, "No ha Ingresado Area del Galpon");
-        } else {
-            normalizeInput(txtAreaGalpon);
-        }
-    }//GEN-LAST:event_txtAreaGalponFocusLost
-
     private void cmbTipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbTipoActionPerformed
         // TODO add your handling code here:
         if(cmbTipo.getSelectedIndex()==0){
-            showError(cmbTemp, "No ha Seleccionado Tipo de Granja");
+            showError(cmbTipo, "No ha Seleccionado Tipo de Granja");
         } else {
             normalizeInput(cmbTipo);
         }
     }//GEN-LAST:event_cmbTipoActionPerformed
+
+    private void txtAreaGalponFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtAreaGalponFocusLost
+
+    }//GEN-LAST:event_txtAreaGalponFocusLost
 
     @Override
     public java.awt.Image getIconImage() {
@@ -538,11 +553,11 @@ public class GUIGranja extends Interfaz {
             showError(cmbTemp, "No ha Seleccionado Tipo de Clima");
             error = true;
         }
-        if(txtArea.getText().isEmpty()) {
+        if(area.isEmpty()) {
             showError(txtArea, "No ha Ingresado Area de la Granja");
             error = true;
         } 
-        if(txtAreaGalpon.getText().isEmpty()) {
+        if(areaGalpon.isEmpty()) {
             showError(txtAreaGalpon, "No ha Ingresado Area del Galpon");
             error = true;
         }
@@ -578,10 +593,6 @@ public class GUIGranja extends Interfaz {
         }
     }
     
-    public int Clima(){
-        int p=cmbTemp.getSelectedIndex();
-        return p;
-    }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.jidesoft.swing.AutoCompletionComboBox cmbDpto;

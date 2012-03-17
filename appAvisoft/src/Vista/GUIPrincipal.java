@@ -43,6 +43,8 @@ public class GUIPrincipal extends Interfaz {
         menuNuevaGranja = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
+        jMenuItem3 = new javax.swing.JMenuItem();
+        jMenuItem4 = new javax.swing.JMenuItem();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
         menuAcerca = new javax.swing.JMenuItem();
@@ -75,6 +77,22 @@ public class GUIPrincipal extends Interfaz {
             }
         });
         jMenu2.add(jMenuItem2);
+
+        jMenuItem3.setText("Insumos");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem3);
+
+        jMenuItem4.setText("Orden de compra");
+        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem4ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem4);
 
         jMenuBar3.add(jMenu2);
 
@@ -166,6 +184,16 @@ public class GUIPrincipal extends Interfaz {
         new GUIProveedor(this).setVisible(true);
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        // TODO add your handling code here:
+        new GUIInsumo(this).setVisible(true);
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
+
+    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+        // TODO add your handling code here:
+        new GUICompra(this).setVisible(true);
+    }//GEN-LAST:event_jMenuItem4ActionPerformed
+
     class ManejadorEventos extends java.awt.event.WindowAdapter {
         @Override
         public void windowClosing(java.awt.event.WindowEvent e) {
@@ -190,6 +218,8 @@ public class GUIPrincipal extends Interfaz {
     private javax.swing.JMenuBar jMenuBar3;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem menuAcerca;
     private javax.swing.JMenuItem menuConf;
     private javax.swing.JMenu menuLog;
