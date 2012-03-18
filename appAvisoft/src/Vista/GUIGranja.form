@@ -463,12 +463,8 @@
                 </Column>
                 <Column maxWidth="-1" minWidth="100" prefWidth="-1" resizable="true">
                   <Title/>
-                  <Editor editor="org.netbeans.modules.form.ComponentChooserEditor">
-                    <ComponentRef name="null"/>
-                  </Editor>
-                  <Renderer editor="org.netbeans.modules.form.ComponentChooserEditor">
-                    <ComponentRef name="null"/>
-                  </Renderer>
+                  <Editor/>
+                  <Renderer/>
                 </Column>
               </TableColumnModel>
             </Property>

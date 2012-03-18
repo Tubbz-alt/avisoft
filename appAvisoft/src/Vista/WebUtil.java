@@ -23,7 +23,7 @@ import javax.mail.internet.MimeMultipart;
 
 /**
  *
- * @author Sergio
+ * @author Kraken
  */
 public abstract class WebUtil {
     

@@ -68,7 +68,7 @@ public class GUIPrincipal extends Interfaz {
 
         jMenuBar3.add(jMenu4);
 
-        jMenu2.setText("Financiera");
+        jMenu2.setText("Finanzas");
 
         jMenuItem2.setText("Proveedores");
         jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
@@ -180,17 +180,14 @@ public class GUIPrincipal extends Interfaz {
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-        // TODO add your handling code here:
         new GUIProveedor(this).setVisible(true);
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
-        // TODO add your handling code here:
         new GUIInsumo(this).setVisible(true);
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
-        // TODO add your handling code here:
         new GUICompra(this).setVisible(true);
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
