@@ -149,7 +149,7 @@ public class ModalClave extends javax.swing.JDialog {
         private ModalClave self;
         
         public Load (ModalClave self) {
-            this.self = self;
+            this.self= self;            
         }
         
         @Override
