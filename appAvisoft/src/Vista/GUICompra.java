@@ -18,7 +18,7 @@ import java.util.ArrayList;
  * @author zirex
  */
 public class GUICompra extends Interfaz {
-    private ArrayList<String[]> insumos= new ArrayList<String[]>();;
+    private ArrayList<String[]> insumos= new ArrayList<String[]>();
 
     /** Creates new form GUICompra */
     public GUICompra(GUIPrincipal principal) {

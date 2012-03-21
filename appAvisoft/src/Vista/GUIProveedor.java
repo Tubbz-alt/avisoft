@@ -11,7 +11,7 @@
 package Vista;
 
 import Modelo.Proveedor;
-import java.util.ArrayList;
+import java.util.HashMap;
 import javax.swing.JOptionPane;
 
 /**
@@ -20,13 +20,12 @@ import javax.swing.JOptionPane;
  */
 public class GUIProveedor extends Interfaz {
 
-    private ArrayList<Proveedor> proveedores;
-    private String accion= "Guardar";
+    private HashMap proveedores;
     /** Creates new form GUIProveedor */
     public GUIProveedor(GUIPrincipal principal) {
         initComponents();
         this.setLocationRelativeTo(null);
-        proveedores= new ArrayList<Proveedor>();
+        proveedores= new HashMap();
     }
     
     private void limpiar(){
@@ -40,7 +39,55 @@ public class GUIProveedor extends Interfaz {
         txtDirVendedor.setText("");
         txtTlfVendedor.setText("");
         
-        this.accion= "Guardar";
+        txtNit.setEditable(true);
+        txtCedula.setEditable(true);
+        btnAceptar.setText("Guardar");
+        btnAceptar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/Save_1.png")));
+    }
+    
+    private boolean validarCamposProv(){
+        boolean error=false;
+        if(txtNit.getText().isEmpty()){
+            showError(txtNit, "No se ha digitado el nit \n de la empresa");
+            error=true;
+        }
+        if(txtRazonSocial.getText().isEmpty()){
+            showError(txtRazonSocial, "No se ha digitado el nombre \n de la empresa");
+            error=true;
+        }
+        if(txtDireccion.getText().isEmpty()){
+            showError(txtDireccion, "No se ha digitado la dirección \n de la empresa");
+            error=true;
+        }
+        if(txtTlf.getText().isEmpty()){
+            showError(txtTlf, "No se ha digitado el teléfono \n de la empresa");
+            error=true;
+        }
+        if(txtCedula.getText().isEmpty()){
+            showError(txtCedula, "No se ha digitado la cedula \n del vendedor");
+            error=true;
+        }
+        if(txtNombres.getText().isEmpty()){
+            showError(txtNombres, "No se ha digitado los nombres \n del vendedor");
+            error=true;
+        }
+        if(txtApellidos.getText().isEmpty()){
+            showError(txtApellidos, "No se ha digitado los apellidos \n del vendedor");
+            error=true;
+        }
+        if(txtDirVendedor.getText().isEmpty()){
+            showError(txtDirVendedor, "No se ha digitado la dirección \n del vendedor");
+            error=true;
+        }
+        if(txtTlfVendedor.getText().isEmpty()){
+            showError(txtTlfVendedor, "No se ha digitado el teléfono \n del vendedor");
+            error=true;
+        }
+        
+        if(error)
+            JOptionPane.showMessageDialog(this, "Por favor revise los campos", "Error en el formulario", javax.swing.JOptionPane.ERROR_MESSAGE);
+        
+        return error;
     }
 
     /** This method is called from within the constructor to
@@ -73,10 +120,10 @@ public class GUIProveedor extends Interfaz {
         txtDirVendedor = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
         txtTlfVendedor = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        btnLimpiar = new javax.swing.JButton();
+        btnBuscar = new javax.swing.JButton();
+        btnBorrar = new javax.swing.JButton();
+        btnAceptar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -86,12 +133,35 @@ public class GUIProveedor extends Interfaz {
 
         jLabel1.setText("NIT...............:");
 
+        txtNit.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtNitFocusLost(evt);
+            }
+        });
+
         jLabel2.setText("Razón Social:");
+
+        txtRazonSocial.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtRazonSocialFocusLost(evt);
+            }
+        });
 
         jLabel3.setText("Dirección.....:");
 
+        txtDireccion.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtDireccionFocusLost(evt);
+            }
+        });
+
         jLabel4.setText("Tlf. Empresa:");
 
+        txtTlf.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtTlfFocusLost(evt);
+            }
+        });
         txtTlf.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtTlfKeyTyped(evt);
@@ -112,14 +182,14 @@ public class GUIProveedor extends Interfaz {
                         .addGap(3, 3, 3)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtNit, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtRazonSocial, javax.swing.GroupLayout.DEFAULT_SIZE, 265, Short.MAX_VALUE)))
+                            .addComponent(txtRazonSocial, javax.swing.GroupLayout.DEFAULT_SIZE, 308, Short.MAX_VALUE)))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel4)
                             .addComponent(jLabel3))
                         .addGap(4, 4, 4)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtDireccion, javax.swing.GroupLayout.DEFAULT_SIZE, 261, Short.MAX_VALUE)
+                            .addComponent(txtDireccion, javax.swing.GroupLayout.DEFAULT_SIZE, 304, Short.MAX_VALUE)
                             .addComponent(txtTlf, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap())
         );
@@ -147,6 +217,11 @@ public class GUIProveedor extends Interfaz {
 
         jLabel5.setText("Cedula....:");
 
+        txtCedula.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtCedulaFocusLost(evt);
+            }
+        });
         txtCedula.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtCedulaKeyTyped(evt);
@@ -155,6 +230,11 @@ public class GUIProveedor extends Interfaz {
 
         jLabel6.setText("Nombres:");
 
+        txtNombres.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtNombresFocusLost(evt);
+            }
+        });
         txtNombres.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtNombresKeyTyped(evt);
@@ -163,6 +243,11 @@ public class GUIProveedor extends Interfaz {
 
         jLabel7.setText("Apellidos:");
 
+        txtApellidos.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtApellidosFocusLost(evt);
+            }
+        });
         txtApellidos.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtApellidosKeyTyped(evt);
@@ -171,8 +256,19 @@ public class GUIProveedor extends Interfaz {
 
         jLabel8.setText("Dirección:");
 
+        txtDirVendedor.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtDirVendedorFocusLost(evt);
+            }
+        });
+
         jLabel9.setText("Tlf./Cel...:");
 
+        txtTlfVendedor.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtTlfVendedorFocusLost(evt);
+            }
+        });
         txtTlfVendedor.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtTlfVendedorKeyTyped(evt);
@@ -193,7 +289,7 @@ public class GUIProveedor extends Interfaz {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtTlfVendedor, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtDirVendedor, javax.swing.GroupLayout.DEFAULT_SIZE, 274, Short.MAX_VALUE)))
+                            .addComponent(txtDirVendedor, javax.swing.GroupLayout.DEFAULT_SIZE, 317, Short.MAX_VALUE)))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel6)
@@ -202,8 +298,8 @@ public class GUIProveedor extends Interfaz {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtCedula, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtNombres, javax.swing.GroupLayout.DEFAULT_SIZE, 275, Short.MAX_VALUE)
-                            .addComponent(txtApellidos, javax.swing.GroupLayout.DEFAULT_SIZE, 275, Short.MAX_VALUE))))
+                            .addComponent(txtNombres, javax.swing.GroupLayout.DEFAULT_SIZE, 318, Short.MAX_VALUE)
+                            .addComponent(txtApellidos, javax.swing.GroupLayout.DEFAULT_SIZE, 318, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -245,39 +341,39 @@ public class GUIProveedor extends Interfaz {
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/Clear.png"))); // NOI18N
-        jButton1.setText("Limpiar");
-        jButton1.setToolTipText("borrar entradas");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnLimpiar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/Clear.png"))); // NOI18N
+        btnLimpiar.setText("Limpiar");
+        btnLimpiar.setToolTipText("borrar entradas");
+        btnLimpiar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnLimpiarActionPerformed(evt);
             }
         });
 
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/company.png"))); // NOI18N
-        jButton2.setText("Buscar");
-        jButton2.setToolTipText("Seleccioná Proveedor");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        btnBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/company.png"))); // NOI18N
+        btnBuscar.setText("Buscar");
+        btnBuscar.setToolTipText("Seleccioná Proveedor");
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                btnBuscarActionPerformed(evt);
             }
         });
 
-        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/Delete.png"))); // NOI18N
-        jButton3.setText("Borrar");
-        jButton3.setToolTipText("Elimina Proveedor");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        btnBorrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/Delete.png"))); // NOI18N
+        btnBorrar.setText("Borrar");
+        btnBorrar.setToolTipText("Elimina Proveedor");
+        btnBorrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                btnBorrarActionPerformed(evt);
             }
         });
 
-        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/Save_1.png"))); // NOI18N
-        jButton4.setText("Aceptar");
-        jButton4.setToolTipText("Guarda empresa y proveedor");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        btnAceptar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/Save_1.png"))); // NOI18N
+        btnAceptar.setText("Guardar");
+        btnAceptar.setToolTipText("Guarda empresa y proveedor");
+        btnAceptar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                btnAceptarActionPerformed(evt);
             }
         });
 
@@ -288,107 +384,97 @@ public class GUIProveedor extends Interfaz {
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jButton1)
+                .addComponent(btnLimpiar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton2)
+                .addComponent(btnBuscar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton3)
+                .addComponent(btnBorrar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton4)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(btnAceptar)
+                .addContainerGap(54, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 384, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2)
-                    .addComponent(jButton3)
-                    .addComponent(jButton4))
-                .addContainerGap(21, Short.MAX_VALUE))
+                    .addComponent(btnLimpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnBuscar)
+                    .addComponent(btnBorrar)
+                    .addComponent(btnAceptar))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+    private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
         // TODO add your handling code here:
-        if(txtNit.getText().isEmpty() || txtRazonSocial.getText().isEmpty() ||
-           txtTlf.getText().isEmpty() || txtDireccion.getText().isEmpty() || txtCedula.getText().isEmpty() ||
-           txtNombres.getText().isEmpty() || txtApellidos.getText().isEmpty() || txtDirVendedor.getText().isEmpty() ||
-           txtTlfVendedor.getText().isEmpty()){
-            JOptionPane.showMessageDialog(this, "Atención: Por favor digite todos los campos...");
-            return;
-        }
-        if(this.accion.equals("Guardar")){
-            Proveedor pro= new Proveedor(txtNit.getText().trim(), txtRazonSocial.getText().trim().toUpperCase(),
-                                     txtTlf.getText().trim(), txtDireccion.getText().trim().toUpperCase(),
-                                     txtCedula.getText().trim(), txtNombres.getText().trim().toUpperCase(),
-                                     txtApellidos.getText().trim(), txtDirVendedor.getText().trim().toUpperCase(),
-                                     txtTlfVendedor.getText().trim());
-            proveedores.add(pro);
-            JOptionPane.showMessageDialog(this, "Exito: Se agrego un nuevo proveedor...");
-            limpiar();
-        }
-        else{
-            for (Proveedor p: this.proveedores) {
-                if(p.getNit().equals(txtNit.getText())){
-                    p.setRazonSocial(txtRazonSocial.getText().trim().toUpperCase());
-                    p.setDirEmp(txtDireccion.getText().trim().toUpperCase());
-                    p.setTelEmp(txtTlf.getText().trim());
-                    p.setNombres(txtNombres.getText().trim().toUpperCase());
-                    p.setApellidos(txtApellidos.getText().trim().toUpperCase());
-                    p.setDireccion(txtDirVendedor.getText().trim().toUpperCase());
-                    p.setTelefono(txtTlfVendedor.getText().trim().toUpperCase());
-                    
-                    JOptionPane.showMessageDialog(this, "Exito: Se Actualizo el proveedor...");
-                    limpiar();
-                    
-                    break;
-                }    
+        String nit= txtNit.getText().trim();
+        String razonSocial= txtRazonSocial.getText().trim();
+        String tlfEm= txtTlf.getText().trim();
+        String dirEm= txtDireccion.getText().trim();
+        String cedula= txtCedula.getText().trim();
+        String nombres= txtNombres.getText().trim();
+        String apellidos= txtApellidos.getText().trim();
+        String dirVen= txtDirVendedor.getText().trim();
+        String tlfVen= txtTlfVendedor.getText().trim();
+        
+        if(!validarCamposProv())
+            if(btnAceptar.getText().equals("Guardar")){
+                Proveedor pro= new Proveedor(nit, razonSocial, tlfEm, dirEm, cedula,
+                                             nombres, apellidos, dirVen, tlfVen);
+                proveedores.put(cedula, pro);
+                JOptionPane.showMessageDialog(this, "Exito: Se agrego un nuevo proveedor...");
+                limpiar();
             }
-        }
-    }//GEN-LAST:event_jButton4ActionPerformed
+            else{
+                Proveedor p= (Proveedor) proveedores.get(cedula);
+                        p.setRazonSocial(razonSocial);
+                        p.setDirEmp(dirEm);
+                        p.setTelEmp(tlfEm);
+                        p.setNombres(nombres);
+                        p.setApellidos(apellidos);
+                        p.setDireccion(dirVen);
+                        p.setTelefono(tlfVen);
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+                        JOptionPane.showMessageDialog(this, "Exito: Se actualizo el proveedor...");
+                        limpiar();
+            }
+    }//GEN-LAST:event_btnAceptarActionPerformed
+
+    private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
         // TODO add your handling code here:
         limpiar();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btnLimpiarActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         // TODO add your handling code here:
-        String ced = javax.swing.JOptionPane.showInputDialog("Cedula: ");
-        Proveedor pro = null;
-        for(Proveedor p: this.proveedores) {
-            if(p.getCedula().equals(ced)) {
-                pro = p;
-                break;
-            }
+        String ced = javax.swing.JOptionPane.showInputDialog("Cedula del proveedor: ");
+        Proveedor pro=(Proveedor) proveedores.get(ced);
+        if(pro == null){
+            pro= Proveedor.existe(ced);
+            if(pro!=null)
+                proveedores.put(pro.getCedula(), pro);
         }
-        if(pro == null)
-            pro = Proveedor.existe(ced);
-            if(pro != null) {
-                proveedores.add(pro);
-                txtNit.setText(pro.getNit());
-                txtRazonSocial.setText(pro.getRazonSocial());
-                txtDireccion.setText(pro.getDirEmp());
-                txtTlf.setText(pro.getTelEmp());
-                txtCedula.setText(pro.getCedula());
-                txtNombres.setText(pro.getNombres());
-                txtApellidos.setText(pro.getApellidos());
-                txtDirVendedor.setText(pro.getDireccion());
-                txtTlfVendedor.setText(pro.getTelefono());
-                
-                this.accion="Actualizar";
-            } else {
-                JOptionPane.showMessageDialog(this,"El proveedor no existe");
-            }
-            for(Proveedor p: this.proveedores){
-                System.out.println(p.toString());
-            }
-    }//GEN-LAST:event_jButton2ActionPerformed
+        if(pro != null) {
+            txtNit.setText(pro.getNit());
+            txtRazonSocial.setText(pro.getRazonSocial());
+            txtDireccion.setText(pro.getDirEmp());
+            txtTlf.setText(pro.getTelEmp());
+            txtCedula.setText(pro.getCedula());
+            txtNombres.setText(pro.getNombres());
+            txtApellidos.setText(pro.getApellidos());
+            txtDirVendedor.setText(pro.getDireccion());
+            txtTlfVendedor.setText(pro.getTelefono());
+            
+            txtNit.setEditable(false);
+            txtCedula.setEditable(false);
+            btnAceptar.setText("Actualizar");
+            btnAceptar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/Update.png")));
+        } else  JOptionPane.showMessageDialog(this,"El proveedor no existe");
+    }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void txtTlfKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTlfKeyTyped
         // TODO add your handling code here:
@@ -415,31 +501,86 @@ public class GUIProveedor extends Interfaz {
         soloABC(evt);
     }//GEN-LAST:event_txtApellidosKeyTyped
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void btnBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarActionPerformed
         // TODO add your handling code here:
-        Proveedor p = null;
-        for (Proveedor pro : this.proveedores) {
-            if(pro.getNit().equals(txtNit.getText().trim())){
-                p = pro;
-                break;
+        Proveedor pro= (Proveedor) proveedores.get(txtCedula.getText());
+        if(pro!=null){
+            int confirmado= JOptionPane.showConfirmDialog(this, "¿Realmente desea eliminar \n el proveedor?");
+            if(JOptionPane.OK_OPTION==confirmado){
+                pro.eliminar();
+                proveedores.remove(txtCedula.getText());
+                JOptionPane.showMessageDialog(this, "Exito: Se elimino el proveedor", "Confirmación", JOptionPane.INFORMATION_MESSAGE);
+                limpiar();
             }
+            else JOptionPane.showMessageDialog(this, "Vale... no se eliminará el proveedor", "Confirmación", JOptionPane.INFORMATION_MESSAGE);
         }
-        
-        p.eliminar();
-        System.out.println("Sale");
-        JOptionPane.showMessageDialog(this, "Exito: Se elimino el proveedor...");
-        limpiar();
-    }//GEN-LAST:event_jButton3ActionPerformed
+        else JOptionPane.showMessageDialog(this, "No hay ningún proveedor para ser eliminado...");
+    }//GEN-LAST:event_btnBorrarActionPerformed
+
+    private void txtNitFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtNitFocusLost
+        // TODO add your handling code here:
+        if(!txtNit.getText().isEmpty())
+            normalizeInput(txtNit);
+    }//GEN-LAST:event_txtNitFocusLost
+
+    private void txtRazonSocialFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtRazonSocialFocusLost
+        // TODO add your handling code here:
+        if(!txtRazonSocial.getText().isEmpty())
+            normalizeInput(txtRazonSocial);
+    }//GEN-LAST:event_txtRazonSocialFocusLost
+
+    private void txtDireccionFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtDireccionFocusLost
+        // TODO add your handling code here:
+        if(!txtDireccion.getText().isEmpty())
+            normalizeInput(txtDireccion);
+    }//GEN-LAST:event_txtDireccionFocusLost
+
+    private void txtTlfFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtTlfFocusLost
+        // TODO add your handling code here:
+        if(!txtTlf.getText().isEmpty()){
+            normalizeInput(txtTlf);
+        }
+    }//GEN-LAST:event_txtTlfFocusLost
+
+    private void txtCedulaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCedulaFocusLost
+        // TODO add your handling code here:
+        if(!txtCedula.getText().isEmpty())
+            normalizeInput(txtCedula);
+    }//GEN-LAST:event_txtCedulaFocusLost
+
+    private void txtNombresFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtNombresFocusLost
+        // TODO add your handling code here:
+        if(!txtNombres.getText().isEmpty())
+            normalizeInput(txtNombres);
+    }//GEN-LAST:event_txtNombresFocusLost
+
+    private void txtApellidosFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtApellidosFocusLost
+        // TODO add your handling code here:
+        if(!txtApellidos.getText().isEmpty())
+            normalizeInput(txtApellidos);
+    }//GEN-LAST:event_txtApellidosFocusLost
+
+    private void txtDirVendedorFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtDirVendedorFocusLost
+        // TODO add your handling code here:
+        if(!txtDirVendedor.getText().isEmpty())
+            normalizeInput(txtDirVendedor);
+    }//GEN-LAST:event_txtDirVendedorFocusLost
+
+    private void txtTlfVendedorFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtTlfVendedorFocusLost
+        // TODO add your handling code here:
+        if(!txtTlfVendedor.getText().isEmpty())
+            normalizeInput(txtTlfVendedor);
+    }//GEN-LAST:event_txtTlfVendedorFocusLost
 
     /**
      * @param args the command line arguments
      */
    
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
+    private javax.swing.JButton btnAceptar;
+    private javax.swing.JButton btnBorrar;
+    private javax.swing.JButton btnBuscar;
+    private javax.swing.JButton btnLimpiar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

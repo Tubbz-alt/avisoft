@@ -20,14 +20,12 @@ import javax.swing.JOptionPane;
  */
 public class GUIInsumo extends Interfaz {
     private HashMap insumos;
-    private Insumo in;
 
     /** Creates new form GUIInsumo */
     public GUIInsumo(GUIPrincipal principal) {
         initComponents();
         this.setLocationRelativeTo(null);
         this.insumos= new HashMap();
-        this.in=null;
     }
     
     private void limpiar(){
@@ -42,6 +40,35 @@ public class GUIInsumo extends Interfaz {
         this.txtCodigo.setEditable(true);
         this.txtCantidad.setEditable(true);
         this.txtCodigo.requestFocus();
+    }
+    
+    private boolean validarInsumo(){
+        boolean error=false;
+        if(txtCodigo.getText().isEmpty()){
+            showError(txtCodigo, "No ha digitado ningun código valido");
+            error=true;
+        }
+        
+        if(txtNombre.getText().isEmpty()){
+            showError(txtNombre, "No le ha colocado un nombre al insumo");
+            error=true;
+        }
+        
+        if(txtTipo.getText().isEmpty()){
+            showError(txtTipo, "No ha digitado el tipo de insumo");
+            error=true;
+        }
+        
+        if(txtCantidad.getText().isEmpty()){
+            showError(txtCantidad, "No ha ingresado una cantidad para el insumo");
+            error=true;
+        }
+        
+        if(error) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Por favor revise los campos", "Error en el formulario", javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
+            
+        return error;
     }
 
     /** This method is called from within the constructor to
@@ -93,6 +120,23 @@ public class GUIInsumo extends Interfaz {
             }
         });
 
+        txtNombre.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtNombreFocusLost(evt);
+            }
+        });
+
+        txtTipo.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtTipoFocusLost(evt);
+            }
+        });
+
+        txtCantidad.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtCantidadFocusLost(evt);
+            }
+        });
         txtCantidad.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtCantidadKeyTyped(evt);
@@ -190,27 +234,26 @@ public class GUIInsumo extends Interfaz {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addContainerGap())
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(12, 12, 12)
                         .addComponent(btnLimpiar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnEliminar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnAceptar)
-                        .addGap(25, 25, 25))))
+                        .addComponent(btnAceptar))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnEliminar)
                     .addComponent(btnAceptar)
                     .addComponent(btnLimpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addContainerGap())
+                .addGap(18, 18, 18))
         );
 
         pack();
@@ -234,8 +277,7 @@ public class GUIInsumo extends Interfaz {
         String tipo = txtTipo.getText().trim();
         String cantidad = txtCantidad.getText().trim();
         String medida = cmbMedida.getSelectedItem().toString();
-        if(codigo.isEmpty() || nombre.isEmpty() || tipo.isEmpty() || cantidad.isEmpty() || medida.isEmpty()){
-            JOptionPane.showMessageDialog(null, "Por favor digite todos los campos...");
+        if(validarInsumo()){
             return;
         }
         if(this.btnAceptar.getText().equals("Guardar")){
@@ -245,9 +287,10 @@ public class GUIInsumo extends Interfaz {
             limpiar();
         }
         else{
-            in.setNombre(nombre);
-            in.setTipo(codigo);
-            in.setMedida(medida);
+            Insumo insumo= (Insumo)insumos.get(txtCodigo.getText());
+            insumo.setNombre(nombre);
+            insumo.setTipo(tipo);
+            insumo.setMedida(medida);
             
             JOptionPane.showMessageDialog(null, "Exito: el insumo a sido actualizado...");
             limpiar();
@@ -258,21 +301,20 @@ public class GUIInsumo extends Interfaz {
         // TODO add your handling code here:
        Insumo aux = (Insumo) this.insumos.get(txtCodigo.getText());
         if(aux!=null){
-            int confirmado= JOptionPane.showConfirmDialog(this, "¿Realmente desea eliminar'\n'el Insumo?");
+            int confirmado= JOptionPane.showConfirmDialog(this, "¿Realmente desea eliminar \n el insumo?");
             if(JOptionPane.OK_OPTION==confirmado){
                 aux.eliminar();
-                this.in= null;
-                this.insumos.remove(aux);
+                this.insumos.remove(txtCodigo.getText());
                 limpiar();
 
-                JOptionPane.showMessageDialog(null, "Exito: Se elimino el proveedor...");
+                JOptionPane.showMessageDialog(null, "Exito: Se elimino el insumo...");
             }
             else{
                 JOptionPane.showMessageDialog(null, "Vale!! no borro nada...");
             }
         }
         else
-            JOptionPane.showMessageDialog(this, "No hay ningún Insumo para Eliminar");
+            JOptionPane.showMessageDialog(this, "No hay ningún insumo para eliminar");
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
@@ -282,25 +324,46 @@ public class GUIInsumo extends Interfaz {
 
     private void txtCodigoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCodigoFocusLost
         // TODO add your handling code here:
-            in = (Insumo) insumos.get(txtCodigo.getText());
-            if(in==null){
-                in= Insumo.existe(txtCodigo.getText().trim());
-                if(in!=null)
-                    this.insumos.put(in.getId(), in);
+        if(!txtCodigo.getText().isEmpty())
+            normalizeInput(txtCodigo);
+        
+        Insumo ins = (Insumo) insumos.get(txtCodigo.getText());
+        if(ins==null){
+            ins= Insumo.existe(txtCodigo.getText().trim());
+            if(ins!=null)
+            this.insumos.put(ins.getId(), ins);
             }                
-            if(in != null){
-                txtNombre.setText(in.getNombre());
-                txtTipo.setText(in.getTipo());
-                txtCantidad.setText(in.getCantidad()+"");
-                cmbMedida.setSelectedItem(in.getMedida());
-                
-                this.txtCodigo.setEditable(false);
-                this.txtCantidad.setEditable(false);
-                this.btnAceptar.setText("Actualizar");
-                this.btnAceptar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/update.png")));
+        if(ins != null){
+            txtNombre.setText(ins.getNombre());
+            txtTipo.setText(ins.getTipo());
+            txtCantidad.setText(ins.getCantidad()+"");
+            cmbMedida.setSelectedItem(ins.getMedida());
+
+            this.txtCodigo.setEditable(false);
+            this.txtCantidad.setEditable(false);
+            this.btnAceptar.setText("Actualizar");
+            this.btnAceptar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/Update.png")));
             }
         
     }//GEN-LAST:event_txtCodigoFocusLost
+
+    private void txtNombreFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtNombreFocusLost
+        // TODO add your handling code here:
+        if(!txtNombre.getText().isEmpty())
+            normalizeInput(txtNombre);
+    }//GEN-LAST:event_txtNombreFocusLost
+
+    private void txtTipoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtTipoFocusLost
+        // TODO add your handling code here:
+        if(!txtTipo.getText().isEmpty())
+            normalizeInput(txtTipo);
+    }//GEN-LAST:event_txtTipoFocusLost
+
+    private void txtCantidadFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCantidadFocusLost
+        // TODO add your handling code here:
+        if(!txtCantidad.getText().isEmpty())
+            normalizeInput(txtCantidad);
+    }//GEN-LAST:event_txtCantidadFocusLost
 
     @Override
     public java.awt.Image getIconImage() {
