@@ -500,8 +500,9 @@ public class ModalLote extends javax.swing.JDialog {
         g.addLote(cmbInicio.getDate(), cmbFinal.getDate(), Integer.parseInt(spnCantidad.getValue().toString()), 
                 bgCriadoras.getSelection().getActionCommand(), bgBebederos.getSelection().getActionCommand(),
                 bgComederos.getSelection().getActionCommand(), bgVentiladores.getSelection().getActionCommand(),
-                txtCilindros.getText(), txtCriadoras.getText(), txtBandejas.getText(), txtBebederos.getText(), 
-                txtComederos.getText(), txtVentiladores.getText(), txtBombillos.getText());
+                txtCilindros.getText().trim(), txtCriadoras.getText().trim(), txtBandejas.getText().trim(), 
+                txtBebederos.getText().trim(), txtComederos.getText().trim(), txtVentiladores.getText().trim(), 
+                txtBombillos.getText().trim());
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void spnCantidadStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_spnCantidadStateChanged
