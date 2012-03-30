@@ -13,14 +13,8 @@ package Vista;
 import Modelo.Compra;
 import Modelo.Insumo;
 import Modelo.Proveedor;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Locale;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
 
 /**
  *
@@ -30,21 +24,21 @@ public class GUICompra extends Interfaz {
     private GUIPrincipal p;
     private ArrayList<String[]> insumos;
     private ArrayList<String[]> proveedores;
-    private DefaultTableModel model;
+    private javax.swing.table.DefaultTableModel model;
     private float totalCompra=0;
-    private SimpleDateFormat formateador= new SimpleDateFormat("dd-MM-yyyy", new Locale("es_ES"));
 
     /** Creates new form GUICompra */
     public GUICompra(GUIPrincipal principal) {
         initComponents();
+        this.model = (DefaultTableModel) tabla.getModel();
         this.p= principal;
         this.p.forms.add(this);
         this.insumos= new ArrayList<String[]>();
         this.proveedores= new ArrayList<String[]>();
+        txtNumFact.setText(Compra.getMaxNumFact());
         setLocationRelativeTo(null);
         cargarInsumos();
         cargarProveedores();
-        cargarTabla();
    }
     
     private void cargarInsumos(){
@@ -59,35 +53,6 @@ public class GUICompra extends Interfaz {
         for (String[] prv : proveedores) {
             cmbProveedores.addItem(prv[1]+" : "+prv[3]+" : "+prv[4]);
         }
-    }
-    
-    private void cargarTabla(){
-        this.model= new DefaultTableModel();
-        this.model.addColumn("N°");
-        this.model.addColumn("Nombre Ins.");
-        this.model.addColumn("Cantidad");
-        this.model.addColumn("Precio Unt.");
-        this.model.addColumn("Total");
-        tabla.setModel(this.model);
-        
-        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-        tabla.getColumnModel().getColumn(1).setCellRenderer(centerRenderer);
-        
-        DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
-        rightRenderer.setHorizontalAlignment(JLabel.RIGHT);
-        tabla.getColumnModel().getColumn(2).setCellRenderer(rightRenderer);
-        tabla.getColumnModel().getColumn(3).setCellRenderer(rightRenderer);
-        tabla.getColumnModel().getColumn(4).setCellRenderer(rightRenderer);
-        
-        TableColumn col= tabla.getColumnModel().getColumn(0); // N°.
-        col.setPreferredWidth(30);
-        
-        col= tabla.getColumnModel().getColumn(1); // Nombre Ins.
-        col.setPreferredWidth(180);
-        
-        col= tabla.getColumnModel().getColumn(3); //Precio Unt.
-        col.setPreferredWidth(90);
     }
 
     /** This method is called from within the constructor to
@@ -206,7 +171,7 @@ public class GUICompra extends Interfaz {
                     .addComponent(jLabel5)
                     .addComponent(jLabel6)
                     .addComponent(jLabel7))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtMedida, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -247,7 +212,7 @@ public class GUICompra extends Interfaz {
                                 .addComponent(jLabel3)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(txtExistencia, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(cmbInsumos, javax.swing.GroupLayout.DEFAULT_SIZE, 224, Short.MAX_VALUE))))
+                            .addComponent(cmbInsumos, javax.swing.GroupLayout.DEFAULT_SIZE, 271, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -270,17 +235,17 @@ public class GUICompra extends Interfaz {
 
         tabla.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "N°", "Nombre Ins.", "Cantidad", "Precio Unt.", "Total"
             }
         ));
         tabla.setComponentPopupMenu(jpmTabla);
         jScrollPane1.setViewportView(tabla);
+        tabla.getColumnModel().getColumn(0).setMinWidth(50);
+        tabla.getColumnModel().getColumn(1).setMinWidth(180);
+        tabla.getColumnModel().getColumn(3).setMinWidth(90);
 
         jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/Save_1.png"))); // NOI18N
         jButton2.setText("Grabar");
@@ -320,7 +285,7 @@ public class GUICompra extends Interfaz {
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addComponent(ccbFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 133, Short.MAX_VALUE)
                                 .addComponent(jLabel11)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(txtNumFact, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -452,7 +417,7 @@ public class GUICompra extends Interfaz {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-        int numFact=0; //Integer.parseInt(txtNumFact.getText());
+        int numFact= Integer.parseInt(txtNumFact.getText());
         java.util.Date fechaFact= ccbFecha.getDate();
         double total=Double.parseDouble(txtTotalCompra.getText());
         String cedula=null;
@@ -465,7 +430,7 @@ public class GUICompra extends Interfaz {
             }
         }
         if(this.tabla.getRowCount()==0){
-            JOptionPane.showMessageDialog(this, "No ha agregado ningún item de insumos", "Advertencia", JOptionPane.ERROR_MESSAGE);
+            javax.swing.JOptionPane.showMessageDialog(this, "No ha agregado ningún item de insumos", "Advertencia", javax.swing.JOptionPane.ERROR_MESSAGE);
         }
         else{
             items= new Object[this.tabla.getRowCount()][4];
@@ -475,8 +440,8 @@ public class GUICompra extends Interfaz {
                 items[i][2] = this.tabla.getValueAt(i, 2);
                 items[i][3] = this.tabla.getValueAt(i, 3);
             }
-            Compra com= new Compra(numFact, fechaFact, total, cedula, items);
-            JOptionPane.showMessageDialog(this, "Exito: se ha ingresado una \n nueva orden de compra...", "Información", JOptionPane.INFORMATION_MESSAGE);
+            new Compra(numFact, fechaFact, total, cedula, items);
+            javax.swing.JOptionPane.showMessageDialog(this, "Exito: se ha ingresado una \n nueva orden de compra...", "Información", javax.swing.JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_jButton2ActionPerformed
 

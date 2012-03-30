@@ -22,16 +22,15 @@ public class Compra{
 
     public Compra(int numFact, Date fechaFact, double total, String cedula, Object [][] items) {
         this.con= new Conexion();
-        this.con.query("INSERT INTO compra VALUES ("+numFact+", "+new java.sql.Date(fechaFact.getTime())+", "+total+", '"+cedula+"')");
+        this.con.query("INSERT INTO compra VALUES ("+numFact+", '"+new java.sql.Date(fechaFact.getTime())+"', "+total+", '"+cedula+"')");
         this.numFact = numFact;
         this.fechaFact = fechaFact;
         this.total = total;
         this.cedula = cedula;
         this.items= items;
         
-        for(int i=0; i<this.items.length; i++){
-            this.con.query("INSERT INTO detalle_compra VALUES ('"+this.items[i][0].toString()+"', '"+this.items[i][1].toString()+"', '"+
-                           this.items[i][2].toString()+"', '"+this.items[i][3].toString()+"');");            
+        for(int i=0; i<items.length; i++){this.con.query("INSERT INTO detalle_compra VALUES ('"+items[i][0].toString()+"', '"+items[i][1].toString()+"', '"+
+                           items[i][2].toString()+"', '"+items[i][3].toString()+"');");       
         }
     }
     
@@ -82,11 +81,22 @@ public class Compra{
                         break;
                     }
             return new Compra(Integer.parseInt(res.get(0).get("num")+""),
-                              new Date(res.get(0).get("fecha")+""),
+                              (Date) res.get(0).get("fecha"),
                               Double.parseDouble(res.get(0).get("total")+""),
                               res.get(0).get("cedula")+"",
                               itemsCompra,'a');
         }
         return null;
+    }
+    
+    public static String getMaxNumFact() {
+        Conexion c = new Conexion();
+        ArrayList<HashMap> res = c.query("SELECT MAX(num) as max FROM compra");
+        int max = 0;
+        Object data = res.get(0).get("max");
+        if (data != null) {
+            max = Integer.parseInt(data.toString());
+        }
+        return (max+1)+"";
     }
 }
