@@ -64,6 +64,24 @@ public class Proveedor extends Persona {
     public String getTelEmp() {
         return telEmp;
     }
+    
+    public static ArrayList<String[]> getProveedores(){
+        Conexion c= new Conexion();
+        ArrayList<String[]> pro= new ArrayList<String[]>();
+        ArrayList<HashMap> res= c.query("SELECT p.cedula, pn.nombres, pn.apellidos,"+
+                                        " p.nit, e.razon_social FROM proveedor p,"+
+                                        " persona pn, empresa e WHERE p.cedula= pn.cedula"+
+                                        " AND p.nit= e.nit");
+        if(!res.isEmpty()){
+            for (HashMap prv : res) {
+                String[] p= {prv.get("nit").toString(), prv.get("razon_social").toString(),
+                             prv.get("cedula").toString(), prv.get("nombres").toString(),
+                             prv.get("apellidos").toString()};
+                pro.add(p);
+            }
+        }
+        return pro;
+    }
 
     public void setDirEmp(String dirEmp) {
         this.con.query("UPDATE empresa SET direccion = '"+dirEmp+"' WHERE nit = '"+this.nit+"'");

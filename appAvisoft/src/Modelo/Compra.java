@@ -22,7 +22,7 @@ public class Compra{
 
     public Compra(int numFact, Date fechaFact, double total, String cedula, Object [][] items) {
         this.con= new Conexion();
-        this.con.query("INSERT INTO compra VALUES ("+numFact+", "+fechaFact+", "+total+", '"+cedula+"')");
+        this.con.query("INSERT INTO compra VALUES ("+numFact+", "+new java.sql.Date(fechaFact.getTime())+", "+total+", '"+cedula+"')");
         this.numFact = numFact;
         this.fechaFact = fechaFact;
         this.total = total;
