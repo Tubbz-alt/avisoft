@@ -35,6 +35,12 @@ public class GUIInsumo extends Interfaz {
         this.txtCantidad.setText(null);
         this.cmbMedida.setSelectedIndex(0);
         
+        normalizeInput(txtCodigo);
+        normalizeInput(txtNombre);
+        normalizeInput(txtTipo);
+        normalizeInput(txtCantidad);
+        normalizeInput(cmbMedida);
+        
         this.btnAceptar.setText("Guardar");
         this.btnAceptar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/Save_1.png")));
         this.txtCodigo.setEditable(true);
@@ -68,7 +74,7 @@ public class GUIInsumo extends Interfaz {
             javax.swing.JOptionPane.showMessageDialog(this, "Por favor revise los campos", "Error en el formulario", javax.swing.JOptionPane.ERROR_MESSAGE);
         }
             
-        return error;
+        return !error;
     }
 
     /** This method is called from within the constructor to
@@ -278,7 +284,7 @@ public class GUIInsumo extends Interfaz {
         String tipo = txtTipo.getText().trim();
         String cantidad = txtCantidad.getText().trim();
         String medida = cmbMedida.getSelectedItem().toString();
-        if(validarInsumo()){
+        if(!validarInsumo()){
             return;
         }
         if(this.btnAceptar.getText().equals("Guardar")){
@@ -324,9 +330,10 @@ public class GUIInsumo extends Interfaz {
     }//GEN-LAST:event_btnLimpiarActionPerformed
 
     private void txtCodigoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCodigoFocusLost
-        // TODO add your handling code here:
-        if(!txtCodigo.getText().isEmpty())
+        // TODO add your handling code here: convenciones JAVA doc toda estructura de control va en llaves
+        if(!txtCodigo.getText().isEmpty()) {
             normalizeInput(txtCodigo);
+        }
         
         Insumo ins = (Insumo) insumos.get(txtCodigo.getText());
         if(ins==null){
@@ -335,6 +342,10 @@ public class GUIInsumo extends Interfaz {
             this.insumos.put(ins.getId(), ins);
             }                
         if(ins != null){
+            normalizeInput(txtNombre);
+            normalizeInput(txtTipo);
+            normalizeInput(txtCantidad);
+            normalizeInput(cmbMedida);
             txtNombre.setText(ins.getNombre());
             txtTipo.setText(ins.getTipo());
             txtCantidad.setText(ins.getCantidad()+"");
