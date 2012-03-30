@@ -19,11 +19,14 @@ import javax.swing.JOptionPane;
  * @author zirex
  */
 public class GUIInsumo extends Interfaz {
+    private GUIPrincipal p;
     private HashMap insumos;
 
     /** Creates new form GUIInsumo */
     public GUIInsumo(GUIPrincipal principal) {
         initComponents();
+        this.p= principal;
+        this.p.forms.add(this);
         this.setLocationRelativeTo(null);
         this.insumos= new HashMap();
     }
@@ -331,7 +334,10 @@ public class GUIInsumo extends Interfaz {
 
     private void txtCodigoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCodigoFocusLost
         // TODO add your handling code here: convenciones JAVA doc toda estructura de control va en llaves
-        if(!txtCodigo.getText().isEmpty()) {
+        if(txtCodigo.getText().isEmpty()) {
+            showError(txtCodigo, "No ha digitado ningun código valido");
+        }
+        else{
             normalizeInput(txtCodigo);
         }
         
@@ -361,20 +367,32 @@ public class GUIInsumo extends Interfaz {
 
     private void txtNombreFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtNombreFocusLost
         // TODO add your handling code here:
-        if(!txtNombre.getText().isEmpty())
+        if(txtNombre.getText().isEmpty()){
+            showError(txtNombre, "No le ha colocado un nombre al insumo");
+        }
+        else{
             normalizeInput(txtNombre);
+        }
     }//GEN-LAST:event_txtNombreFocusLost
 
     private void txtTipoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtTipoFocusLost
         // TODO add your handling code here:
-        if(!txtTipo.getText().isEmpty())
+        if(txtTipo.getText().isEmpty()){
+            showError(txtTipo, "No ha digitado el tipo de insumo");
+        }
+        else{
             normalizeInput(txtTipo);
+        }
     }//GEN-LAST:event_txtTipoFocusLost
 
     private void txtCantidadFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCantidadFocusLost
         // TODO add your handling code here:
-        if(!txtCantidad.getText().isEmpty())
+        if(txtCantidad.getText().isEmpty()){
+            showError(txtCantidad, "No ha ingresado una cantidad para el insumo");
+        }
+        else{
             normalizeInput(txtCantidad);
+        }
     }//GEN-LAST:event_txtCantidadFocusLost
 
     @Override

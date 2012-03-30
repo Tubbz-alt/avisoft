@@ -19,12 +19,14 @@ import javax.swing.JOptionPane;
  * @author zirex
  */
 public class GUIProveedor extends Interfaz {
-
+    private GUIPrincipal p;
     private HashMap proveedores;
     /** Creates new form GUIProveedor */
     public GUIProveedor(GUIPrincipal principal) {
         initComponents();
-        this.setLocationRelativeTo(null);
+        this.p= principal;
+        this.p.forms.add(this);
+        setLocationRelativeTo(null);
         proveedores= new HashMap();
     }
     
@@ -38,6 +40,16 @@ public class GUIProveedor extends Interfaz {
         txtApellidos.setText("");
         txtDirVendedor.setText("");
         txtTlfVendedor.setText("");
+        
+        normalizeInput(txtNit);
+        normalizeInput(txtRazonSocial);
+        normalizeInput(txtDireccion);
+        normalizeInput(txtTlf);
+        normalizeInput(txtCedula);
+        normalizeInput(txtNombres);
+        normalizeInput(txtApellidos);
+        normalizeInput(txtDirVendedor);
+        normalizeInput(txtTlfVendedor);
         
         txtNit.setEditable(true);
         txtCedula.setEditable(true);
@@ -87,7 +99,7 @@ public class GUIProveedor extends Interfaz {
         if(error)
             JOptionPane.showMessageDialog(this, "Por favor revise los campos", "Error en el formulario", javax.swing.JOptionPane.ERROR_MESSAGE);
         
-        return error;
+        return !error;
     }
 
     /** This method is called from within the constructor to
@@ -126,6 +138,8 @@ public class GUIProveedor extends Interfaz {
         btnAceptar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Crear proveedor");
+        setIconImage(getIconImage());
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Datos del Proveedor"));
 
@@ -421,26 +435,28 @@ public class GUIProveedor extends Interfaz {
         String dirVen= txtDirVendedor.getText().trim();
         String tlfVen= txtTlfVendedor.getText().trim();
         
-        if(!validarCamposProv())
-            if(btnAceptar.getText().equals("Guardar")){
-                Proveedor pro= new Proveedor(nit, razonSocial, tlfEm, dirEm, cedula,
-                                             nombres, apellidos, dirVen, tlfVen);
-                proveedores.put(cedula, pro);
-                JOptionPane.showMessageDialog(this, "Exito: Se agrego un nuevo proveedor...");
-                limpiar();
-            }
-            else{
-                Proveedor p= (Proveedor) proveedores.get(cedula);
-                        p.setRazonSocial(razonSocial);
-                        p.setDirEmp(dirEm);
-                        p.setTelEmp(tlfEm);
-                        p.setNombres(nombres);
-                        p.setApellidos(apellidos);
-                        p.setDireccion(dirVen);
-                        p.setTelefono(tlfVen);
+        if(!validarCamposProv()){
+            return;
+        }
+        if(btnAceptar.getText().equals("Guardar")){
+            Proveedor pro= new Proveedor(nit, razonSocial, tlfEm, dirEm, cedula,
+                                         nombres, apellidos, dirVen, tlfVen);
+            proveedores.put(cedula, pro);
+            JOptionPane.showMessageDialog(this, "Exito: Se agrego un nuevo proveedor...");
+            limpiar();
+        }
+        else{
+            Proveedor p= (Proveedor) proveedores.get(cedula);
+            p.setRazonSocial(razonSocial);
+            p.setDirEmp(dirEm);
+            p.setTelEmp(tlfEm);
+            p.setNombres(nombres);
+            p.setApellidos(apellidos);
+            p.setDireccion(dirVen);
+            p.setTelefono(tlfVen);
 
-                        JOptionPane.showMessageDialog(this, "Exito: Se actualizo el proveedor...");
-                        limpiar();
+            JOptionPane.showMessageDialog(this, "Exito: Se actualizo el proveedor...");
+            limpiar();
             }
     }//GEN-LAST:event_btnAceptarActionPerformed
 
@@ -459,6 +475,7 @@ public class GUIProveedor extends Interfaz {
                 proveedores.put(pro.getCedula(), pro);
         }
         if(pro != null) {
+            normalizeInput(txtNit);
             txtNit.setText(pro.getNit());
             txtRazonSocial.setText(pro.getRazonSocial());
             txtDireccion.setText(pro.getDirEmp());
@@ -519,59 +536,111 @@ public class GUIProveedor extends Interfaz {
 
     private void txtNitFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtNitFocusLost
         // TODO add your handling code here:
-        if(!txtNit.getText().isEmpty())
+        if(txtNit.getText().isEmpty()){
+            showError(txtNit, "No se ha digitado el nit \n de la empresa");
+        }
+        else{
             normalizeInput(txtNit);
+        }
     }//GEN-LAST:event_txtNitFocusLost
 
     private void txtRazonSocialFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtRazonSocialFocusLost
         // TODO add your handling code here:
-        if(!txtRazonSocial.getText().isEmpty())
+        if(txtRazonSocial.getText().isEmpty()){
+            showError(txtRazonSocial, "No se ha digitado el nombre \n de la empresa");
+        }
+        else{
             normalizeInput(txtRazonSocial);
+        }
     }//GEN-LAST:event_txtRazonSocialFocusLost
 
     private void txtDireccionFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtDireccionFocusLost
         // TODO add your handling code here:
-        if(!txtDireccion.getText().isEmpty())
+        if(txtDireccion.getText().isEmpty()){
+            showError(txtDireccion, "No se ha digitado la dirección \n de la empresa");
+        }
+        else{
             normalizeInput(txtDireccion);
+        }
     }//GEN-LAST:event_txtDireccionFocusLost
 
     private void txtTlfFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtTlfFocusLost
         // TODO add your handling code here:
-        if(!txtTlf.getText().isEmpty()){
-            normalizeInput(txtTlf);
+        if(txtTlf.getText().isEmpty()){
+            showError(txtTlf, "No ha digitado un numero de teléfono.");
         }
+        else            
+            if(!isPhone(txtTlf.getText())){
+                showError(txtTlf, "Por favor digite un numero de teléfono correcto.");
+            }
+            else
+                if(!txtTlf.getText().isEmpty() && isPhone(txtTlf.getText())){
+                    normalizeInput(txtTlf);
+                }
     }//GEN-LAST:event_txtTlfFocusLost
 
     private void txtCedulaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCedulaFocusLost
         // TODO add your handling code here:
-        if(!txtCedula.getText().isEmpty())
+        if(txtCedula.getText().isEmpty()){
+            showError(txtCedula, "No se ha digitado la cedula \n del vendedor");
+        }
+        else{
             normalizeInput(txtCedula);
+        }
     }//GEN-LAST:event_txtCedulaFocusLost
 
     private void txtNombresFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtNombresFocusLost
         // TODO add your handling code here:
-        if(!txtNombres.getText().isEmpty())
+        if(txtNombres.getText().isEmpty()){
+            showError(txtNombres, "No se ha digitado los nombres \n del vendedor");
+        }
+        else{
             normalizeInput(txtNombres);
+        }
     }//GEN-LAST:event_txtNombresFocusLost
 
     private void txtApellidosFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtApellidosFocusLost
         // TODO add your handling code here:
-        if(!txtApellidos.getText().isEmpty())
+        if(txtApellidos.getText().isEmpty()){
+            showError(txtApellidos, "No se ha digitado los apellidos \n del vendedor");
+        }
+        else{
             normalizeInput(txtApellidos);
+        }
     }//GEN-LAST:event_txtApellidosFocusLost
 
     private void txtDirVendedorFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtDirVendedorFocusLost
         // TODO add your handling code here:
-        if(!txtDirVendedor.getText().isEmpty())
+        if(txtDirVendedor.getText().isEmpty()){
+            showError(txtDirVendedor, "No se ha digitado la dirección \n del vendedor");
+        }
+        else{
             normalizeInput(txtDirVendedor);
+        }
     }//GEN-LAST:event_txtDirVendedorFocusLost
 
     private void txtTlfVendedorFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtTlfVendedorFocusLost
         // TODO add your handling code here:
-        if(!txtTlfVendedor.getText().isEmpty())
-            normalizeInput(txtTlfVendedor);
+        if(txtTlfVendedor.getText().isEmpty()){
+            showError(txtTlfVendedor, "No se ha digitado el teléfono \n del vendedor");
+        }
+        else
+            if(!isPhone(txtTlfVendedor.getText())){
+                showError(txtTlfVendedor, "Por favor digite un numero de teléfono correcto");
+            }
+            else{
+                if(!txtTlfVendedor.getText().isEmpty() && isPhone(txtTlfVendedor.getText())){
+                    normalizeInput(txtTlfVendedor);
+                }
+            }            
     }//GEN-LAST:event_txtTlfVendedorFocusLost
 
+    @Override
+    public java.awt.Image getIconImage(){
+        java.awt.Image retValue= java.awt.Toolkit.getDefaultToolkit().
+                getImage(ClassLoader.getSystemResource("Images/supplier.png"));
+        return retValue;
+    }
     /**
      * @param args the command line arguments
      */
