@@ -4,9 +4,14 @@
  */
 package Modelo;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -29,8 +34,11 @@ public class Compra{
         this.cedula = cedula;
         this.items= items;
         
-        for(int i=0; i<items.length; i++){this.con.query("INSERT INTO detalle_compra VALUES ('"+items[i][0].toString()+"', '"+items[i][1].toString()+"', '"+
-                           items[i][2].toString()+"', '"+items[i][3].toString()+"');");       
+        for(int i=0; i<items.length; i++){
+            this.con.query("INSERT INTO detalle_compra VALUES ('"+items[i][0].toString()+"', '"+items[i][1].toString()+"', '"+
+                           items[i][2].toString()+"', '"+items[i][3].toString()+"');");
+            Insumo ins= Insumo.existe(items[i][1].toString());
+            ins.setCantidad(Integer.parseInt(items[i][2]+""), 1);
         }
     }
     
@@ -47,8 +55,10 @@ public class Compra{
         return cedula;
     }
 
-    public Date getFechaFact() {
-        return fechaFact;
+    public String getFechaFact() {
+        SimpleDateFormat formateador= new SimpleDateFormat("yyyy-MM-dd", new Locale("es_ES"));
+        String fecha=formateador.format(fechaFact.getTime());
+        return fecha;
     }
 
     public Object[][] getItems() {
@@ -64,6 +74,8 @@ public class Compra{
     }
     
     public static Compra existe(String numFact){
+        SimpleDateFormat formateador= new SimpleDateFormat("yyyy-MM-dd", new Locale("es_ES"));
+        java.util.Date fecha= null;
         Conexion c= new Conexion();
         Object [][] itemsCompra;
         ArrayList<String []> insumos= Insumo.getInsumos();
@@ -72,16 +84,25 @@ public class Compra{
         if(!res.isEmpty()){
             ArrayList<HashMap> res1= c.query("SELECT * FROM detalle_compra where num="+numFact);
             itemsCompra= new Object[res1.size()][3];
-            for(int i=0; i<res1.size(); i++)
-                for(String [] insumo: insumos)
-                    if(insumo[0].equals(res.get(i).get("id"))){
+            int i=0;
+            while(i < res1.size()){
+                for(String [] insumo: insumos){
+                    if(insumo[0].equals(res1.get(i).get("id"))){
                         itemsCompra[i][0]=insumo[1];
-                        itemsCompra[i][1]=res.get(i).get("cantidad");
-                        itemsCompra[i][2]=res.get(i).get("precio");
+                        itemsCompra[i][1]=res1.get(i).get("cantidad");
+                        itemsCompra[i][2]=res1.get(i).get("precio");                        
                         break;
                     }
-            return new Compra(Integer.parseInt(res.get(0).get("num")+""),
-                              (Date) res.get(0).get("fecha"),
+                }
+                i++;
+            }
+            try {
+                fecha= formateador.parse(res.get(0).get("fecha").toString());
+            } catch (ParseException ex) {
+                Logger.getLogger(Compra.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            return new Compra(Integer.parseInt(numFact),
+                              new java.util.Date(fecha.getTime()),
                               Double.parseDouble(res.get(0).get("total")+""),
                               res.get(0).get("cedula")+"",
                               itemsCompra,'a');
@@ -98,5 +119,12 @@ public class Compra{
             max = Integer.parseInt(data.toString());
         }
         return (max+1)+"";
+    }
+    
+    //---------------Código para imprimir factura---------------------------
+    public void imprimir(){
+        Imprimir imp= new Imprimir();
+        imp.imprimir_Compra("Avisoft", String.valueOf(this.numFact), 
+                            String.valueOf(this.cedula), String.valueOf(this.total), items);
     }
 }
