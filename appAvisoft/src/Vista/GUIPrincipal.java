@@ -68,7 +68,7 @@ public class GUIPrincipal extends Interfaz {
 
         jMenuBar3.add(jMenu4);
 
-        jMenu2.setText("Finanzas");
+        jMenu2.setText("Inventario");
 
         jMenuItem2.setText("Proveedores");
         jMenuItem2.addActionListener(new java.awt.event.ActionListener() {

@@ -19,8 +19,9 @@ public class Proveedor extends Persona {
     private String razonSocial;
     private String telEmp;
     private String dirEmp;
+    private String estado;
 
-    public Proveedor(String nit, String razonSocial, String telEmp, String dirEmp, String cedula, String nombres, String apellidos, String direccion, String telefono) {
+    public Proveedor(String nit, String razonSocial, String telEmp, String dirEmp, String cedula, String nombres, String apellidos, String direccion, String telefono, String estado) {
         super(cedula, nombres, apellidos, direccion, telefono);
         ArrayList<HashMap> res = this.con.query("SELECT razon_social, telefono, direccion FROM empresa WHERE nit = '"+nit+"'");
         if(res.isEmpty()) {
@@ -37,16 +38,18 @@ public class Proveedor extends Persona {
         }
         res = this.con.query("SELECT COUNT(*) as num FROM proveedor WHERE cedula = '"+cedula+"'");
         if(Integer.parseInt(res.get(0).get("num")+"") == 0) {
-            this.con.query("INSERT INTO proveedor (nit, cedula) VALUES ('"+nit+"', '"+cedula+"')");
+            this.estado = estado;
+            this.con.query("INSERT INTO proveedor (nit, cedula, estado) VALUES ('"+nit+"', '"+cedula+"', '"+estado+"')");
         }
     }
 
-    private Proveedor(String nit, String razonSocial, String telEmp, String dirEmp, String cedula, String nombres, String apellidos, String direccion, String telefono, char a) {
+    private Proveedor(String nit, String razonSocial, String telEmp, String dirEmp, String cedula, String nombres, String apellidos, String direccion, String telefono, String estado, char a) {
         super(cedula, nombres, apellidos, direccion, telefono);
         this.nit = nit;
         this.razonSocial = razonSocial;
         this.telEmp = telEmp;
         this.dirEmp = dirEmp;
+        this.estado= estado;
     }
 
     public String getDirEmp() {
@@ -63,6 +66,10 @@ public class Proveedor extends Persona {
 
     public String getTelEmp() {
         return telEmp;
+    }
+
+    public String getEstado() {
+        return estado;
     }
     
     public static ArrayList<String[]> getProveedores(){
@@ -97,6 +104,11 @@ public class Proveedor extends Persona {
         this.con.query("UPDATE empresa SET telefono = '"+telEmp+"' WHERE nit = '"+this.nit+"'");
         this.telEmp = telEmp;
     }
+
+    public void setEstado(String estado) {
+        this.con.query("UPDATE proveedor SET estado = '"+estado+"' WHERE cedula ='"+this.cedula+"'");
+        this.estado = estado;
+    }
     
     @Override
     public void eliminar() {
@@ -112,16 +124,16 @@ public class Proveedor extends Persona {
     
     public static Proveedor existe (String cedula) {
         Conexion c = new Conexion();
-        ArrayList<HashMap> res = c.query("SELECT p.nombres, p.apellidos, p.direccion, p.telefono, e.nit, e.razon_social, e.direccion as dir_emp, e.telefono as tel_emp FROM empresa e, persona p, proveedor pro WHERE pro.nit = e.nit AND pro.cedula = p.cedula AND p.cedula = '"+cedula+"'");
+        ArrayList<HashMap> res = c.query("SELECT p.nombres, p.apellidos, p.direccion, p.telefono, pro.estado, e.nit, e.razon_social, e.direccion as dir_emp, e.telefono as tel_emp FROM empresa e, persona p, proveedor pro WHERE pro.nit = e.nit AND pro.cedula = p.cedula AND p.cedula = '"+cedula+"'");
         if(!res.isEmpty()) {
-            return new Proveedor(res.get(0).get("nit")+"", res.get(0).get("razon_social")+"", res.get(0).get("tel_emp")+"", res.get(0).get("dir_emp")+"", cedula, res.get(0).get("nombres")+"", res.get(0).get("apellidos")+"", res.get(0).get("direccion")+"", res.get(0).get("telefono")+"", 'a');
+            return new Proveedor(res.get(0).get("nit")+"", res.get(0).get("razon_social")+"", res.get(0).get("tel_emp")+"", res.get(0).get("dir_emp")+"", cedula, res.get(0).get("nombres")+"", res.get(0).get("apellidos")+"", res.get(0).get("direccion")+"", res.get(0).get("telefono")+"", res.get(0).get("estado")+"", 'a');
         }
         return null;
     }
 
     @Override
     public String toString() {
-        return "Proveedor{" + "nit=" + nit + ", razonSocial=" + razonSocial + ", telEmp=" + telEmp + ", dirEmp=" + dirEmp + '}';
+        return "Proveedor{" + "nit=" + nit + ", razonSocial=" + razonSocial + ", telEmp=" + telEmp + ", dirEmp=" + dirEmp + ", estado=" + estado + '}';
     }
     
 }

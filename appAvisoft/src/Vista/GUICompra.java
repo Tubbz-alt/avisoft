@@ -14,6 +14,7 @@ import Modelo.Compra;
 import Modelo.Insumo;
 import Modelo.Proveedor;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -53,6 +54,39 @@ public class GUICompra extends Interfaz {
         for (String[] prv : proveedores) {
             cmbProveedores.addItem(prv[1]+" : "+prv[3]+" : "+prv[4]);
         }
+    }
+    
+    private boolean validarCampos(){
+        boolean error=false;
+        
+        if(txtCantidad.getText().isEmpty()){
+            showError(txtCantidad, "No ha ingresado ninguna cantidad.");
+            error=true;
+        }
+        else{
+            if(txtCantidad.getText().trim().indexOf(",") > 0 || txtCantidad.getText().trim().indexOf(".")>0){
+                showError(txtCantidad, "La cantidad no puede contener decimales.");
+                error=true;
+            }
+            else{
+                if(Integer.parseInt(txtCantidad.getText().trim())<= 0){
+                    showError(txtCantidad, "La cantidad no puede ser menor a 1");
+                    error=true;
+                }
+            }
+        }
+        
+        if(txtPrecio.getText().isEmpty()){
+            showError(txtPrecio, "No ha ingresado ningún precio");
+            error=true;
+        }
+        else{
+            if(txtPrecio.getText().trim().indexOf(",")>0){
+                showError(txtPrecio, "Para colocar un decimal utiliza la tecla punto");
+                error=true;
+            }
+        }
+        return !error;
     }
 
     /** This method is called from within the constructor to
@@ -107,6 +141,8 @@ public class GUICompra extends Interfaz {
         jpmTabla.add(jmiEliminar);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Recepción de insumos");
+        setIconImage(new javax.swing.ImageIcon(getClass().getResource("/Images/buy_register.png")).getImage());
         setResizable(false);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Detalle Insumo:"));
@@ -121,15 +157,34 @@ public class GUICompra extends Interfaz {
 
         jLabel4.setText("Tipo:");
 
+        txtTipo.setEditable(false);
+
+        txtExistencia.setEditable(false);
+
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Ingresar:"));
 
         jLabel5.setText("Medida:");
 
         jLabel6.setText("Cantidad:");
 
+        txtMedida.setEditable(false);
+
+        txtCantidad.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtCantidadFocusLost(evt);
+            }
+        });
+
+        txtPrecio.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtPrecioFocusLost(evt);
+            }
+        });
+
         jLabel7.setText("Prc. Unitario");
 
         btnAgregar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/ok.png"))); // NOI18N
+        btnAgregar.setToolTipText("Agrega un insumo a la compra");
         btnAgregar.setBorderPainted(false);
         btnAgregar.setContentAreaFilled(false);
         btnAgregar.addActionListener(new java.awt.event.ActionListener() {
@@ -171,7 +226,7 @@ public class GUICompra extends Interfaz {
                     .addComponent(jLabel5)
                     .addComponent(jLabel6)
                     .addComponent(jLabel7))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtMedida, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -212,7 +267,7 @@ public class GUICompra extends Interfaz {
                                 .addComponent(jLabel3)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(txtExistencia, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(cmbInsumos, javax.swing.GroupLayout.DEFAULT_SIZE, 271, Short.MAX_VALUE))))
+                            .addComponent(cmbInsumos, javax.swing.GroupLayout.DEFAULT_SIZE, 231, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -240,12 +295,30 @@ public class GUICompra extends Interfaz {
             new String [] {
                 "N°", "Nombre Ins.", "Cantidad", "Precio Unt.", "Total"
             }
-        ));
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.Float.class, java.lang.Float.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         tabla.setComponentPopupMenu(jpmTabla);
+        tabla.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(tabla);
-        tabla.getColumnModel().getColumn(0).setMinWidth(50);
+        tabla.getColumnModel().getColumn(0).setMinWidth(30);
         tabla.getColumnModel().getColumn(1).setMinWidth(180);
+        tabla.getColumnModel().getColumn(2).setMinWidth(80);
         tabla.getColumnModel().getColumn(3).setMinWidth(90);
+        tabla.getColumnModel().getColumn(4).setMinWidth(70);
 
         jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/Save_1.png"))); // NOI18N
         jButton2.setText("Grabar");
@@ -285,7 +358,7 @@ public class GUICompra extends Interfaz {
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addComponent(ccbFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 133, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 46, Short.MAX_VALUE)
                                 .addComponent(jLabel11)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(txtNumFact, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -314,7 +387,7 @@ public class GUICompra extends Interfaz {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
                     .addComponent(cmbProveedores, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel10)
                     .addComponent(txtTotalCompra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -322,6 +395,11 @@ public class GUICompra extends Interfaz {
 
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/preview.png"))); // NOI18N
         jButton1.setText("Vista");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -330,14 +408,13 @@ public class GUICompra extends Interfaz {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jButton1))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, 0, 439, Short.MAX_VALUE)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 439, Short.MAX_VALUE)))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -347,12 +424,12 @@ public class GUICompra extends Interfaz {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton2)
                     .addComponent(jButton1))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(15, Short.MAX_VALUE))
         );
 
         pack();
@@ -372,7 +449,11 @@ public class GUICompra extends Interfaz {
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
         // TODO add your handling code here:
-        int codigo= Integer.parseInt(txtCodigo.getText());
+        if(!validarCampos()){
+            return;
+        }
+        
+        String codigo= txtCodigo.getText();
         String nombreInsumo= cmbInsumos.getSelectedItem()+"";
         int cantidadInsumo= Integer.parseInt(txtCantidad.getText().trim());
         float precioInsumo= Float.valueOf(txtPrecio.getText().trim());
@@ -380,36 +461,41 @@ public class GUICompra extends Interfaz {
         
         Object [] row= {codigo, nombreInsumo, cantidadInsumo, precioInsumo, totalPrecioInsumo};
         
+        int aux=0;
         if(this.tabla.getRowCount()!=0){
             for(int i=0; i<this.tabla.getRowCount(); i++){
-                String nombre= this.tabla.getValueAt(i, 1).toString();
-                if(nombreInsumo.equals(nombre)){
+                String numIns= this.tabla.getValueAt(i, 0).toString();
+                if(codigo.equals(numIns)){
 
                     int nuevaCantidad= Integer.parseInt(this.tabla.getValueAt(i, 2).toString())+cantidadInsumo;
                     float nuevoTotalPrecioInsumo= Float.valueOf(this.tabla.getValueAt(i, 4).toString())+ totalPrecioInsumo;
 
                     this.tabla.setValueAt(nuevaCantidad, i, 2);
                     this.tabla.setValueAt(nuevoTotalPrecioInsumo, i, 4);
+                    aux=1;
                     break;
-                }
-                else{
-                    this.model.addRow(row);
                 }
             }
         }
-        else{
+        if(aux==0){
             this.model.addRow(row);
         }
         this.totalCompra+=totalPrecioInsumo;
         this.txtTotalCompra.setText(this.totalCompra+"");
+        this.txtCantidad.setText(null);
+        this.txtPrecio.setText(null);
+        this.txtCantidad.requestFocus();
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     private void jmiEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiEliminarActionPerformed
         // TODO add your handling code here:
-        if(this.tabla.getSelectedRow() > -1){
-            this.model.removeRow(this.tabla.getSelectedRow());
+        int filas= tabla.getRowCount();
+        for(int i= filas; i> -1; i--){
+            if(tabla.isRowSelected(i)){
+                this.model.removeRow(i);
+            }
         }
-        else{
+        if(filas==tabla.getRowCount()){
             javax.swing.JOptionPane.showMessageDialog(null, "No se ha seleccionado ningún \n item para borrar",
                                                       "Aviso", javax.swing.JOptionPane.ERROR_MESSAGE);
         }
@@ -444,6 +530,48 @@ public class GUICompra extends Interfaz {
             javax.swing.JOptionPane.showMessageDialog(this, "Exito: se ha ingresado una \n nueva orden de compra...", "Información", javax.swing.JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        Compra com= Compra.existe(txtNumFact.getText());
+        if(com != null){
+            new ModalCompra(com).setVisible(true);
+        }
+        else{
+            JOptionPane.showMessageDialog(this, "Aun no se ha creado la factura.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void txtCantidadFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCantidadFocusLost
+        // TODO add your handling code here:
+        if(txtCantidad.getText().isEmpty()){
+            showError(txtCantidad, "No ha ingresado ninguna cantidad.");
+        }
+        else{
+            if(txtCantidad.getText().trim().indexOf(",") > 0 || txtCantidad.getText().trim().indexOf(".")>0){
+                showError(txtCantidad, "La cantidad no puede contener decimales.");
+            }
+            else{
+                if(Integer.parseInt(txtCantidad.getText().trim())<= 0){
+                    showError(txtCantidad, "La cantidad no puede ser menor a 1");
+                }
+                else{normalizeInput(txtCantidad);}
+            }
+        }
+    }//GEN-LAST:event_txtCantidadFocusLost
+
+    private void txtPrecioFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPrecioFocusLost
+        // TODO add your handling code here:
+        if(txtPrecio.getText().isEmpty()){
+            showError(txtPrecio, "No ha ingresado ningún precio");
+        }
+        else{
+            if(txtPrecio.getText().trim().indexOf(",")>0){
+                showError(txtPrecio, "Para colocar un decimal utiliza la tecla punto");
+            }
+            else{normalizeInput(txtPrecio);}
+        }
+    }//GEN-LAST:event_txtPrecioFocusLost
 
     /**
      * @param args the command line arguments
