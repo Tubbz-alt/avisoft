@@ -394,7 +394,7 @@ public class GUICompra extends Interfaz {
         );
 
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/preview.png"))); // NOI18N
-        jButton1.setText("Vista");
+        jButton1.setText("Vista previa");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -407,29 +407,33 @@ public class GUICompra extends Interfaz {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(12, 12, 12)
                         .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton1))
-                    .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 213, Short.MAX_VALUE)
+                        .addComponent(jButton1)
+                        .addGap(22, 22, 22))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2)
-                    .addComponent(jButton1))
-                .addContainerGap(15, Short.MAX_VALUE))
+                    .addComponent(jButton1)
+                    .addComponent(jButton2))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -468,10 +472,11 @@ public class GUICompra extends Interfaz {
                 if(codigo.equals(numIns)){
 
                     int nuevaCantidad= Integer.parseInt(this.tabla.getValueAt(i, 2).toString())+cantidadInsumo;
-                    float nuevoTotalPrecioInsumo= Float.valueOf(this.tabla.getValueAt(i, 4).toString())+ totalPrecioInsumo;
+                    totalCompra-= Float.parseFloat(tabla.getValueAt(i, 4).toString());
+                    totalPrecioInsumo= nuevaCantidad*Float.valueOf(tabla.getValueAt(i, 3).toString());
 
                     this.tabla.setValueAt(nuevaCantidad, i, 2);
-                    this.tabla.setValueAt(nuevoTotalPrecioInsumo, i, 4);
+                    this.tabla.setValueAt(totalPrecioInsumo, i, 4);
                     aux=1;
                     break;
                 }
@@ -492,6 +497,7 @@ public class GUICompra extends Interfaz {
         int filas= tabla.getRowCount();
         for(int i= filas; i> -1; i--){
             if(tabla.isRowSelected(i)){
+                totalCompra-= Float.parseFloat(tabla.getValueAt(i, 4).toString());
                 this.model.removeRow(i);
             }
         }
@@ -499,6 +505,7 @@ public class GUICompra extends Interfaz {
             javax.swing.JOptionPane.showMessageDialog(null, "No se ha seleccionado ningún \n item para borrar",
                                                       "Aviso", javax.swing.JOptionPane.ERROR_MESSAGE);
         }
+        txtTotalCompra.setText(totalCompra+"");
     }//GEN-LAST:event_jmiEliminarActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -517,6 +524,7 @@ public class GUICompra extends Interfaz {
         }
         if(this.tabla.getRowCount()==0){
             javax.swing.JOptionPane.showMessageDialog(this, "No ha agregado ningún item de insumos", "Advertencia", javax.swing.JOptionPane.ERROR_MESSAGE);
+            return;
         }
         else{
             items= new Object[this.tabla.getRowCount()][4];
@@ -526,8 +534,19 @@ public class GUICompra extends Interfaz {
                 items[i][2] = this.tabla.getValueAt(i, 2);
                 items[i][3] = this.tabla.getValueAt(i, 3);
             }
-            new Compra(numFact, fechaFact, total, cedula, items);
-            javax.swing.JOptionPane.showMessageDialog(this, "Exito: se ha ingresado una \n nueva orden de compra...", "Información", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+            if(cedula!= null){
+                new Compra(numFact, fechaFact, total, cedula, items);
+                int facturaNueva= JOptionPane.showConfirmDialog(this, "Exito: se ha ingresado una \n nueva orden de compra... \n "+
+                                                                "¿Desea crear una nueva factura?", "Aviso", JOptionPane.QUESTION_MESSAGE);
+                if(JOptionPane.OK_OPTION==facturaNueva){
+                    txtNumFact.setText(Compra.getMaxNumFact());
+                    tabla.removeAll();
+                }
+                else{this.dispose();}
+            }
+            else{
+                javax.swing.JOptionPane.showMessageDialog(this, "Se ha generado un error al crear la factura de compra", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+            }
         }
     }//GEN-LAST:event_jButton2ActionPerformed
 

@@ -21,7 +21,7 @@ public class Proveedor extends Persona {
     private String dirEmp;
     private String estado;
 
-    public Proveedor(String nit, String razonSocial, String telEmp, String dirEmp, String cedula, String nombres, String apellidos, String direccion, String telefono, String estado) {
+    public Proveedor(String nit, String razonSocial, String telEmp, String dirEmp, String cedula, String nombres, String apellidos, String direccion, String telefono) {
         super(cedula, nombres, apellidos, direccion, telefono);
         ArrayList<HashMap> res = this.con.query("SELECT razon_social, telefono, direccion FROM empresa WHERE nit = '"+nit+"'");
         if(res.isEmpty()) {
@@ -36,14 +36,14 @@ public class Proveedor extends Persona {
             this.telEmp = res.get(0).get("telefono")+"";
             this.dirEmp = res.get(0).get("direccion")+"";
         }
-        res = this.con.query("SELECT COUNT(*) as num FROM proveedor WHERE cedula = '"+cedula+"'");
+        res = this.con.query("SELECT COUNT(*) as num FROM empresa_proveedor WHERE cedula = '"+cedula+"' AND nit= '"+nit+"';");
         if(Integer.parseInt(res.get(0).get("num")+"") == 0) {
-            this.estado = estado;
-            this.con.query("INSERT INTO proveedor (nit, cedula, estado) VALUES ('"+nit+"', '"+cedula+"', '"+estado+"')");
+            this.estado = "1";
+            this.con.query("INSERT INTO empresa_proveedor (nit, cedula) VALUES ('"+nit+"', '"+cedula+"')");
         }
     }
 
-    private Proveedor(String nit, String razonSocial, String telEmp, String dirEmp, String cedula, String nombres, String apellidos, String direccion, String telefono, String estado, char a) {
+    private Proveedor(String nit, String razonSocial, String telEmp, String dirEmp, String cedula, String nombres, String apellidos, String direccion, String telefono, String estado) {
         super(cedula, nombres, apellidos, direccion, telefono);
         this.nit = nit;
         this.razonSocial = razonSocial;
@@ -75,10 +75,10 @@ public class Proveedor extends Persona {
     public static ArrayList<String[]> getProveedores(){
         Conexion c= new Conexion();
         ArrayList<String[]> pro= new ArrayList<String[]>();
-        ArrayList<HashMap> res= c.query("SELECT p.cedula, pn.nombres, pn.apellidos,"+
-                                        " p.nit, e.razon_social FROM proveedor p,"+
-                                        " persona pn, empresa e WHERE p.cedula= pn.cedula"+
-                                        " AND p.nit= e.nit");
+        ArrayList<HashMap> res= c.query("SELECT ep.cedula, pn.nombres, pn.apellidos,"+
+                                        " ep.nit, e.razon_social FROM empresa_proveedor ep,"+
+                                        " persona pn, empresa e WHERE ep.cedula= pn.cedula"+
+                                        " AND ep.nit= e.nit AND ep.estado= 1");
         if(!res.isEmpty()){
             for (HashMap prv : res) {
                 String[] p= {prv.get("nit").toString(), prv.get("razon_social").toString(),
@@ -106,7 +106,7 @@ public class Proveedor extends Persona {
     }
 
     public void setEstado(String estado) {
-        this.con.query("UPDATE proveedor SET estado = '"+estado+"' WHERE cedula ='"+this.cedula+"'");
+        this.con.query("UPDATE empresa_proveedor SET estado = '"+estado+"' WHERE cedula ='"+this.cedula+"'");
         this.estado = estado;
     }
     
@@ -124,11 +124,25 @@ public class Proveedor extends Persona {
     
     public static Proveedor existe (String cedula) {
         Conexion c = new Conexion();
-        ArrayList<HashMap> res = c.query("SELECT p.nombres, p.apellidos, p.direccion, p.telefono, pro.estado, e.nit, e.razon_social, e.direccion as dir_emp, e.telefono as tel_emp FROM empresa e, persona p, proveedor pro WHERE pro.nit = e.nit AND pro.cedula = p.cedula AND p.cedula = '"+cedula+"'");
+        ArrayList<HashMap> res = c.query("SELECT p.nombres, p.apellidos, p.direccion, p.telefono, pro.estado, e.nit, e.razon_social, e.direccion as dir_emp, e.telefono as tel_emp FROM empresa e, persona p, empresa_proveedor pro WHERE pro.nit = e.nit AND pro.cedula = p.cedula AND p.cedula = '"+cedula+"'");
         if(!res.isEmpty()) {
-            return new Proveedor(res.get(0).get("nit")+"", res.get(0).get("razon_social")+"", res.get(0).get("tel_emp")+"", res.get(0).get("dir_emp")+"", cedula, res.get(0).get("nombres")+"", res.get(0).get("apellidos")+"", res.get(0).get("direccion")+"", res.get(0).get("telefono")+"", res.get(0).get("estado")+"", 'a');
+            return new Proveedor(res.get(0).get("nit")+"", res.get(0).get("razon_social")+"", res.get(0).get("tel_emp")+"", res.get(0).get("dir_emp")+"", cedula, res.get(0).get("nombres")+"", res.get(0).get("apellidos")+"", res.get(0).get("direccion")+"", res.get(0).get("telefono")+"", res.get(0).get("estado")+"");
         }
         return null;
+    }
+    
+    public static String [] getEmpresa(String nit){
+        Conexion c= new Conexion();
+        ArrayList<HashMap> res= c.query("SELECT * FROM empresa WHERE nit= '"+nit+"'");
+        if(!res.isEmpty()){
+            String [] empresa= new String [5];
+            empresa[0]= res.get(0).get("nit").toString();
+            empresa[1]= res.get(0).get("razon_social").toString();
+            empresa[2]= res.get(0).get("telefono").toString();
+            empresa[3]= res.get(0).get("direccion").toString();
+            return empresa;
+        }
+        else{ return null;}
     }
 
     @Override

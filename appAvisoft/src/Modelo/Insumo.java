@@ -20,17 +20,17 @@ public class Insumo {
     private String medida;
     private String estado;
 
-    public Insumo(String id, String nombre, String tipo, int cantidad, String medida, String estado) {
+    public Insumo(String id, String nombre, String tipo, int cantidad, String medida) {
         this.con= new Conexion();
         ArrayList<HashMap> res= this.con.query("SELECT nombre, tipo, cantidad, medida, estado FROM insumo WHERE id='"+id+"';");
         if(res.isEmpty()){
-            this.con.query("INSERT INTO insumo VALUES('"+id+"', '"+nombre+"', '"+tipo+"', "+cantidad+", '"+medida+"', '"+estado+"');");
+            this.con.query("INSERT INTO insumo VALUES('"+id+"', '"+nombre+"', '"+tipo+"', "+cantidad+", '"+medida+"');");
             this.id = id;
             this.nombre = nombre;
             this.tipo = tipo;
             this.cantidad = cantidad;
             this.medida = medida;
-            this.estado= estado;
+            this.estado= "1";
         }
         else{
             this.id= res.get(0).get("id")+"";
