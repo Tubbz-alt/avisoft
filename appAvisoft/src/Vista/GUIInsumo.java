@@ -126,6 +126,9 @@ public class GUIInsumo extends Interfaz {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtCodigoKeyTyped(evt);
             }
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtCodigoKeyPressed(evt);
+            }
         });
 
         txtNombre.addFocusListener(new java.awt.event.FocusAdapter() {
@@ -363,6 +366,13 @@ public class GUIInsumo extends Interfaz {
             normalizeInput(txtCantidad);
         }
     }//GEN-LAST:event_txtCantidadFocusLost
+
+    private void txtCodigoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCodigoKeyPressed
+        // TODO add your handling code here:
+        if(evt.getKeyCode() == evt.VK_ENTER){
+            txtCodigo.transferFocus();
+        }
+    }//GEN-LAST:event_txtCodigoKeyPressed
 
     @Override
     public java.awt.Image getIconImage() {

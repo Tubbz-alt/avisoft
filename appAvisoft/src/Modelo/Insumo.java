@@ -22,9 +22,9 @@ public class Insumo {
 
     public Insumo(String id, String nombre, String tipo, int cantidad, String medida) {
         this.con= new Conexion();
-        ArrayList<HashMap> res= this.con.query("SELECT nombre, tipo, cantidad, medida, estado FROM insumo WHERE id='"+id+"';");
+        ArrayList<HashMap> res= this.con.query("SELECT * FROM insumo WHERE id='"+id+"';");
         if(res.isEmpty()){
-            this.con.query("INSERT INTO insumo VALUES('"+id+"', '"+nombre+"', '"+tipo+"', "+cantidad+", '"+medida+"');");
+            this.con.query("INSERT INTO insumo (id, nombre, tipo, cantidad, medida) VALUES('"+id+"', '"+nombre+"', '"+tipo+"', "+cantidad+", '"+medida+"');");
             this.id = id;
             this.nombre = nombre;
             this.tipo = tipo;
@@ -53,7 +53,7 @@ public class Insumo {
         return ins;
     }
 
-    private Insumo(String id, String nombre, String tipo, int cantidad, String medida, String estado, char a) {
+    public Insumo(String id, String nombre, String tipo, int cantidad, String medida, String estado) {
         this.con=new Conexion();
         this.id = id;
         this.nombre = nombre;
@@ -126,7 +126,7 @@ public class Insumo {
                               res.get(0).get("tipo").toString(),
                               Integer.parseInt(res.get(0).get("cantidad")+""),
                               res.get(0).get("medida").toString(),
-                              res.get(0).get("estado")+"", 'a');
+                              res.get(0).get("estado")+"");
         }
         return null;
     }
