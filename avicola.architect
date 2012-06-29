@@ -726,7 +726,7 @@
     <column id="COL253" populated="true" UUID="214f6027-27ad-474e-b19f-18f87cca1090" autoIncrement="false" defaultValue="" name="num" nullable="0" physicalName="num" precision="0" primaryKeySeq="0" referenceCount="2" scale="0" source-column-ref="COL18" sourceDataTypeName="INT" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
      <remarks></remarks>
     </column>
-    <column id="COL254" populated="true" UUID="b3c16148-cb8a-4c85-9f80-eb8789fa9cbc" autoIncrement="false" defaultValue="" name="id" nullable="0" physicalName="id" precision="0" primaryKeySeq="1" referenceCount="2" scale="0" source-column-ref="COL19" sourceDataTypeName="INT" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL254" populated="true" UUID="b3c16148-cb8a-4c85-9f80-eb8789fa9cbc" autoIncrement="false" defaultValue="" name="id" nullable="0" physicalName="id" precision="3" primaryKeySeq="1" referenceCount="2" scale="0" source-column-ref="COL19" sourceDataTypeName="INT" type="1" userDefinedTypeUUID="67ddc63f-5541-4dd1-9236-632d9d155e80" >
      <remarks></remarks>
     </column>
     <column id="COL255" populated="true" UUID="47609a7f-3409-4152-b5c5-292bfec3abce" autoIncrement="false" defaultValue="" name="cantidad" nullable="0" physicalName="cantidad" precision="0" referenceCount="1" scale="0" source-column-ref="COL20" sourceDataTypeName="INT" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
@@ -927,7 +927,7 @@
   <table id="TAB320" populated="true" UUID="42fc3647-10c0-43e3-a34a-d41eead8e582" name="insumo" objectType="TABLE" physicalName="insumo" >
    <remarks></remarks>
    <folder id="FOLTAB3201" populated="true" name="Columns" physicalName="Columns" type="1">
-    <column id="COL321" populated="true" UUID="1b6e29a1-8c87-4517-b6dc-1d0a925e0d8e" autoIncrement="true" defaultValue="" name="id" nullable="0" physicalName="id" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" source-column-ref="COL86" sourceDataTypeName="INT" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL321" populated="true" UUID="1b6e29a1-8c87-4517-b6dc-1d0a925e0d8e" autoIncrement="false" defaultValue="" name="id" nullable="0" physicalName="id" precision="3" primaryKeySeq="0" referenceCount="1" scale="0" source-column-ref="COL86" sourceDataTypeName="INT" type="1" userDefinedTypeUUID="67ddc63f-5541-4dd1-9236-632d9d155e80" >
      <remarks></remarks>
     </column>
     <column id="COL322" populated="true" UUID="d32e66ed-861e-4020-ae7b-6f06cbe4d005" autoIncrement="false" defaultValue="" name="nombre" nullable="0" physicalName="nombre" precision="60" referenceCount="1" scale="0" source-column-ref="COL87" sourceDataTypeName="VARCHAR" type="12" userDefinedTypeUUID="831ac2d4-0e65-47ec-a0b7-62b7f6b8760a" >
@@ -1144,7 +1144,7 @@
   <table id="TAB391" populated="true" UUID="8b6f4f79-4eb3-45af-9945-2f612b39b99a" name="recurso" objectType="TABLE" physicalName="recurso" >
    <remarks></remarks>
    <folder id="FOLTAB3911" populated="true" name="Columns" physicalName="Columns" type="1">
-    <column id="COL392" populated="true" UUID="4891cd4d-fd19-4215-add8-2fda7c5b05e4" autoIncrement="false" defaultValue="" name="id" nullable="0" physicalName="id" precision="0" primaryKeySeq="0" referenceCount="2" scale="0" source-column-ref="COL163" sourceDataTypeName="INT" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >
+    <column id="COL392" populated="true" UUID="4891cd4d-fd19-4215-add8-2fda7c5b05e4" autoIncrement="false" defaultValue="" name="id" nullable="0" physicalName="id" precision="3" primaryKeySeq="0" referenceCount="2" scale="0" source-column-ref="COL163" sourceDataTypeName="INT" type="1" userDefinedTypeUUID="67ddc63f-5541-4dd1-9236-632d9d155e80" >
      <remarks></remarks>
     </column>
     <column id="COL393" populated="true" UUID="2c23afad-cb3f-4ac2-a379-738d56ff9bd1" autoIncrement="false" defaultValue="" name="fecha_reg" nullable="0" physicalName="fecha_reg" precision="0" primaryKeySeq="1" referenceCount="3" scale="0" source-column-ref="COL164" sourceDataTypeName="DATE" type="91" userDefinedTypeUUID="ee349be3-6af2-46e1-b305-975f5354b009" >
@@ -1297,7 +1297,7 @@
  <ddl-generator type="ca.sqlpower.architect.ddl.MySqlDDLGenerator" allow-connection="false" target-catalog="avicola"> </ddl-generator>
  <liquibase-settings useSeparateChangeSets="false" generateId="false" idStart="1"/>
  <create-kettle-job-settings filePath="" jobName="" schemaName="" kettleJoinType="0" savingToFile="true" />
- <play-pen zoom="0.6975973879971319" viewportX="0" viewportY="25" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
+ <play-pen zoom="0.6975973879971319" viewportX="0" viewportY="0" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
   <table-pane table-ref="TAB237" x="1223" y="107" bgColor="0xf0f0f0" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB247" x="30" y="275" bgColor="0xf0f0f0" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB252" x="1247" y="282" bgColor="0xf0f0f0" fgColor="0x000000" rounded="false" dashed="false"/>

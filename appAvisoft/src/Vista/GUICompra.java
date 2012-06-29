@@ -13,9 +13,11 @@ package Vista;
 import Modelo.Compra;
 import Modelo.Insumo;
 import Modelo.Proveedor;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
+import javax.swing.DefaultCellEditor;
 import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -25,13 +27,12 @@ public class GUICompra extends Interfaz {
     private GUIPrincipal p;
     private ArrayList<String[]> insumos;
     private ArrayList<String[]> proveedores;
-    private javax.swing.table.DefaultTableModel model;
+    private ModeloTabla model;
     private float totalCompra=0;
 
     /** Creates new form GUICompra */
     public GUICompra(GUIPrincipal principal) {
         initComponents();
-        this.model = (DefaultTableModel) tabla.getModel();
         this.p= principal;
         this.p.forms.add(this);
         this.insumos= new ArrayList<String[]>();
@@ -40,7 +41,38 @@ public class GUICompra extends Interfaz {
         setLocationRelativeTo(null);
         cargarInsumos();
         cargarProveedores();
+        cargarTabla();
    }
+    
+    private void cargarTabla(){
+        this.model= new ModeloTabla();
+        tabla.setModel(model);
+        this.model.anhadeItem(new ItemCompra(0, null, 0, 0, 0));
+        tabla.getColumnModel().getColumn(1).setCellEditor(new DefaultCellEditor(cmbInsumos));
+        tabla.addKeyListener(new KeyListener(){
+
+            @Override
+            public void keyPressed(KeyEvent ke) {
+                if(model.generarEvento(ke, tabla.getSelectedRow(), tabla.getSelectedColumn())){
+                    tabla.changeSelection ( tabla.getRowCount () - 1, 0, false, false );
+                }
+            }
+
+            @Override
+            public void keyTyped(KeyEvent ke) {
+                if(model.generarEvento(ke, tabla.getSelectedRow(), tabla.getSelectedColumn())){
+                    tabla.changeSelection ( tabla.getRowCount () - 1, 0, false, false );
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent ke) {
+                if(model.generarEvento(ke, tabla.getSelectedRow(), tabla.getSelectedColumn())){
+                    tabla.changeSelection ( tabla.getRowCount () - 1, 0, false, false );
+                }
+            }            
+        });
+    }
     
     private void cargarInsumos(){
         this.insumos= Insumo.getInsumos();
@@ -290,7 +322,7 @@ public class GUICompra extends Interfaz {
 
         tabla.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-
+                {null, null, null, null, null}
             },
             new String [] {
                 "N°", "Nombre Ins.", "Cantidad", "Precio Unt.", "Total"
@@ -300,7 +332,7 @@ public class GUICompra extends Interfaz {
                 java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.Float.class, java.lang.Float.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, true, true, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -358,7 +390,7 @@ public class GUICompra extends Interfaz {
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addComponent(ccbFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 46, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 71, Short.MAX_VALUE)
                                 .addComponent(jLabel11)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(txtNumFact, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -463,7 +495,7 @@ public class GUICompra extends Interfaz {
         float precioInsumo= Float.valueOf(txtPrecio.getText().trim());
         float totalPrecioInsumo= cantidadInsumo*precioInsumo;
         
-        Object [] row= {codigo, nombreInsumo, cantidadInsumo, precioInsumo, totalPrecioInsumo};
+        ItemCompra item = new ItemCompra (Integer.valueOf(codigo), nombreInsumo, cantidadInsumo, precioInsumo, totalPrecioInsumo);
         
         int aux=0;
         if(this.tabla.getRowCount()!=0){
@@ -483,7 +515,7 @@ public class GUICompra extends Interfaz {
             }
         }
         if(aux==0){
-            this.model.addRow(row);
+            this.model.anhadeItem(item);
         }
         this.totalCompra+=totalPrecioInsumo;
         this.txtTotalCompra.setText(this.totalCompra+"");
@@ -498,7 +530,7 @@ public class GUICompra extends Interfaz {
         for(int i= filas; i> -1; i--){
             if(tabla.isRowSelected(i)){
                 totalCompra-= Float.parseFloat(tabla.getValueAt(i, 4).toString());
-                this.model.removeRow(i);
+                this.model.borraItem(i);
             }
         }
         if(filas==tabla.getRowCount()){
