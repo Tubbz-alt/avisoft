@@ -128,11 +128,6 @@ public class GUIGranja extends Interfaz {
 
         lblcm.setText("<html> m<sup style='font-size:8px'>2</sup></html>");
 
-        txtAreaGalpon.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                txtAreaGalponFocusLost(evt);
-            }
-        });
         txtAreaGalpon.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtAreaGalponKeyTyped(evt);
@@ -201,11 +196,6 @@ public class GUIGranja extends Interfaz {
         jLabel11.setText("Clima:");
 
         cmbTemp.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Elija clima", "Calido", "Frio" }));
-        cmbTemp.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cmbTempActionPerformed(evt);
-            }
-        });
 
         jLabel12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/info.png"))); // NOI18N
         jLabel12.setToolTipText("Al cambiar este valor se cambiara en todas las granjas del municipio");
@@ -240,22 +230,12 @@ public class GUIGranja extends Interfaz {
         });
 
         cmbTipo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Elija Tipo", "Engorde (Carne)", "Ponedor (Huevo)" }));
-        cmbTipo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cmbTipoActionPerformed(evt);
-            }
-        });
 
         jLabel8.setText("Tipo:");
 
         jLabel3.setText("Area:");
 
         txtArea.setMaximumSize(new java.awt.Dimension(6, 20));
-        txtArea.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                txtAreaFocusLost(evt);
-            }
-        });
         txtArea.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtAreaKeyTyped(evt);
@@ -510,6 +490,10 @@ public class GUIGranja extends Interfaz {
     }//GEN-LAST:event_cmbMpioActionPerformed
 
     private void cmdAgregarGalponActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdAgregarGalponActionPerformed
+        normalizeInput(cmbTipo);
+        normalizeInput(txtArea);
+        normalizeInput(cmbTemp);
+        normalizeInput(txtAreaGalpon);
         if(txtArea.isEnabled()) {
             if(validarGalpon()) {
                 txtArea.setEnabled(false);
@@ -531,41 +515,6 @@ public class GUIGranja extends Interfaz {
         
         model.addRow(new Object[]{cont++,area, resp, "add"});
     }//GEN-LAST:event_cmdAgregarGalponActionPerformed
-
-    private void cmbTempActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbTempActionPerformed
-        // TODO add your handling code here:
-        if(cmbTemp.getSelectedIndex() ==0){
-            showError(cmbTemp, "No ha Seleccionado Tipo de Clima");
-        } else {
-            normalizeInput(cmbTemp);
-        }
-    }//GEN-LAST:event_cmbTempActionPerformed
-
-    private void txtAreaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtAreaFocusLost
-        // TODO add your handling code here:
-        if(txtArea.getText().trim().isEmpty()) {
-            showError(txtArea, "No ha Ingresado Area de la Granja");
-        } else {
-            normalizeInput(txtArea);
-        }
-    }//GEN-LAST:event_txtAreaFocusLost
-
-    private void cmbTipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbTipoActionPerformed
-        // TODO add your handling code here:
-        if(cmbTipo.getSelectedIndex()==0){
-            showError(cmbTipo, "No ha Seleccionado Tipo de Granja");
-        } else {
-            normalizeInput(cmbTipo);
-        }
-    }//GEN-LAST:event_cmbTipoActionPerformed
-
-    private void txtAreaGalponFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtAreaGalponFocusLost
-        if(txtAreaGalpon.getText().trim().isEmpty()) {
-            showError(txtAreaGalpon, "No ha Ingresado Area de la Granja");
-        } else {
-            normalizeInput(txtAreaGalpon);
-        }
-    }//GEN-LAST:event_txtAreaGalponFocusLost
 
     private void txtAreaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAreaKeyTyped
         // TODO add your handling code here:
