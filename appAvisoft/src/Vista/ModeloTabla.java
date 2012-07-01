@@ -166,10 +166,7 @@ public class ModeloTabla extends AbstractTableModel{
         int columna= columnIndex+1;
         if(p== KeyEvent.VK_ENTER && fila==registros.size() && columna==columnNames.length){
             ItemCompra item= registros.get(rowIndex);
-            if(item.getNombre() == null || item.getTotal() == 0){
-                JOptionPane.showMessageDialog(null, "Debe seleccionar un insumo de la lista,\ndigitar la cantidad y su precio Unt.", "Advertencia", JOptionPane.INFORMATION_MESSAGE);
-            }
-            else{
+            if(item.getNombre() != null && item.getTotal() != 0){
                 this.anhadeItem(new ItemCompra(0, null, 0, 0, 0));
                 ok= true;
             }

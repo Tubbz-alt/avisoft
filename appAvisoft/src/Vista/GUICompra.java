@@ -50,24 +50,19 @@ public class GUICompra extends Interfaz {
         this.model.anhadeItem(new ItemCompra(0, null, 0, 0, 0));
         tabla.getColumnModel().getColumn(1).setCellEditor(new DefaultCellEditor(cmbInsumos));
         tabla.addKeyListener(new KeyListener(){
-
+            private boolean last = false;
             @Override
             public void keyPressed(KeyEvent ke) {
-                if(model.generarEvento(ke, tabla.getSelectedRow(), tabla.getSelectedColumn())){
-                    tabla.changeSelection ( tabla.getRowCount () - 1, 0, false, false );
-                }
+                last = model.generarEvento(ke, tabla.getSelectedRow(), tabla.getSelectedColumn());
             }
 
             @Override
             public void keyTyped(KeyEvent ke) {
-                if(model.generarEvento(ke, tabla.getSelectedRow(), tabla.getSelectedColumn())){
-                    tabla.changeSelection ( tabla.getRowCount () - 1, 0, false, false );
-                }
             }
 
             @Override
             public void keyReleased(KeyEvent ke) {
-                if(model.generarEvento(ke, tabla.getSelectedRow(), tabla.getSelectedColumn())){
+                if (last) {
                     tabla.changeSelection ( tabla.getRowCount () - 1, 0, false, false );
                 }
             }            
