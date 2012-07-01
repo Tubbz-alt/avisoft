@@ -17,6 +17,7 @@ import javax.swing.table.AbstractTableModel;
 public class ModeloTabla extends AbstractTableModel{
     private ArrayList<ItemCompra> registros= new ArrayList<ItemCompra>();
     private String [] columnNames= {"Id", "Nombre Ins.", "Cantidad", "Precio Unt.", "Total"};
+    public boolean rowAdd = false;
 
     @Override
     public int getRowCount() {
@@ -102,6 +103,11 @@ public class ModeloTabla extends AbstractTableModel{
     @Override
     public void setValueAt(Object aValue, int rowIndex, int columnIndex){
         ItemCompra item= registros.get(rowIndex);
+        if (aValue == null) {
+            this.setValueAt(0, rowIndex, columnIndex);
+            return;
+        }
+        String value = aValue.toString();
         switch(columnIndex){
             case 0:
                 item.getId();
@@ -111,12 +117,12 @@ public class ModeloTabla extends AbstractTableModel{
                 item.setId(this.getCodigoInsumo(item.getNombre()));
                 break;
             case 2:
-                int nuevaCantidad= Integer.valueOf(aValue.toString());
+                int nuevaCantidad= Integer.valueOf(value);
                 item.setCantidad(nuevaCantidad);
                 item.setTotal(item.getPrecioUnt()*nuevaCantidad);
                 break;
             case 3:
-                float nuevoPrecio= Float.valueOf(aValue.toString());
+                float nuevoPrecio= Float.valueOf(value);
                 item.setPrecioUnt(nuevoPrecio);
                 item.setTotal(item.getCantidad()*nuevoPrecio);
                 break;
@@ -126,6 +132,7 @@ public class ModeloTabla extends AbstractTableModel{
             default:
                 break;
         }
+        generarFila(rowIndex);
         // Disparamos el Evento TableDataChanged (La tabla ha cambiado)
         fireTableDataChanged(); 
     }
@@ -159,19 +166,15 @@ public class ModeloTabla extends AbstractTableModel{
         return codigo;
     }
     
-    public boolean generarEvento(KeyEvent e, int rowIndex, int columnIndex){
-        boolean ok= false;
-        int p= e.getKeyCode();
+    private void generarFila (int rowIndex) {
         int fila= rowIndex+1;
-        int columna= columnIndex+1;
-        if(p== KeyEvent.VK_ENTER && fila==registros.size() && columna==columnNames.length){
+        if(fila==registros.size()){
             ItemCompra item= registros.get(rowIndex);
             if(item.getNombre() != null && item.getTotal() != 0){
                 this.anhadeItem(new ItemCompra(0, null, 0, 0, 0));
-                ok= true;
+                this.rowAdd = true;
             }
         }
-        return ok;
     }
     
     public void anhadeItem(ItemCompra item){
