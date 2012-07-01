@@ -13,11 +13,16 @@ package Vista;
 import Modelo.Compra;
 import Modelo.Insumo;
 import Modelo.Proveedor;
+import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
+import javax.swing.AbstractAction;
 import javax.swing.DefaultCellEditor;
+import javax.swing.JComponent;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.KeyStroke;
 
 /**
  *
@@ -49,12 +54,26 @@ public class GUICompra extends Interfaz {
         tabla.setModel(model);
         this.model.anhadeItem(new ItemCompra(0, null, 0, 0, 0));
         tabla.getColumnModel().getColumn(1).setCellEditor(new DefaultCellEditor(cmbInsumos));
+        KeyStroke enter= KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0);
+        tabla.getInputMap(JTable.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(enter, "richard");
+        tabla.getActionMap().put("richard", new AbstractAction() {
+
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                
+            }
+        });
         tabla.addKeyListener(new KeyListener(){
 
             @Override
             public void keyPressed(KeyEvent ke) {
                 if(model.generarEvento(ke, tabla.getSelectedRow(), tabla.getSelectedColumn())){
                     tabla.changeSelection ( tabla.getRowCount () - 1, 0, false, false );
+                }
+                else {
+                    if (ke.getKeyCode()==java.awt.event.KeyEvent.VK_ENTER){
+                        ke.setKeyCode(java.awt.event.KeyEvent.VK_TAB);//este codigo lo que hace es convertir el enter en tab
+                   }
                 }
             }
 
@@ -63,12 +82,22 @@ public class GUICompra extends Interfaz {
                 if(model.generarEvento(ke, tabla.getSelectedRow(), tabla.getSelectedColumn())){
                     tabla.changeSelection ( tabla.getRowCount () - 1, 0, false, false );
                 }
+                else {
+                    if (ke.getKeyCode()==java.awt.event.KeyEvent.VK_ENTER){
+                        ke.setKeyCode(java.awt.event.KeyEvent.VK_TAB);//este codigo lo que hace es convertir el enter en tab
+                   }
+                }
             }
 
             @Override
             public void keyReleased(KeyEvent ke) {
                 if(model.generarEvento(ke, tabla.getSelectedRow(), tabla.getSelectedColumn())){
                     tabla.changeSelection ( tabla.getRowCount () - 1, 0, false, false );
+                }
+                else {
+                    if (ke.getKeyCode()==java.awt.event.KeyEvent.VK_ENTER){
+                        ke.setKeyCode(java.awt.event.KeyEvent.VK_TAB);//este codigo lo que hace es convertir el enter en tab
+                   }
                 }
             }            
         });
