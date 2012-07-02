@@ -1,0 +1,29 @@
+{
+	"name": "avisoft",
+	"title": "AviSoft",
+	"language": "java",
+	"description": "Gestor de granjas avicolas",
+	"version": "0.1 pre",
+	"homepage": "mirdaware.co.cc",
+	"authors": [{
+		"name": "Marlon Ramirez",
+		"mail": "soy.marlon@hotmail.com"
+		}, {
+			"name": "Richard Maldonado",
+			"mail": "zirex26@gmail.com"
+			}, {
+				"name": "Michael Vega",
+				"email": "supermavp@gmail.com"
+				}],
+	"bugs": {
+		"url": "https://github.com/marlonramirez/avisoft/issues/"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/marlonramirez/avisoft.git",
+	},
+	"license": {
+		"type": "GPL",
+		"url": "http://www.opensource.org/licenses/GPL-2.0"
+	}
+}
