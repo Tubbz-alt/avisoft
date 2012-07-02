@@ -13,12 +13,14 @@ package Vista;
 import Modelo.Compra;
 import Modelo.Insumo;
 import Modelo.Proveedor;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import javax.swing.AbstractAction;
 import javax.swing.DefaultCellEditor;
+import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -54,17 +56,12 @@ public class GUICompra extends Interfaz {
         tabla.setModel(model);
         this.model.anhadeItem(new ItemCompra(0, null, 0, 0, 0));
         tabla.getColumnModel().getColumn(1).setCellEditor(new DefaultCellEditor(cmbInsumos));
-        KeyStroke enter= KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0);
-        tabla.getInputMap(JTable.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(enter, "richard");
-        tabla.getActionMap().put("richard", new AbstractAction() {
-
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-                
-            }
-        });
+        KeyStroke tab = KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0);
+        KeyStroke enter = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0);
+        InputMap im = tabla.getInputMap(JTable.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+        im.put(enter, im.get(tab));
         tabla.addKeyListener(new KeyListener(){
-
+            private boolean last = false;
             @Override
             public void keyPressed(KeyEvent ke) {
                 if(model.generarEvento(ke, tabla.getSelectedRow(), tabla.getSelectedColumn())){
@@ -75,6 +72,7 @@ public class GUICompra extends Interfaz {
                         ke.setKeyCode(java.awt.event.KeyEvent.VK_TAB);//este codigo lo que hace es convertir el enter en tab
                    }
                 }
+                last = model.generarEvento(ke, tabla.getSelectedRow(), tabla.getSelectedColumn());
             }
 
             @Override
@@ -91,7 +89,7 @@ public class GUICompra extends Interfaz {
 
             @Override
             public void keyReleased(KeyEvent ke) {
-                if(model.generarEvento(ke, tabla.getSelectedRow(), tabla.getSelectedColumn())){
+                if (last) {
                     tabla.changeSelection ( tabla.getRowCount () - 1, 0, false, false );
                 }
                 else {
