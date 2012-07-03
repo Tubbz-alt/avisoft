@@ -64,9 +64,6 @@ public class GUICompra extends Interfaz {
                     tabla.changeSelection ( tabla.getRowCount () - 1, 0, false, false );
                     model.rowAdd = false;
                 }
-                if (!tabla.isEditing() && tabla.editCellAt(tabla.getSelectedRow(), tabla.getSelectedColumn())) {
-                    tabla.getEditorComponent().requestFocusInWindow();
-                }
             }            
         });
     }
