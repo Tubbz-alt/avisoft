@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="26"/>
+	<parameter name="numFac" class="java.lang.Integer"/>
+	<parameter name="logo" class="java.io.InputStream"/>
+	<queryString>
+		<![CDATA[SELECT c.num, c.fecha, c.total, c.nit, c.cedula, e.razon_social, e.telefono, e.direccion, p.nombres, p.apellidos, p.telefono, i.nombre, dc.cantidad, dc.precio
+FROM compra c, empresa e, persona p, detalle_compra dc, insumo i
+WHERE c.num=dc.num AND c.nit=e.nit AND c.cedula=p.cedula AND dc.id= i.id AND c.num= $P{numFac}]]>
+	</queryString>
+	<field name="num" class="java.lang.Integer"/>
+	<field name="fecha" class="java.sql.Date"/>
+	<field name="total" class="java.lang.Double"/>
+	<field name="nit" class="java.lang.String"/>
+	<field name="cedula" class="java.lang.String"/>
+	<field name="razon_social" class="java.lang.String"/>
+	<field name="telefono" class="java.lang.String"/>
+	<field name="direccion" class="java.lang.String"/>
+	<field name="nombres" class="java.lang.String"/>
+	<field name="apellidos" class="java.lang.String"/>
+	<field name="nombre" class="java.lang.String"/>
+	<field name="cantidad" class="java.lang.Integer"/>
+	<field name="precio" class="java.lang.Double"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="183" splitType="Stretch">
+			<image>
+				<reportElement x="9" y="0" width="308" height="180"/>
+				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
+			</image>
+			<rectangle radius="10">
+				<reportElement x="323" y="0" width="219" height="180" backcolor="#F4D76C"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="332" y="10" width="203" height="157" forecolor="#010101"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="13" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Programación  de Software, SENA - Cúcuta, Norte de Santander.
+Proyecto para la culminación del curso, con la colaboración de los estudaintes de AVICOLA del instituto SENA.
+Integrantes:
+Marlón Ramírez.
+Richard Maldonado. ]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="145" splitType="Stretch">
+			<rectangle radius="10">
+				<reportElement x="9" y="4" width="538" height="33" backcolor="#3C9182"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="144" y="4" width="263" height="33" forecolor="#FFFFFF"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="22" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Factura Compra]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="388" y="48" width="158" height="53" backcolor="#CCCCCC"/>
+				<graphicElement>
+					<pen lineWidth="0.0" lineStyle="Double"/>
+				</graphicElement>
+			</rectangle>
+			<rectangle>
+				<reportElement x="383" y="43" width="159" height="53"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="388" y="48" width="147" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="15"/>
+				</textElement>
+				<text><![CDATA[Número factura]]></text>
+			</staticText>
+			<rectangle radius="10">
+				<reportElement x="9" y="43" width="369" height="98" backcolor="#AF7474"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="383" y="106" width="159" height="35"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="13" y="55" width="78" height="15"/>
+				<textElement>
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Razón social :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="257" y="55" width="27" height="15"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[NIT :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="91" y="55" width="160" height="15"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{razon_social}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="284" y="55" width="84" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{nit}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="389" y="115" width="46" height="15"/>
+				<textElement/>
+				<text><![CDATA[Fecha de ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="437" y="115" width="98" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{fecha}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="13" y="75" width="78" height="15"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Proveedor :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="91" y="75" width="139" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{nombres}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="230" y="75" width="138" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{apellidos}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="13" y="95" width="78" height="15"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Telefono :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="91" y="95" width="124" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{telefono}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="13" y="116" width="78" height="15"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Dirección :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="91" y="116" width="277" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{direccion}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="388" y="70" width="147" height="25"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="20" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{numFac}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="26" splitType="Stretch">
+			<rectangle>
+				<reportElement x="9" y="0" width="537" height="26" backcolor="#2563FB"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="13" y="6" width="224" height="15"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Nombre de Insumo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="239" y="6" width="56" height="15"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Cant.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="295" y="6" width="133" height="15"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Precio Unitario]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="427" y="6" width="119" height="15"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Total]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="35" splitType="Stretch">
+			<textField>
+				<reportElement x="13" y="1" width="217" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nombre}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="246" y="1" width="38" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{cantidad}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="305" y="0" width="100" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{precio}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="435" y="1" width="100" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom" markup="none">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{cantidad}*$F{precio}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="9" y="23" width="538" height="1"/>
+				<graphicElement>
+					<pen lineWidth="1.0"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement x="9" y="0" width="1" height="24"/>
+			</line>
+			<line>
+				<reportElement x="237" y="1" width="1" height="23"/>
+			</line>
+			<line>
+				<reportElement x="294" y="0" width="1" height="24"/>
+			</line>
+			<line>
+				<reportElement x="427" y="0" width="1" height="24"/>
+			</line>
+			<line>
+				<reportElement x="546" y="0" width="1" height="24"/>
+			</line>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="3" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="4" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="57" splitType="Stretch">
+			<rectangle radius="10">
+				<reportElement x="383" y="4" width="164" height="48"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="389" y="18" width="48" height="20"/>
+				<textElement>
+					<font size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="437" y="18" width="105" height="20"/>
+				<textElement textAlignment="Right">
+					<font size="16" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{total}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement x="9" y="4" width="369" height="48"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="12" y="10" width="364" height="10"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Esta Factura de compra es de uso consultivo por lo que no se trata de una factura fiscal.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="12" y="26" width="364" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[AVISOFT. Programa informático desarrollado por aprendices SENA.]]></text>
+			</staticText>
+		</band>
+	</summary>
+</jasperReport>
