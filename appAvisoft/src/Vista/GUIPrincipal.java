@@ -45,6 +45,7 @@ public class GUIPrincipal extends Interfaz {
         jMenuItem2 = new javax.swing.JMenuItem();
         jMenuItem3 = new javax.swing.JMenuItem();
         jMenuItem4 = new javax.swing.JMenuItem();
+        jMenuItem5 = new javax.swing.JMenuItem();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
         menuAcerca = new javax.swing.JMenuItem();
@@ -93,6 +94,14 @@ public class GUIPrincipal extends Interfaz {
             }
         });
         jMenu2.add(jMenuItem4);
+
+        jMenuItem5.setText("Consultas");
+        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem5ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem5);
 
         jMenuBar3.add(jMenu2);
 
@@ -191,6 +200,11 @@ public class GUIPrincipal extends Interfaz {
         new GUICompra(this).setVisible(true);
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
+    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
+        // TODO add your handling code here:
+        new GUIConsInv(this).setVisible(true);
+    }//GEN-LAST:event_jMenuItem5ActionPerformed
+
     class ManejadorEventos extends java.awt.event.WindowAdapter {
         @Override
         public void windowClosing(java.awt.event.WindowEvent e) {
@@ -217,6 +231,7 @@ public class GUIPrincipal extends Interfaz {
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem menuAcerca;
     private javax.swing.JMenuItem menuConf;
     private javax.swing.JMenu menuLog;

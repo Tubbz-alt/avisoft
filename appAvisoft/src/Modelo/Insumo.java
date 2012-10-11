@@ -6,6 +6,8 @@ package Modelo;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -42,6 +44,16 @@ public class Insumo {
         }
     }
     
+    public Insumo(String id, String nombre, String tipo, int cantidad, String medida, String estado) {
+        this.con=new Conexion();
+        this.id = id;
+        this.nombre = nombre;
+        this.tipo = tipo;
+        this.cantidad = cantidad;
+        this.medida = medida;
+        this.estado= estado;
+    }
+    
     public static ArrayList<String[]> getInsumos() {
         Conexion con = new Conexion();
         ArrayList<String[]> ins = new ArrayList<String[]>();
@@ -52,17 +64,91 @@ public class Insumo {
         }
         return ins;
     }
+    
+    public static AbstractTableModel tablaIns(){
+        AbstractTableModel tabla= new AbstractTableModel() {
+            private Conexion con;
+            private String[] ColumnName= {"Id", "Nombre", "Tipo", "Cant.", "Medida", "Estado"};
+            private Object [][] cons= this.contenido();
+            
+            private Object[][] contenido(){
+                boolean activo= true;
+                boolean inactivo= false;
+                this.con= new Conexion();
+                Object [][] datos;
+                ArrayList<HashMap> res= con.query("SELECT * FROM insumo");
+                datos= new Object[res.size()][ColumnName.length];
+                int i=0;
+                for (HashMap fila : res) {
+                    String [] col= {fila.get("id").toString(), fila.get("nombre").toString(), fila.get("tipo").toString(),
+                                    fila.get("cantidad").toString(), fila.get("medida").toString(), fila.get("estado").toString()};
+                    for(int j=0; j<ColumnName.length; j++){
+                        if(j !=5){
+                            datos[i][j]= col[j];
+                        }
+                        else{
+                            if(Integer.parseInt(col[j]+"") == 1){
+                                datos[i][j]= activo;
+                            }
+                            else{
+                                datos[i][j]= inactivo;
+                            }
+                        }
+                    }
+                    i++;
+                }
+                return datos;
+            }
 
-    public Insumo(String id, String nombre, String tipo, int cantidad, String medida, String estado) {
-        this.con=new Conexion();
-        this.id = id;
-        this.nombre = nombre;
-        this.tipo = tipo;
-        this.cantidad = cantidad;
-        this.medida = medida;
-        this.estado= estado;
+            @Override
+            public int getRowCount() {
+                return this.cons.length;
+            }
+
+            @Override
+            public int getColumnCount() {
+                return this.ColumnName.length;
+            }
+
+            @Override
+            public Object getValueAt(int i, int i1) {
+                return this.cons[i][i1];
+            }
+            
+            @Override
+            public String getColumnName(int columnIndex){
+                return this.ColumnName[columnIndex];
+            }
+            
+            @Override
+            public Class<?> getColumnClass(int c){
+                return this.cons[0][c].getClass();
+            }
+            
+            @Override
+            public void setValueAt(Object aValue, int rowIndex, int columnIndex){
+                if(columnIndex == 5){
+                    boolean value= Boolean.parseBoolean(aValue.toString());
+                    String estado= "0";
+                    if(value == true){
+                        estado= "1";
+                    }
+                    Insumo i= Insumo.existe(this.cons[rowIndex][0].toString());
+                    i.setEstado(estado);
+                    this.cons[rowIndex][columnIndex]= value;
+                    // Disparamos el Evento TableDataChanged (La tabla ha cambiado)
+                    //fireTableCellUpdated(rowIndex, columnIndex);
+                }
+            }
+            
+            @Override
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return columnIndex==5;
+            }
+        };
+        return tabla;
     }
-
+    
     public String getEstado() {
         return estado;
     }
@@ -129,6 +215,17 @@ public class Insumo {
                               res.get(0).get("estado")+"");
         }
         return null;
+    }
+    
+    public static boolean update(String valores, String id)
+    {
+        Conexion conn= new Conexion();
+        boolean res = false;
+        String q = " UPDATE insumo SET " + valores + " WHERE id= " + id;
+        ArrayList<HashMap> oper= conn.query(q);
+        if(oper==null)
+            res=true;
+        return res;
     }
 
     @Override

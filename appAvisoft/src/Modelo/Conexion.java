@@ -16,7 +16,7 @@ import java.util.logging.Logger;
  
 public class Conexion {
     
-    private Connection conexion;//atributo de la conección
+    private Connection conexion= null;//atributo de la conección
     private String error;
     
     //Contructor...
@@ -94,6 +94,10 @@ public class Conexion {
             Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    public Connection getConnection(){
+      return conexion;
+   }
 
     public String getError() {
         return error;

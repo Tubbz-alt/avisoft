@@ -12,6 +12,9 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -23,15 +26,17 @@ public class Compra{
     private Date fechaFact;
     private double total;
     private String cedula;
+    private String nit;
     private Object [][] items;
-
-    public Compra(int numFact, Date fechaFact, double total, String cedula, Object [][] items) {
+    
+    public Compra(int numFact, Date fechaFact, double total, String cedula, String nit, Object [][] items) {
         this.con= new Conexion();
-        this.con.query("INSERT INTO compra VALUES ("+numFact+", '"+new java.sql.Date(fechaFact.getTime())+"', "+total+", '"+cedula+"')");
+        this.con.query("INSERT INTO compra VALUES ("+numFact+", '"+new java.sql.Date(fechaFact.getTime())+"', "+total+", '"+cedula+"', '"+nit+"')");
         this.numFact = numFact;
         this.fechaFact = fechaFact;
         this.total = total;
         this.cedula = cedula;
+        this.nit= nit;
         this.items= items;
         
         for(int i=0; i<items.length; i++){
@@ -42,13 +47,42 @@ public class Compra{
         }
     }
     
-    private Compra(int numFact, Date fechaFact, double total, String cedula, Object [][] items, char a){
+    private Compra(int numFact, Date fechaFact, double total, String cedula, String nit, Object [][] items, char a){
         this.con= new Conexion();
         this.numFact= numFact;
         this.fechaFact= fechaFact;
         this.total= total;
         this.cedula= cedula;
+        this.nit=nit;
         this.items= items;
+    }
+    
+    public static DefaultTableModel tablaCompra(){
+        DefaultTableModel tabla;
+        Conexion con= new Conexion();
+        String[] ColumnName={"Num. Factura", "Proveedor"};
+        ArrayList<HashMap> res= con.query("SELECT c.num, p.nombres, p.apellidos, e.razon_social "+
+                                          "FROM compra c "+
+                                          "INNER JOIN persona p ON c.cedula= p.cedula "+
+                                          "INNER JOIN empresa e ON c.nit= e.nit");
+        Object [][] datos= new Object[res.size()][ColumnName.length];
+        int i=0;
+        for (HashMap fila : res) {
+            datos[i][0]= fila.get("num").toString();
+            datos[i][1]= fila.get("razon_social").toString() +", "+fila.get("nombres").toString()+" "+fila.get("apellidos").toString();
+            i++;
+        }
+        tabla= new DefaultTableModel(datos, ColumnName){
+            @Override
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return columnIndex==1;
+            }
+            @Override
+            public Class<?> getColumnClass(int c){
+                return super.getColumnClass(c).getClass();
+            }
+        };
+        return tabla;
     }
 
     public String getCedula() {
@@ -80,7 +114,7 @@ public class Compra{
         Object [][] itemsCompra;
         ArrayList<String []> insumos= Insumo.getInsumos();
         
-        ArrayList<HashMap> res= c.query("SELECT fecha, total, cedula from compra where num="+numFact);
+        ArrayList<HashMap> res= c.query("SELECT fecha, total, cedula, nit from compra where num="+numFact);
         if(!res.isEmpty()){
             ArrayList<HashMap> res1= c.query("SELECT * FROM detalle_compra where num="+numFact);
             itemsCompra= new Object[res1.size()][3];
@@ -105,6 +139,7 @@ public class Compra{
                               new java.util.Date(fecha.getTime()),
                               Double.parseDouble(res.get(0).get("total")+""),
                               res.get(0).get("cedula")+"",
+                              res.get(0).get("nit")+"",
                               itemsCompra,'a');
         }
         return null;

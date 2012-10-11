@@ -6,8 +6,7 @@ package Modelo;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javax.swing.table.AbstractTableModel;
 
 /**
  *
@@ -72,22 +71,137 @@ public class Proveedor extends Persona {
         return estado;
     }
     
-    public static ArrayList<String[]> getProveedores(){
+    public static ArrayList<HashMap> getProveedores(){
         Conexion c= new Conexion();
-        ArrayList<String[]> pro= new ArrayList<String[]>();
-        ArrayList<HashMap> res= c.query("SELECT ep.cedula, pn.nombres, pn.apellidos,"+
-                                        " ep.nit, e.razon_social FROM empresa_proveedor ep,"+
-                                        " persona pn, empresa e WHERE ep.cedula= pn.cedula"+
-                                        " AND ep.nit= e.nit AND ep.estado= 1");
+        ArrayList<HashMap> res= c.query("SELECT e.nit, e.razon_social FROM empresa e;");
         if(!res.isEmpty()){
-            for (HashMap prv : res) {
-                String[] p= {prv.get("nit").toString(), prv.get("razon_social").toString(),
-                             prv.get("cedula").toString(), prv.get("nombres").toString(),
-                             prv.get("apellidos").toString()};
-                pro.add(p);
+            return res;
+        }
+        else{
+            return null;
+        }
+    }
+    
+    public static ArrayList<String[]> getVendedores(String nit){
+        Conexion c= new Conexion();
+        ArrayList<String[]> ven= new ArrayList<String[]>();
+        ArrayList<HashMap> res= c.query("SELECT ep.cedula, p.nombres, p.apellidos"+
+                                        " FROM empresa_proveedor ep, persona p WHERE ep.nit='"+nit+
+                                        "' AND ep.cedula=p.cedula AND ep.estado=1;");
+        if(!res.isEmpty()){
+            for (HashMap vdr : res) {
+                String[] v= {vdr.get("cedula").toString(),
+                             vdr.get("nombres").toString(),
+                             vdr.get("apellidos").toString()};
+                ven.add(v);
             }
         }
-        return pro;
+        return ven;
+    }
+    
+    public static AbstractTableModel tablaProv(){
+        AbstractTableModel tabla= new AbstractTableModel() {
+            private Conexion con;
+            private String[] ColumnName={"Nit", "Razón social", "Cédula", "Nombres","Apellidos", "Estado"};
+            private Object[][] cons= this.contenido();
+            
+            private Object[][] contenido(){
+                boolean activo= true;
+                boolean inactivo= false;
+                this.con= new Conexion();
+                Object [][] datos;
+                ArrayList<HashMap> res= con.query("SELECT ep.nit, e.razon_social, ep.cedula, p.nombres, p.apellidos, ep.estado "+
+                                                  "FROM empresa_proveedor ep, empresa e, persona p "+
+                                                  "WHERE ep.nit=e.nit AND ep.cedula=p.cedula");
+                datos= new Object[res.size()][ColumnName.length];
+                int i=0;
+                for (HashMap fila : res) {
+                    String [] col= {fila.get("nit").toString(), fila.get("razon_social").toString(), fila.get("cedula").toString(),
+                                    fila.get("nombres").toString(), fila.get("apellidos").toString(), fila.get("estado").toString()};
+                    for(int j=0; j<ColumnName.length; j++){
+                        if(j !=5){
+                            datos[i][j]= col[j];
+                        }
+                        else{
+                            if(Integer.parseInt(col[j]+"") == 1){
+                                datos[i][j]= activo;
+                            }
+                            else{
+                                datos[i][j]= inactivo;
+                            }
+                        }
+                    }
+                    i++;
+                }
+                return datos;
+            }           
+
+            @Override
+            public int getRowCount() {
+                return this.cons.length;
+            }
+
+            @Override
+            public int getColumnCount() {
+                return ColumnName.length;
+            }
+            
+            @Override
+            public String getColumnName(int columnIndex) {
+                // Devuelve el nombre de cada columna. Este texto aparecerá en la
+                // cabecera de la tabla.
+                switch (columnIndex)
+                {
+                    case 0:
+                        return ColumnName[0];
+                    case 1:
+                        return ColumnName[1];
+                    case 2:
+                        return ColumnName[2];
+                    case 3:
+                        return ColumnName[3];
+                    case 4:
+                        return ColumnName[4];
+                    case 5:
+                        return ColumnName[5];
+                    default:
+                        return null;
+                }
+            }
+            
+            @Override
+            public Class<?> getColumnClass(int columnIndex) {
+                // Devuelve la clase que hay en cada columna.
+                return this.cons[0][columnIndex].getClass();
+            }
+
+            @Override
+            public Object getValueAt(int rowIndex, int columnIndex) {
+                return this.cons[rowIndex][columnIndex];
+            }
+            
+            @Override
+            public void setValueAt(Object aValue, int rowIndex, int columnIndex){
+                if(columnIndex == 5){
+                    boolean value= Boolean.parseBoolean(aValue.toString());
+                    String estado= "0";
+                    if(value == true){
+                        estado= "1";
+                    }
+                    Proveedor p= Proveedor.existe(this.cons[rowIndex][2].toString());
+                    p.setEstado(estado);
+                    this.cons[rowIndex][columnIndex]= value;
+                    // Disparamos el Evento TableDataChanged (La tabla ha cambiado)
+                    //fireTableCellUpdated(rowIndex, columnIndex);
+                }
+            }
+            
+            @Override
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return columnIndex==5;
+            }
+        };
+        return tabla;
     }
 
     public void setDirEmp(String dirEmp) {
@@ -108,18 +222,6 @@ public class Proveedor extends Persona {
     public void setEstado(String estado) {
         this.con.query("UPDATE empresa_proveedor SET estado = '"+estado+"' WHERE cedula ='"+this.cedula+"'");
         this.estado = estado;
-    }
-    
-    @Override
-    public void eliminar() {
-        this.con.query("DELETE FROM proveedor WHERE nit = '"+this.nit+"' AND cedula = '"+this.cedula+"'");
-        this.con.query("DELETE FROM empresa WHERE nit = '"+this.nit+"'");
-        super.eliminar();
-        try {
-            this.finalize();
-        } catch (Throwable ex) {
-            Logger.getLogger(Proveedor.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
     
     public static Proveedor existe (String cedula) {
