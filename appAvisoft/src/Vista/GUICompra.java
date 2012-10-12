@@ -59,7 +59,7 @@ public class GUICompra extends Interfaz {
         cargarTabla();
    }
     
-    private void setAnchoColumnas(){       
+    private void setAnchoColumnas(){
         JViewport scroll =  (JViewport) tabla.getParent();
         int ancho = scroll.getWidth();
         int anchoColumna=0;
@@ -109,14 +109,11 @@ public class GUICompra extends Interfaz {
                     tabla.changeSelection ( tabla.getRowCount () - 1, 0, false, false );
                     model.rowAdd = false;
                 }
-<<<<<<< HEAD
             }
-=======
-            }            
->>>>>>> ec462aeac351e774c640714615cc91952778551b
         });
         this.setAnchoColumnas();
     }
+    
     
     private void cargarInsumos(){
         this.insumos= Insumo.getInsumos();
