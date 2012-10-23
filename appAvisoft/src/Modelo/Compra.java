@@ -12,8 +12,6 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -60,7 +58,7 @@ public class Compra{
     public static DefaultTableModel tablaCompra(){
         DefaultTableModel tabla;
         Conexion con= new Conexion();
-        String[] ColumnName={"Num. Factura", "Proveedor"};
+        String[] ColumnName={"Num. Factura", "Proveedor", "Opciones"};
         ArrayList<HashMap> res= con.query("SELECT c.num, p.nombres, p.apellidos, e.razon_social "+
                                           "FROM compra c "+
                                           "INNER JOIN persona p ON c.cedula= p.cedula "+
@@ -70,12 +68,13 @@ public class Compra{
         for (HashMap fila : res) {
             datos[i][0]= fila.get("num").toString();
             datos[i][1]= fila.get("razon_social").toString() +", "+fila.get("nombres").toString()+" "+fila.get("apellidos").toString();
+            datos[i][2]= "";
             i++;
         }
         tabla= new DefaultTableModel(datos, ColumnName){
             @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return columnIndex==1;
+                return columnIndex==2;
             }
             @Override
             public Class<?> getColumnClass(int c){

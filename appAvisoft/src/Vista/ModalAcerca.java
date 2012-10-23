@@ -49,7 +49,7 @@ public class ModalAcerca extends javax.swing.JDialog {
 
         jLabel2.setText("<html>\n<p style=\"text-align: justify\"><b>AviSoft</b> es un proyecto creado por aprendices en tecnica de programación de software del <b>SENA</b> regional Norte de Santander con el apoyo de aprendices de Avicultura de la misma institución.</p>\n</html>");
 
-        jEditorPane1.setContentType("text/html");
+        jEditorPane1.setContentType("text/html"); // NOI18N
         jEditorPane1.setText("<html>\r\n  <head>\r\n\r\n  </head>\r\n  <body>\r\n    <table>\n          <tr><th>Asesores:</th><td>Hector Gómez<br/>\n\t\t                   Liliana Meneses Ovallos<br/>\n\t\t                   Viviana Alejandra Rubiano Tellez</td></tr>\n          <tr><th>Instructores:</th><td>Danilo Agudelo<br/>\n\t\t\t  Leonardo Hernandez Corredor<br/>\n\t\t\t  Pedro Ariza</td></tr>\n          <tr><th>Programadores:</th><td>Marlon Isidro Ramirez Duque<br/>\n                                                                       Michael Alexander Vega Pabon<br/>\n                                                                       Richard Andres Maldonado Ramirez<br/></td></tr>\n    </table>\n  </body>\r\n</html>\r\n");
         jScrollPane1.setViewportView(jEditorPane1);
 
@@ -71,10 +71,10 @@ public class ModalAcerca extends javax.swing.JDialog {
                         .addComponent(jLabel1))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE))
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE))
+                        .addComponent(jScrollPane1))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(176, 176, 176)
                         .addComponent(jButton1)))
@@ -106,7 +106,7 @@ public class ModalAcerca extends javax.swing.JDialog {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(26, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );

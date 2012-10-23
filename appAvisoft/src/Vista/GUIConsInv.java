@@ -13,6 +13,7 @@ import javax.swing.DefaultCellEditor;
 import javax.swing.JTextField;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 
 public class GUIConsInv extends Interfaz{
     private GUIPrincipal p;
@@ -22,6 +23,7 @@ public class GUIConsInv extends Interfaz{
         initComponents();
         this.p=principal;
         this.p.forms.add(this);
+        this.setSize(700, 410);
         setLocationRelativeTo(null);
     }
     
@@ -40,14 +42,20 @@ public class GUIConsInv extends Interfaz{
     private void cargarTablaCompra(){        
         DefaultTableModel datosCompra= Compra.tablaCompra();
         this.tablaCom.setModel(datosCompra);
-        this.tablaCom.getColumnModel().getColumn(0).setMaxWidth(90);
-        this.tablaCom.getColumnModel().getColumn(0).setMinWidth(90);
-        this.tablaCom.setRowHeight(30);
+        this.tablaCom.getColumnModel().getColumn(0).setMaxWidth(40);
+        this.tablaCom.getColumnModel().getColumn(0).setMinWidth(40);
+        this.tablaCom.getColumnModel().getColumn(1).setMaxWidth(400);
+        this.tablaCom.getColumnModel().getColumn(1).setMinWidth(400);
+        this.tablaCom.setRowHeight(43);// el tama�o de las celulas o celdas
         JTextField textField = new JTextField();
         textField.setBorder(BorderFactory.createEmptyBorder());
         DefaultCellEditor editor = new DefaultCellEditor(textField);
         editor.setClickCountToStart(1);
-        this.tablaCom.getColumn(this.tablaCom.getColumnName(1)).setCellEditor(new MyTableRenderer.StringActionTableCellEditor(editor));
+        //this.tablaCom.getColumn(this.tablaCom.getColumnName(1)).setCellEditor(new MyTableRenderer.ButtonsEditor(tablaCom));
+        TableColumn column = tablaCom.getColumnModel().getColumn(2);
+		    /***************A�ADADO LAS CLASES EDITAR y VISTA PREVIA**************************/
+		    column.setCellRenderer(new MyTableRenderer.ButtonsRenderer());
+		    column.setCellEditor(new MyTableRenderer.ButtonsEditor(tablaCom));
     }
 
     /** This method is called from within the constructor to
@@ -71,6 +79,7 @@ public class GUIConsInv extends Interfaz{
         tablaCom = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);
@@ -141,7 +150,6 @@ public class GUIConsInv extends Interfaz{
                 return canEdit [columnIndex];
             }
         });
-        tablaCom.setTableHeader(null);
         jScrollPane3.setViewportView(tablaCom);
 
         jPanel3.add(jScrollPane3, java.awt.BorderLayout.CENTER);
