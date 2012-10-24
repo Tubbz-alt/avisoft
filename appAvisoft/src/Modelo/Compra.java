@@ -155,10 +155,4 @@ public class Compra{
         return (max+1)+"";
     }
     
-    //---------------Código para imprimir factura---------------------------
-    public void imprimir(){
-        Imprimir imp= new Imprimir();
-        imp.imprimir_Compra("Avisoft", String.valueOf(this.numFact), 
-                            String.valueOf(this.cedula), String.valueOf(this.total), items);
-    }
 }
