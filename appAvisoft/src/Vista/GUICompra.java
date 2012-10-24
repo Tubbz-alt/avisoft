@@ -445,9 +445,21 @@ public class GUICompra extends Interfaz {
         for (int i = 0; i < this.vendedores.size(); i++) {
             String[] vdr= this.vendedores.get(i);
             String[] seleccion= cmbVendedor.getSelectedItem().toString().split(" ");
-            if(vdr[1].equals(seleccion[0]+" "+seleccion[1])){
-                cedula=vdr[0];
-                break;
+            if(cmbVendedor.getSelectedIndex()==0){
+                javax.swing.JOptionPane.showMessageDialog(this, "Por favor seleccione un vendedor", "Advertencia", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+                return;
+            }
+            if(seleccion.length>2){
+                if(vdr[1].equals(seleccion[0]+" "+seleccion[1])){
+                    cedula=vdr[0];
+                    break;
+                }
+            }
+            else{
+                if(vdr[1].equals(seleccion[0])){
+                    cedula=vdr[0];
+                    break;
+                }
             }
         }
         

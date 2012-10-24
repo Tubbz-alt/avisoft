@@ -111,6 +111,9 @@ public class ModeloTabla extends AbstractTableModel{
                 item.getId();
                 break;
             case 1:
+                if(itemExiste(aValue.toString())){
+                    return;
+                }
                 item.setNombre(aValue.toString());
                 item.setId(this.getCodigoInsumo(item.getNombre()));
                 break;
@@ -164,12 +167,27 @@ public class ModeloTabla extends AbstractTableModel{
         return codigo;
     }
     
+    private boolean itemExiste(String nombreItem){
+        boolean ok= false;
+        if(registros.size()!=1){
+                    for(ItemCompra aux: registros){
+                        if(aux.getNombre().equals(nombreItem)){
+                            javax.swing.JOptionPane.showMessageDialog(null, "El item "+aux.getNombre()+" ya existe. Por favor modificar item",
+                                                                      "Advertencia", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+                            ok=true;
+                            break;
+                        }
+                    }
+                }
+        return ok;
+    }
+    
     private void generarFila (int rowIndex) {
         int fila= rowIndex+1;
         if(fila==registros.size()){
             ItemCompra item= registros.get(rowIndex);
             if(item.getNombre() != null && item.getTotal() != 0){
-                this.anhadeItem(new ItemCompra(0, null, 0, 0, 0));
+                this.anhadeItem(new ItemCompra(0, "", 0, 0, 0));
                 this.rowAdd = true;
             }
         }
