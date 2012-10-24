@@ -4,6 +4,7 @@
  */
 package Vista;
 
+import Modelo.Parametros;
 import java.util.Properties;
 import java.util.Random;
 import java.util.logging.Level;
@@ -33,6 +34,8 @@ public abstract class WebUtil {
     
     public static boolean enviarEmail(String to, String from, String mensaje, String asunto, String[][] rutas) {
         try {
+            String email = Parametros.getEmail();
+            String password = Parametros.getPasswordEmail();
             Properties props = new Properties();
             // Nombre del host de correo, es smtp.gmail.com
             props.setProperty("mail.smtp.host", "smtp.gmail.com");
@@ -41,7 +44,7 @@ public abstract class WebUtil {
             // Puerto de gmail para envio de correos
             props.setProperty("mail.smtp.port","587");
             // Nombre del usuario
-            props.setProperty("mail.smtp.user", "mirdware@gmail.com");
+            props.setProperty("mail.smtp.user", email);
             // Si requiere o no usuario y password para conectarse.
             props.setProperty("mail.smtp.auth", "true");
             Session session = Session.getDefaultInstance(props);
@@ -73,7 +76,7 @@ public abstract class WebUtil {
             Transport t = session.getTransport("smtp");
 
             // Aqui usuario y password de gmail
-            t.connect("mirdware@gmail.com","Sena2012");
+            t.connect(email, password);
             t.sendMessage(message,message.getAllRecipients());
             t.close();
             return true;

@@ -10,6 +10,8 @@
  */
 package Vista;
 
+import Modelo.Parametros;
+
 /**
  *
  * @author Kraken
@@ -17,10 +19,12 @@ package Vista;
 public class ModalBugs extends javax.swing.JDialog {
 
     private Log log;
+    private String email;
     /** Creates new form ModalBugs */
     public ModalBugs(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         this.log = Log.check();
+        this.email = Parametros.getEmail();
         if(log != null) {
             initComponents();
             txtVersion.setText("0.1");
@@ -76,21 +80,10 @@ public class ModalBugs extends javax.swing.JDialog {
 
         jLabel4.setText("Titulo:");
 
-        txtTitulo.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                txtTituloFocusLost(evt);
-            }
-        });
-
         jLabel5.setText("Descripción:");
 
         txtDescripcion.setColumns(20);
         txtDescripcion.setRows(5);
-        txtDescripcion.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                txtDescripcionFocusLost(evt);
-            }
-        });
         jScrollPane1.setViewportView(txtDescripcion);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -230,7 +223,7 @@ public class ModalBugs extends javax.swing.JDialog {
             return;
         }
         
-        if(WebUtil.enviarEmail("mirdware@gmail.com", this.log.getEmail(),
+        if(WebUtil.enviarEmail(email, this.log.getEmail(),
                 "<b>Usuario:</b>"+log.getUser()+
                 "<br/><b>Versión:</b>"+version+
                 "<br/><b>Modulo:</b>"+modulo+
@@ -243,24 +236,6 @@ public class ModalBugs extends javax.swing.JDialog {
         }
         
     }//GEN-LAST:event_cmdConfirmActionPerformed
-
-    private void txtTituloFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtTituloFocusLost
-        // TODO add your handling code here:
-        if(txtTitulo.getText().isEmpty()) {
-            Interfaz.showError(txtTitulo, "No ha Ingresado Area del Galpon");
-        } else {
-            Interfaz.normalizeInput(txtTitulo);
-        }
-    }//GEN-LAST:event_txtTituloFocusLost
-
-    private void txtDescripcionFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtDescripcionFocusLost
-        // TODO add your handling code here:
-        if(txtDescripcion.getText().isEmpty()) {
-            Interfaz.showError(txtDescripcion, "No ha Ingresado Area del Galpon");
-        } else {
-            Interfaz.normalizeInput(txtDescripcion);
-        }
-    }//GEN-LAST:event_txtDescripcionFocusLost
 
     
     /**

@@ -23,7 +23,6 @@ public class GUIPrincipal extends Interfaz {
             setLocationRelativeTo(null);
             forms.add(this);
             menuLog.setText("Bienvenido "+log.getUser());
-            addWindowListener(new ManejadorEventos());
         } else {
             salir();
         }
@@ -53,7 +52,7 @@ public class GUIPrincipal extends Interfaz {
         menuConf = new javax.swing.JMenuItem();
         menuSalir = new javax.swing.JMenuItem();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("AVISOFT");
         setIconImage(getIconImage());
 
@@ -204,13 +203,6 @@ public class GUIPrincipal extends Interfaz {
         // TODO add your handling code here:
         new GUIConsInv(this).setVisible(true);
     }//GEN-LAST:event_jMenuItem5ActionPerformed
-
-    class ManejadorEventos extends java.awt.event.WindowAdapter {
-        @Override
-        public void windowClosing(java.awt.event.WindowEvent e) {
-            salir();
-        } 
-    }
     
     @Override
     public java.awt.Image getIconImage() {
