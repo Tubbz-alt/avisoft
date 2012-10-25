@@ -13,8 +13,6 @@ import net.sf.jasperreports.view.JasperViewer;
 
 
 public class IFactCompra {
-    //Direccion para la imagen
-    private final String logotipo= "/Images/logo.png";
     //Se establece la conexion a la base de datos
     private Conexion con= new Conexion();
     
@@ -29,7 +27,6 @@ public class IFactCompra {
             //Parametros de entrada
             Map<String, Object> parametros= new HashMap<String, Object>();
             parametros.clear();
-            parametros.put("logo", this.getClass().getResourceAsStream(logotipo));
             parametros.put("numFac", numFactura);
             re= JasperFillManager.fillReport(repor, parametros, con.getConnection());
             JasperViewer.viewReport(re, false);
