@@ -335,9 +335,21 @@ public class GUICompra extends Interfaz {
 
             jLabel1.setText("Vendedor:");
 
+            cmbVendedor.addItemListener(new java.awt.event.ItemListener() {
+                public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                    cmbVendedorItemStateChanged(evt);
+                }
+            });
+
             cmbNIT.addItemListener(new java.awt.event.ItemListener() {
                 public void itemStateChanged(java.awt.event.ItemEvent evt) {
                     cmbNITItemStateChanged(evt);
+                }
+            });
+
+            cmbCedulaVen.addItemListener(new java.awt.event.ItemListener() {
+                public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                    cmbCedulaVenItemStateChanged(evt);
                 }
             });
 
@@ -535,6 +547,22 @@ public class GUICompra extends Interfaz {
             cmbProveedores.setSelectedIndex(index);
         }
     }//GEN-LAST:event_cmbNITItemStateChanged
+
+    private void cmbVendedorItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cmbVendedorItemStateChanged
+        // TODO add your handling code here:
+        int index = cmbVendedor.getSelectedIndex();
+        if (cmbCedulaVen.getSelectedIndex() != index) {
+            cmbCedulaVen.setSelectedIndex(index);
+        }
+    }//GEN-LAST:event_cmbVendedorItemStateChanged
+
+    private void cmbCedulaVenItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cmbCedulaVenItemStateChanged
+        // TODO add your handling code here:
+        int index = cmbCedulaVen.getSelectedIndex();
+        if (cmbVendedor.getSelectedIndex() != index) {
+            cmbVendedor.setSelectedIndex(index);
+        }
+    }//GEN-LAST:event_cmbCedulaVenItemStateChanged
 
     /**
      * @param args the command line arguments
