@@ -114,7 +114,7 @@
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="txtTlfVendedor" min="-2" pref="124" max="-2" attributes="0"/>
-                                  <Component id="txtDirVendedor" alignment="0" pref="244" max="32767" attributes="0"/>
+                                  <Component id="txtDirVendedor" alignment="0" pref="264" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
@@ -126,8 +126,8 @@
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="txtCedula" alignment="0" min="-2" pref="99" max="-2" attributes="0"/>
-                                  <Component id="txtNombres" pref="245" max="32767" attributes="1"/>
-                                  <Component id="txtApellidos" alignment="0" pref="245" max="32767" attributes="1"/>
+                                  <Component id="txtNombres" pref="262" max="32767" attributes="1"/>
+                                  <Component id="txtApellidos" alignment="0" pref="262" max="32767" attributes="1"/>
                               </Group>
                           </Group>
                       </Group>
@@ -265,7 +265,7 @@
                               </Group>
                               <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="txtDireccion" alignment="0" pref="231" max="32767" attributes="0"/>
+                                  <Component id="txtDireccion" alignment="0" pref="248" max="32767" attributes="0"/>
                                   <Component id="txtTlf" alignment="0" min="-2" pref="114" max="-2" attributes="0"/>
                               </Group>
                           </Group>

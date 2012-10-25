@@ -79,6 +79,7 @@ public class GUIConsInv extends Interfaz{
         tablaCom = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Consultar Inventario");
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowOpened(java.awt.event.WindowEvent evt) {
@@ -88,7 +89,6 @@ public class GUIConsInv extends Interfaz{
 
         jTabbedPane1.setTabPlacement(javax.swing.JTabbedPane.LEFT);
 
-        jPanel1.setBorder(null);
         jPanel1.setLayout(new java.awt.BorderLayout());
 
         tablaIns.setModel(new javax.swing.table.DefaultTableModel(
@@ -108,7 +108,6 @@ public class GUIConsInv extends Interfaz{
 
         jTabbedPane1.addTab("Insumos", jPanel1);
 
-        jPanel2.setBorder(null);
         jPanel2.setLayout(new java.awt.BorderLayout());
 
         tablaPro.setModel(new javax.swing.table.DefaultTableModel(
@@ -128,7 +127,6 @@ public class GUIConsInv extends Interfaz{
 
         jTabbedPane1.addTab("Proveedores", jPanel2);
 
-        jPanel3.setBorder(null);
         jPanel3.setLayout(new java.awt.BorderLayout());
 
         tablaCom.setModel(new javax.swing.table.DefaultTableModel(
