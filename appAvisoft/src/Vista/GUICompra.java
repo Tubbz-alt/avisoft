@@ -252,9 +252,9 @@ public class GUICompra extends Interfaz {
             jLabel11 = new javax.swing.JLabel();
             txtNumFact = new javax.swing.JTextField();
             jLabel1 = new javax.swing.JLabel();
-            cmbVendedor = new javax.swing.JComboBox();
             cmbNIT = new com.jidesoft.swing.AutoCompletionComboBox();
             cmbCedulaVen = new com.jidesoft.swing.AutoCompletionComboBox();
+            cmbVendedor = new com.jidesoft.swing.AutoCompletionComboBox();
             txtTotalCompra = new javax.swing.JTextField();
             jLabel10 = new javax.swing.JLabel();
 
@@ -335,12 +335,6 @@ public class GUICompra extends Interfaz {
 
             jLabel1.setText("Vendedor:");
 
-            cmbVendedor.addItemListener(new java.awt.event.ItemListener() {
-                public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                    cmbVendedorItemStateChanged(evt);
-                }
-            });
-
             cmbNIT.addItemListener(new java.awt.event.ItemListener() {
                 public void itemStateChanged(java.awt.event.ItemEvent evt) {
                     cmbNITItemStateChanged(evt);
@@ -350,6 +344,12 @@ public class GUICompra extends Interfaz {
             cmbCedulaVen.addItemListener(new java.awt.event.ItemListener() {
                 public void itemStateChanged(java.awt.event.ItemEvent evt) {
                     cmbCedulaVenItemStateChanged(evt);
+                }
+            });
+
+            cmbVendedor.addItemListener(new java.awt.event.ItemListener() {
+                public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                    cmbVendedorItemStateChanged(evt);
                 }
             });
 
@@ -377,8 +377,8 @@ public class GUICompra extends Interfaz {
                                 .addComponent(cmbNIT, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(cmbCedulaVen, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(cmbVendedor, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(cmbVendedor, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(cmbProveedores, javax.swing.GroupLayout.DEFAULT_SIZE, 277, Short.MAX_VALUE)))))
             );
             jPanel3Layout.setVerticalGroup(
@@ -398,9 +398,9 @@ public class GUICompra extends Interfaz {
                         .addComponent(cmbNIT, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(cmbVendedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel1)
-                        .addComponent(cmbCedulaVen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(cmbCedulaVen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(cmbVendedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
             );
 
             txtTotalCompra.setEditable(false);
@@ -531,11 +531,12 @@ public class GUICompra extends Interfaz {
 
     private void actualizarVendedor(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_actualizarVendedor
         String nit = null;
+        int index = cmbProveedores.getSelectedIndex();
         if(this.proveedores != null && cmbProveedores.getSelectedItem() != null){
             nit = proveedores.get(cmbProveedores.getSelectedIndex()-1).get("nit").toString();
-            if (!cmbNIT.getSelectedItem().equals(nit)) {
-                cmbNIT.setSelectedItem(nit);
-            }
+        }
+        if (cmbNIT.getSelectedIndex() != index) {
+            cmbNIT.setSelectedIndex(index);
         }
         this.cargarVendedor(nit);
     }//GEN-LAST:event_actualizarVendedor
@@ -548,14 +549,6 @@ public class GUICompra extends Interfaz {
         }
     }//GEN-LAST:event_cmbNITItemStateChanged
 
-    private void cmbVendedorItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cmbVendedorItemStateChanged
-        // TODO add your handling code here:
-        int index = cmbVendedor.getSelectedIndex();
-        if (cmbCedulaVen.getSelectedIndex() != index) {
-            cmbCedulaVen.setSelectedIndex(index);
-        }
-    }//GEN-LAST:event_cmbVendedorItemStateChanged
-
     private void cmbCedulaVenItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cmbCedulaVenItemStateChanged
         // TODO add your handling code here:
         int index = cmbCedulaVen.getSelectedIndex();
@@ -563,6 +556,14 @@ public class GUICompra extends Interfaz {
             cmbVendedor.setSelectedIndex(index);
         }
     }//GEN-LAST:event_cmbCedulaVenItemStateChanged
+
+    private void cmbVendedorItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cmbVendedorItemStateChanged
+        // TODO add your handling code here:
+        int index = cmbVendedor.getSelectedIndex();
+        if (cmbCedulaVen.getSelectedIndex() != index) {
+            cmbCedulaVen.setSelectedIndex(index);
+        }
+    }//GEN-LAST:event_cmbVendedorItemStateChanged
 
     /**
      * @param args the command line arguments
@@ -574,7 +575,7 @@ public class GUICompra extends Interfaz {
     private com.jidesoft.swing.AutoCompletionComboBox cmbInsumos;
     private com.jidesoft.swing.AutoCompletionComboBox cmbNIT;
     private com.jidesoft.swing.AutoCompletionComboBox cmbProveedores;
-    private javax.swing.JComboBox cmbVendedor;
+    private com.jidesoft.swing.AutoCompletionComboBox cmbVendedor;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;

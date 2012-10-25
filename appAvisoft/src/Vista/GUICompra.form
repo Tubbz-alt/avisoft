@@ -201,9 +201,9 @@
                               <Component id="cmbCedulaVen" min="-2" pref="136" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
                               <Component id="cmbVendedor" max="32767" attributes="1"/>
-                              <Component id="cmbProveedores" alignment="1" pref="277" max="32767" attributes="1"/>
+                              <Component id="cmbProveedores" alignment="0" pref="277" max="32767" attributes="1"/>
                           </Group>
                       </Group>
                   </Group>
@@ -231,9 +231,9 @@
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="cmbVendedor" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="cmbCedulaVen" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="cmbVendedor" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
           </Group>
@@ -272,16 +272,6 @@
             <Property name="text" type="java.lang.String" value="Vendedor:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JComboBox" name="cmbVendedor">
-          <Properties>
-            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-              <StringArray count="0"/>
-            </Property>
-          </Properties>
-          <Events>
-            <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="cmbVendedorItemStateChanged"/>
-          </Events>
-        </Component>
         <Component class="com.jidesoft.swing.AutoCompletionComboBox" name="cmbNIT">
           <Events>
             <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="cmbNITItemStateChanged"/>
@@ -290,6 +280,11 @@
         <Component class="com.jidesoft.swing.AutoCompletionComboBox" name="cmbCedulaVen">
           <Events>
             <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="cmbCedulaVenItemStateChanged"/>
+          </Events>
+        </Component>
+        <Component class="com.jidesoft.swing.AutoCompletionComboBox" name="cmbVendedor">
+          <Events>
+            <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="cmbVendedorItemStateChanged"/>
           </Events>
         </Component>
       </SubComponents>
