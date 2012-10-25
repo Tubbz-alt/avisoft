@@ -34,13 +34,13 @@ public class GUIInsumo extends Interfaz {
     private void limpiar(){
         this.txtCodigo.setText(null);
         this.txtNombre.setText(null);
-        this.txtTipo.setText(null);
+        this.cmbTipo.setSelectedIndex(0);
         this.txtCantidad.setText(null);
         this.cmbMedida.setSelectedIndex(0);
         
         normalizeInput(txtCodigo);
         normalizeInput(txtNombre);
-        normalizeInput(txtTipo);
+        normalizeInput(cmbTipo);
         normalizeInput(txtCantidad);
         normalizeInput(cmbMedida);
         
@@ -63,8 +63,8 @@ public class GUIInsumo extends Interfaz {
             error=true;
         }
         
-        if(txtTipo.getText().isEmpty()){
-            showError(txtTipo, "No ha digitado el tipo de insumo");
+        if(cmbTipo.getSelectedIndex() == 0){
+            showError(cmbTipo, "No ha seleccionado ningun tipo de insumo");
             error=true;
         }
         
@@ -96,10 +96,10 @@ public class GUIInsumo extends Interfaz {
         jLabel4 = new javax.swing.JLabel();
         txtCodigo = new javax.swing.JTextField();
         txtNombre = new javax.swing.JTextField();
-        txtTipo = new javax.swing.JTextField();
         txtCantidad = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         cmbMedida = new javax.swing.JComboBox();
+        cmbTipo = new com.jidesoft.swing.AutoCompletionComboBox();
         btnLimpiar = new javax.swing.JButton();
         btnAceptar = new javax.swing.JButton();
 
@@ -123,31 +123,14 @@ public class GUIInsumo extends Interfaz {
             }
         });
         txtCodigo.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtCodigoKeyTyped(evt);
-            }
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 txtCodigoKeyPressed(evt);
             }
-        });
-
-        txtNombre.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                txtNombreFocusLost(evt);
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCodigoKeyTyped(evt);
             }
         });
 
-        txtTipo.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                txtTipoFocusLost(evt);
-            }
-        });
-
-        txtCantidad.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                txtCantidadFocusLost(evt);
-            }
-        });
         txtCantidad.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtCantidadKeyTyped(evt);
@@ -179,12 +162,12 @@ public class GUIInsumo extends Interfaz {
                             .addComponent(jLabel4))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtNombre, javax.swing.GroupLayout.DEFAULT_SIZE, 270, Short.MAX_VALUE)
-                            .addComponent(txtTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtNombre, javax.swing.GroupLayout.DEFAULT_SIZE, 313, Short.MAX_VALUE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(txtCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(cmbMedida, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addComponent(cmbMedida, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(cmbTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -203,7 +186,7 @@ public class GUIInsumo extends Interfaz {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(txtTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cmbTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
@@ -276,7 +259,7 @@ public class GUIInsumo extends Interfaz {
         //no repitamos tantas funciones si podemos almacenarlas y no usemos to upperCase
         String codigo = txtCodigo.getText().trim();
         String nombre = txtNombre.getText().trim();
-        String tipo = txtTipo.getText().trim();
+        String tipo = cmbTipo.getSelectedItem().toString();
         String cantidad = txtCantidad.getText().trim();
         String medida = cmbMedida.getSelectedItem().toString();
         if(!validarInsumo()){
@@ -306,12 +289,6 @@ public class GUIInsumo extends Interfaz {
 
     private void txtCodigoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCodigoFocusLost
         // TODO add your handling code here: convenciones JAVA doc toda estructura de control va en llaves
-        if(txtCodigo.getText().isEmpty()) {
-            showError(txtCodigo, "No ha digitado ningun código valido");
-        }
-        else{
-            normalizeInput(txtCodigo);
-        }
         
         Insumo ins = (Insumo) insumos.get(txtCodigo.getText());
         if(ins==null){
@@ -321,11 +298,11 @@ public class GUIInsumo extends Interfaz {
             }                
         if(ins != null){
             normalizeInput(txtNombre);
-            normalizeInput(txtTipo);
+            normalizeInput(cmbTipo);
             normalizeInput(txtCantidad);
             normalizeInput(cmbMedida);
             txtNombre.setText(ins.getNombre());
-            txtTipo.setText(ins.getTipo());
+            cmbTipo.setSelectedItem(ins.getTipo());
             txtCantidad.setText(ins.getCantidad()+"");
             cmbMedida.setSelectedItem(ins.getMedida());
 
@@ -336,36 +313,6 @@ public class GUIInsumo extends Interfaz {
             }
         
     }//GEN-LAST:event_txtCodigoFocusLost
-
-    private void txtNombreFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtNombreFocusLost
-        // TODO add your handling code here:
-        if(txtNombre.getText().isEmpty()){
-            showError(txtNombre, "No le ha colocado un nombre al insumo");
-        }
-        else{
-            normalizeInput(txtNombre);
-        }
-    }//GEN-LAST:event_txtNombreFocusLost
-
-    private void txtTipoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtTipoFocusLost
-        // TODO add your handling code here:
-        if(txtTipo.getText().isEmpty()){
-            showError(txtTipo, "No ha digitado el tipo de insumo");
-        }
-        else{
-            normalizeInput(txtTipo);
-        }
-    }//GEN-LAST:event_txtTipoFocusLost
-
-    private void txtCantidadFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCantidadFocusLost
-        // TODO add your handling code here:
-        if(txtCantidad.getText().isEmpty()){
-            showError(txtCantidad, "No ha ingresado una cantidad para el insumo");
-        }
-        else{
-            normalizeInput(txtCantidad);
-        }
-    }//GEN-LAST:event_txtCantidadFocusLost
 
     private void txtCodigoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCodigoKeyPressed
         // TODO add your handling code here:
@@ -389,6 +336,7 @@ public class GUIInsumo extends Interfaz {
     private javax.swing.JButton btnAceptar;
     private javax.swing.JButton btnLimpiar;
     private javax.swing.JComboBox cmbMedida;
+    private com.jidesoft.swing.AutoCompletionComboBox cmbTipo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -398,6 +346,5 @@ public class GUIInsumo extends Interfaz {
     private javax.swing.JTextField txtCantidad;
     private javax.swing.JTextField txtCodigo;
     private javax.swing.JTextField txtNombre;
-    private javax.swing.JTextField txtTipo;
     // End of variables declaration//GEN-END:variables
 }
