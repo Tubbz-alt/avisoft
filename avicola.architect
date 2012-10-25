@@ -4,8 +4,8 @@
  <print-settings numCopies="1" zoom="1.0" pageNumbersPrinted="true" orientation="1" paperWidth="612.0" paperHeight="792.0" leftBorder="50.0" rightBorder="50.0" topBorder="50.0" bottomBorder="50.0" />
  <project-data-sources>
   <data-source id="DS0">
-   <property key="Logical" value="avicola" />
    <property key="Connection Type" value="MySQL" />
+   <property key="Logical" value="PlayPen Database" />
    <property key="JDBC URL" value="jdbc:mysql://localhost:3306/avicola" />
    <property key="UID" value="avicola" />
    <property key="PWD" value="qwe123" />
@@ -16,8 +16,8 @@
    <property key="ca.sqlpower.architect.etl.kettle.repos.password" value="" />
   </data-source>
   <data-source id="DS0">
-   <property key="Logical" value="avicola" />
    <property key="Connection Type" value="MySQL" />
+   <property key="Logical" value="PlayPen Database" />
    <property key="JDBC URL" value="jdbc:mysql://localhost:3306/avicola" />
    <property key="UID" value="avicola" />
    <property key="PWD" value="qwe123" />
@@ -29,7 +29,7 @@
   </data-source>
  </project-data-sources>
  <source-databases>
-  <database id="DB0" populated="true" UUID="bfe33124-20c0-4426-b4aa-e81f4ce06457" dbcs-ref="DS0" name="avicola" physicalName="avicola" >
+  <database id="DB0" populated="true" UUID="bfe33124-20c0-4426-b4aa-e81f4ce06457" dbcs-ref="DS0" name="PlayPen Database" physicalName="avicola" >
    <catalog id="CAT1" populated="false" UUID="bce61da2-6d14-4961-a2c7-ac9c210c05d4" name="information_schema" nativeTerm="database" physicalName="information_schema" >
    </catalog>
    <catalog id="CAT2" populated="true" UUID="269d37dd-2ce7-487c-add4-b2467c52b8bd" name="avicola" nativeTerm="database" physicalName="avicola" >
@@ -1252,10 +1252,10 @@
    </relationship>
   </relationships>
  </target-database>
- <ddl-generator type="ca.sqlpower.architect.ddl.MySqlDDLGenerator" allow-connection="false" target-catalog="avicola"> </ddl-generator>
+ <ddl-generator type="ca.sqlpower.architect.ddl.MySqlDDLGenerator" allow-connection="true" target-catalog="avicola"> </ddl-generator>
  <liquibase-settings useSeparateChangeSets="false" generateId="false" idStart="1"/>
  <create-kettle-job-settings filePath="" jobName="" schemaName="" kettleJoinType="0" savingToFile="true" />
- <play-pen zoom="1.0" viewportX="240" viewportY="0" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
+ <play-pen zoom="1.0" viewportX="240" viewportY="89" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
   <table-pane table-ref="TAB237" x="926" y="172" bgColor="0xf0f0f0" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB247" x="30" y="275" bgColor="0xf0f0f0" fgColor="0x000000" rounded="false" dashed="false"/>
   <table-pane table-ref="TAB252" x="948" y="346" bgColor="0xf0f0f0" fgColor="0x000000" rounded="false" dashed="false"/>
@@ -1285,8 +1285,8 @@
   <table-link relationship-ref="REL425" pkConnection="0.4444444444444444" fkConnection="0.45528455284552843" rLineColor="0x4c4c4c" pkLabelText="" fkLabelText="" orientation="20"/>
   <table-link relationship-ref="REL440" pkConnection="0.8247422680412371" fkConnection="0.6326530612244898" rLineColor="0x4c4c4c" pkLabelText="" fkLabelText="" orientation="132"/>
   <table-link relationship-ref="REL444" pkConnection="0.4068627450980392" fkConnection="0.4460093896713615" rLineColor="0x4c4c4c" pkLabelText="" fkLabelText="" orientation="36"/>
-  <table-link relationship-ref="REL412" pkConnection="0.37628865979381443" fkConnection="0.3" rLineColor="0x4c4c4c" pkLabelText="" fkLabelText="" orientation="72"/>
-  <table-link relationship-ref="REL438" pkConnection="1.0" fkConnection="0.0" rLineColor="0x4c4c4c" pkLabelText="" fkLabelText="" orientation="33"/>
+  <table-link relationship-ref="REL412" pkConnection="0.37628865979381443" fkConnection="0.421875" rLineColor="0x4c4c4c" pkLabelText="" fkLabelText="" orientation="72"/>
+  <table-link relationship-ref="REL438" pkConnection="0.7272727272727273" fkConnection="0.0" rLineColor="0x4c4c4c" pkLabelText="" fkLabelText="" orientation="33"/>
   <table-link relationship-ref="REL446" pkConnection="0.5977011494252874" fkConnection="0.7073170731707317" rLineColor="0x4c4c4c" pkLabelText="" fkLabelText="" orientation="33"/>
  </play-pen>
  <critic-manager>
