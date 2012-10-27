@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.EventObject;
 import java.util.HashMap;
 import javax.swing.DefaultCellEditor;
+import javax.swing.ImageIcon;
 import javax.swing.InputMap;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -43,20 +44,35 @@ public class GUICompra extends Interfaz {
     private ArrayList<String[]> vendedores;
     private ModeloTabla model;
     private double totalCompra=0;
+    private Compra compra;
 
     /** Creates new form GUICompra */
     public GUICompra(GUIPrincipal principal) {
         initComponents();
         this.p= principal;
         this.p.forms.add(this);
-        this.insumos= new ArrayList<String[]>();
-        this.proveedores= new ArrayList<HashMap>();
         txtNumFact.setText(Compra.getMaxNumFact());
         setLocationRelativeTo(null);
         cargarInsumos();
         cargarProveedores();
         cargarTabla();
    }
+    
+    public GUICompra(int numFact){
+        initComponents();cargarInsumos();
+        cargarProveedores();
+        btnGuardar.setText("Actualizar");
+        btnGuardar.setIcon(new ImageIcon(getClass().getResource("/Images/Update.png")));
+        //Carga la factura de la consulta para editarla
+        compra = Compra.existe(numFact);
+        txtNumFact.setText(String.valueOf(compra.getNumFact()));
+        cmbNIT.setSelectedItem(compra.getNit());
+        cmbCedulaVen.setSelectedItem(compra.getCedula());
+        cargarTabla();
+        txtTotalCompra.setText(String.valueOf(compra.getTotal()));
+        
+        setLocationRelativeTo(null);
+    }
     
     private void setAnchoColumnas(){
         JViewport scroll =  (JViewport) tabla.getParent();
@@ -80,12 +96,11 @@ public class GUICompra extends Interfaz {
             }                     
             columnaTabla.setPreferredWidth(anchoColumna);           
         }
-    }  
+    }
     
-    private void cargarTabla(){
+    private void inicializarTabla(){
         this.model= new ModeloTabla();
         tabla.setModel(model);
-        this.model.anhadeItem(new ItemCompra(0, null, 0, 0, 0));
         tabla.getColumnModel().getColumn(1).setCellEditor(new DefaultCellEditor(cmbInsumos));
         KeyStroke tab = KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0);
         KeyStroke enter = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0);
@@ -113,8 +128,21 @@ public class GUICompra extends Interfaz {
         this.setAnchoColumnas();
     }
     
+    private void cargarTabla(){
+        this.inicializarTabla();
+        if(compra == null){
+            this.model.anhadeItem(new ItemCompra(0, null, 0, 0, 0));
+        }
+        else{
+            ArrayList<ItemCompra> items= compra.getItemsCompra(compra.getNumFact());
+            for(ItemCompra item: items){
+                this.model.anhadeItem(item);
+            }
+        }
+    }    
     
     private void cargarInsumos(){
+        this.insumos= new ArrayList<String[]>();
         this.insumos= Insumo.getInsumos();
         for (String[] insumo : insumos){
             cmbInsumos.addItem(insumo[1]);
@@ -122,26 +150,33 @@ public class GUICompra extends Interfaz {
     }
     
     private void cargarProveedores(){
+        this.proveedores= new ArrayList<HashMap>();
         this.proveedores= Proveedor.getProveedores();
         cmbProveedores.addItem(null);
+        cmbNIT.addItem(null);
         if(this.proveedores != null){
             for(HashMap prd: this.proveedores){
-                String dato= prd.get("razon_social").toString();
-                this.cmbProveedores.addItem(dato);
+                this.cmbProveedores.addItem(prd.get("razon_social"));
+                cmbNIT.addItem(prd.get("nit"));
             }
         }
     }
     
-    private javax.swing.ComboBoxModel cargarVendedor(String nit){
+    private void cargarVendedor(String nit){
         this.vendedores= Proveedor.getVendedores(nit);
-        String[] vndrs= new String[this.vendedores.size()+1];
-        vndrs[0]= "--Seleccionar--";
-        for(int i=0; i<this.vendedores.size(); i++){
+        int i = 0;
+        int size = this.vendedores.size();
+        String[] vndrs= new String[size+1];
+        String[] cedulas = new String[size+1];
+        vndrs[0]= null;
+        while(i<size){
             String [] vdr= this.vendedores.get(i);
-            vndrs[i+1]= vdr[1]+" "+vdr[2];
+            i++;
+            vndrs[i]= vdr[1]+" "+vdr[2];
+            cedulas[i] = vdr[0];
         }
-        javax.swing.ComboBoxModel elemento= new javax.swing.DefaultComboBoxModel(vndrs);
-        return elemento;
+        this.cmbVendedor.setModel( new javax.swing.DefaultComboBoxModel(vndrs) );
+        this.cmbCedulaVen.setModel( new javax.swing.DefaultComboBoxModel(cedulas) );
     }
 
     /** This method is called from within the constructor to
@@ -246,9 +281,9 @@ public class GUICompra extends Interfaz {
             jLabel11 = new javax.swing.JLabel();
             txtNumFact = new javax.swing.JTextField();
             jLabel1 = new javax.swing.JLabel();
-            cmbVendedor = new javax.swing.JComboBox();
-            txtNIT = new javax.swing.JTextField();
-            txtCedulaVen = new javax.swing.JTextField();
+            cmbNIT = new com.jidesoft.swing.AutoCompletionComboBox();
+            cmbCedulaVen = new com.jidesoft.swing.AutoCompletionComboBox();
+            cmbVendedor = new com.jidesoft.swing.AutoCompletionComboBox();
             txtTotalCompra = new javax.swing.JTextField();
             jLabel10 = new javax.swing.JLabel();
 
@@ -329,6 +364,24 @@ public class GUICompra extends Interfaz {
 
             jLabel1.setText("Vendedor:");
 
+            cmbNIT.addItemListener(new java.awt.event.ItemListener() {
+                public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                    cmbNITItemStateChanged(evt);
+                }
+            });
+
+            cmbCedulaVen.addItemListener(new java.awt.event.ItemListener() {
+                public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                    cmbCedulaVenItemStateChanged(evt);
+                }
+            });
+
+            cmbVendedor.addItemListener(new java.awt.event.ItemListener() {
+                public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                    cmbVendedorItemStateChanged(evt);
+                }
+            });
+
             javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
             jPanel3.setLayout(jPanel3Layout);
             jPanel3Layout.setHorizontalGroup(
@@ -340,7 +393,7 @@ public class GUICompra extends Interfaz {
                             .addComponent(jLabel9)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(ccbFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 222, Short.MAX_VALUE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 204, Short.MAX_VALUE)
                             .addComponent(jLabel11)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(txtNumFact, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -348,13 +401,13 @@ public class GUICompra extends Interfaz {
                             .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(jLabel8)
                                 .addComponent(jLabel1))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(txtNIT, javax.swing.GroupLayout.DEFAULT_SIZE, 133, Short.MAX_VALUE)
-                                .addComponent(txtCedulaVen, javax.swing.GroupLayout.DEFAULT_SIZE, 133, Short.MAX_VALUE))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
+                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(cmbNIT, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(cmbCedulaVen, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(cmbVendedor, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(cmbVendedor, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(cmbProveedores, javax.swing.GroupLayout.DEFAULT_SIZE, 277, Short.MAX_VALUE)))))
             );
             jPanel3Layout.setVerticalGroup(
@@ -371,12 +424,12 @@ public class GUICompra extends Interfaz {
                     .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel8)
                         .addComponent(cmbProveedores, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(txtNIT, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(cmbNIT, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(cmbVendedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel1)
-                        .addComponent(txtCedulaVen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(cmbCedulaVen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(cmbVendedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
             );
 
             txtTotalCompra.setEditable(false);
@@ -429,7 +482,6 @@ public class GUICompra extends Interfaz {
             if(tabla.isRowSelected(i)){
                 totalCompra-= Float.parseFloat(tabla.getValueAt(i, 4).toString());
                 this.model.borraItem(i);
-                System.out.println(i);
             }
         }
         if(filas<tabla.getRowCount()){
@@ -446,51 +498,27 @@ public class GUICompra extends Interfaz {
         // TODO add your handling code here:
         int numFact= Integer.parseInt(txtNumFact.getText());
         java.util.Date fechaFact= ccbFecha.getDate();
-        String cedula=null;
-        Object[][] items = null;
-        
-        for (int i = 0; i < this.vendedores.size(); i++) {
-            String[] vdr= this.vendedores.get(i);
-            String[] seleccion= cmbVendedor.getSelectedItem().toString().split(" ");
-            if(cmbVendedor.getSelectedIndex()==0){
-                javax.swing.JOptionPane.showMessageDialog(this, "Por favor seleccione un vendedor", "Advertencia", javax.swing.JOptionPane.INFORMATION_MESSAGE);
-                return;
-            }
-            if(seleccion.length>2){
-                if(vdr[1].equals(seleccion[0]+" "+seleccion[1])){
-                    cedula=vdr[0];
-                    break;
-                }
-            }
-            else{
-                if(vdr[1].equals(seleccion[0])){
-                    cedula=vdr[0];
-                    break;
-                }
-            }
-        }
+        String cedula=cmbCedulaVen.getSelectedItem().toString();
+        ArrayList<ItemCompra> items = new ArrayList<ItemCompra>();
         
         if(this.totalCompra==0){
             javax.swing.JOptionPane.showMessageDialog(this, "No ha agregado ningún item de insumos", "Advertencia", javax.swing.JOptionPane.ERROR_MESSAGE);
             return;
         }
         else{
-            if(!this.tabla.getValueAt(this.tabla.getRowCount()-1, 4).toString().equals("0.0")){
-                items= new Object[this.tabla.getRowCount()][4];
-            }
-            else{
-                items= new Object[this.tabla.getRowCount()-1][4];
-            }
             for(int i=0; i<this.tabla.getRowCount(); i++){
                 if(!this.tabla.getValueAt(i, 4).toString().equals("0.0")){
-                    items[i][0] = numFact;
-                    items[i][1] = this.tabla.getValueAt(i, 0);
-                    items[i][2] = this.tabla.getValueAt(i, 2);
-                    items[i][3] = this.tabla.getValueAt(i, 3);
+                    ItemCompra item = new ItemCompra();
+                    item.setId(Integer.parseInt(tabla.getValueAt(i, 0).toString()));
+                    item.setNombre(tabla.getValueAt(i, 1).toString());
+                    item.setCantidad(Integer.parseInt(tabla.getValueAt(i, 2).toString()));
+                    item.setPrecioUnt(Float.parseFloat(tabla.getValueAt(i, 3).toString()));
+                    item.setTotal(Float.parseFloat(tabla.getValueAt(i, 4).toString()));
+                    items.add(item);
                 }
             }
-            if(cedula!= null){
-                new Compra(numFact, fechaFact, totalCompra, cedula, txtNIT.getText(), items);
+            if(!cedula.equals("")){
+                new Compra(numFact, fechaFact, totalCompra, cedula, cmbNIT.getSelectedItem().toString(), items);
                 int facturaNueva= JOptionPane.showConfirmDialog(this, "Exito: se ha ingresado una \n nueva orden de compra... \n "+
                                                                 "¿Desea crear una nueva factura?");
                 if(JOptionPane.OK_OPTION==facturaNueva){
@@ -506,12 +534,40 @@ public class GUICompra extends Interfaz {
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void actualizarVendedor(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_actualizarVendedor
-        if(this.proveedores != null){
-            String nit= proveedores.get(cmbProveedores.getSelectedIndex()-1).get("nit").toString();
-            txtNIT.setText(nit);
-            this.cmbVendedor.setModel(this.cargarVendedor(nit));
+        String nit = null;
+        int index = cmbProveedores.getSelectedIndex();
+        if(this.proveedores != null && cmbProveedores.getSelectedItem() != null){
+            nit = proveedores.get(cmbProveedores.getSelectedIndex()-1).get("nit").toString();
         }
+        if (cmbNIT.getSelectedIndex() != index) {
+            cmbNIT.setSelectedIndex(index);
+        }
+        this.cargarVendedor(nit);
     }//GEN-LAST:event_actualizarVendedor
+
+    private void cmbNITItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cmbNITItemStateChanged
+        // TODO add your handling code here:
+        int index = cmbNIT.getSelectedIndex();
+        if (cmbProveedores.getSelectedIndex() != index) {
+            cmbProveedores.setSelectedIndex(index);
+        }
+    }//GEN-LAST:event_cmbNITItemStateChanged
+
+    private void cmbCedulaVenItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cmbCedulaVenItemStateChanged
+        // TODO add your handling code here:
+        int index = cmbCedulaVen.getSelectedIndex();
+        if (cmbVendedor.getSelectedIndex() != index) {
+            cmbVendedor.setSelectedIndex(index);
+        }
+    }//GEN-LAST:event_cmbCedulaVenItemStateChanged
+
+    private void cmbVendedorItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cmbVendedorItemStateChanged
+        // TODO add your handling code here:
+        int index = cmbVendedor.getSelectedIndex();
+        if (cmbCedulaVen.getSelectedIndex() != index) {
+            cmbCedulaVen.setSelectedIndex(index);
+        }
+    }//GEN-LAST:event_cmbVendedorItemStateChanged
 
     /**
      * @param args the command line arguments
@@ -519,9 +575,11 @@ public class GUICompra extends Interfaz {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnGuardar;
     private de.wannawork.jcalendar.JCalendarComboBox ccbFecha;
+    private com.jidesoft.swing.AutoCompletionComboBox cmbCedulaVen;
     private com.jidesoft.swing.AutoCompletionComboBox cmbInsumos;
+    private com.jidesoft.swing.AutoCompletionComboBox cmbNIT;
     private com.jidesoft.swing.AutoCompletionComboBox cmbProveedores;
-    private javax.swing.JComboBox cmbVendedor;
+    private com.jidesoft.swing.AutoCompletionComboBox cmbVendedor;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -532,8 +590,6 @@ public class GUICompra extends Interfaz {
     private javax.swing.JMenuItem jmiEliminar;
     private javax.swing.JPopupMenu jpmTabla;
     private javax.swing.JTable tabla;
-    private javax.swing.JTextField txtCedulaVen;
-    private javax.swing.JTextField txtNIT;
     private javax.swing.JTextField txtNumFact;
     private javax.swing.JTextField txtTotalCompra;
     // End of variables declaration//GEN-END:variables

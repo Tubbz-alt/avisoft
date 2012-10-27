@@ -1,4 +1,4 @@
-<?xml version="1.1" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
 
 <Form version="1.5" maxVersion="1.7" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <NonVisualComponents>
@@ -185,7 +185,7 @@
                           <Component id="jLabel9" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="ccbFecha" min="-2" max="-2" attributes="1"/>
-                          <EmptySpace pref="222" max="32767" attributes="0"/>
+                          <EmptySpace pref="204" max="32767" attributes="0"/>
                           <Component id="jLabel11" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="txtNumFact" min="-2" pref="59" max="-2" attributes="0"/>
@@ -195,15 +195,15 @@
                               <Component id="jLabel8" min="-2" max="-2" attributes="0"/>
                               <Component id="jLabel1" alignment="0" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="txtNIT" pref="133" max="32767" attributes="0"/>
-                              <Component id="txtCedulaVen" alignment="0" pref="133" max="32767" attributes="0"/>
+                          <EmptySpace pref="7" max="32767" attributes="0"/>
+                          <Group type="103" groupAlignment="1" attributes="0">
+                              <Component id="cmbNIT" min="-2" pref="136" max="-2" attributes="0"/>
+                              <Component id="cmbCedulaVen" min="-2" pref="136" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
                               <Component id="cmbVendedor" max="32767" attributes="1"/>
-                              <Component id="cmbProveedores" alignment="1" pref="277" max="32767" attributes="1"/>
+                              <Component id="cmbProveedores" alignment="0" pref="277" max="32767" attributes="1"/>
                           </Group>
                       </Group>
                   </Group>
@@ -227,13 +227,13 @@
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabel8" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="cmbProveedores" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="txtNIT" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="cmbNIT" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="cmbVendedor" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="txtCedulaVen" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="cmbCedulaVen" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="cmbVendedor" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
           </Group>
@@ -272,16 +272,20 @@
             <Property name="text" type="java.lang.String" value="Vendedor:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JComboBox" name="cmbVendedor">
-          <Properties>
-            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-              <StringArray count="0"/>
-            </Property>
-          </Properties>
+        <Component class="com.jidesoft.swing.AutoCompletionComboBox" name="cmbNIT">
+          <Events>
+            <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="cmbNITItemStateChanged"/>
+          </Events>
         </Component>
-        <Component class="javax.swing.JTextField" name="txtNIT">
+        <Component class="com.jidesoft.swing.AutoCompletionComboBox" name="cmbCedulaVen">
+          <Events>
+            <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="cmbCedulaVenItemStateChanged"/>
+          </Events>
         </Component>
-        <Component class="javax.swing.JTextField" name="txtCedulaVen">
+        <Component class="com.jidesoft.swing.AutoCompletionComboBox" name="cmbVendedor">
+          <Events>
+            <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="cmbVendedorItemStateChanged"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>

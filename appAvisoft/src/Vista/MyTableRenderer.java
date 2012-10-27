@@ -5,16 +5,13 @@
 package Vista;
 
 import Reportes.IFactCompra;
-import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Image;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.EventObject;
 import javax.swing.ButtonModel;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -198,8 +195,10 @@ public class MyTableRenderer {
 
 	        buttons.get(0).addActionListener(new ActionListener() {
 	            @Override public void actionPerformed(ActionEvent e) {
-	                fireEditingStopped();
-	                JOptionPane.showMessageDialog(table, "Vista Previa");
+	                int row = table.convertRowIndexToModel(table.getEditingRow());
+                        int o = Integer.parseInt(table.getModel().getValueAt(row, 0).toString());
+                        fireEditingStopped();
+                        new GUICompra(o).setVisible(true);
 	            }
 	        });
 

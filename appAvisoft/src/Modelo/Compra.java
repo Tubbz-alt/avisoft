@@ -4,6 +4,7 @@
  */
 package Modelo;
 
+import Vista.ItemCompra;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -19,40 +20,32 @@ import javax.swing.table.DefaultTableModel;
  * @author zirex
  */
 public class Compra{
-    private Conexion con;
+    private Conexion con = new Conexion();
     private int numFact;
     private Date fechaFact;
     private double total;
     private String cedula;
     private String nit;
-    private Object [][] items;
+    private ArrayList<ItemCompra> itemsCompra;
     
-    public Compra(int numFact, Date fechaFact, double total, String cedula, String nit, Object [][] items) {
-        this.con= new Conexion();
-        this.con.query("INSERT INTO compra VALUES ("+numFact+", '"+new java.sql.Date(fechaFact.getTime())+"', "+total+", '"+cedula+"', '"+nit+"')");
+    public Compra(){
+    }
+    
+    public Compra(int numFact, Date fechaFact, double total, String cedula, String nit, ArrayList<ItemCompra> itemsCompra) {
         this.numFact = numFact;
         this.fechaFact = fechaFact;
         this.total = total;
         this.cedula = cedula;
         this.nit= nit;
-        this.items= items;
+        this.itemsCompra= itemsCompra;
         
-        for(int i=0; i<items.length; i++){
-            this.con.query("INSERT INTO detalle_compra VALUES ('"+items[i][0].toString()+"', '"+items[i][1].toString()+"', '"+
-                           items[i][2].toString()+"', '"+items[i][3].toString()+"');");
-            Insumo ins= Insumo.existe(items[i][1].toString());
-            ins.setCantidad(Integer.parseInt(items[i][2]+""), 1);
+        if(Compra.existe(numFact) == null){
+            this.con.query("INSERT INTO compra VALUES ("+numFact+", '"+new java.sql.Date(fechaFact.getTime())+"', "+total+", '"+cedula+"', '"+nit+"')");
+            for(ItemCompra item: itemsCompra){
+                this.con.query("INSERT INTO detalle_compra VALUES ('"+numFact+"', '"+item.getId()+"', '"+
+                               item.getCantidad()+"', '"+item.getPrecioUnt()+"');");
+            }
         }
-    }
-    
-    private Compra(int numFact, Date fechaFact, double total, String cedula, String nit, Object [][] items, char a){
-        this.con= new Conexion();
-        this.numFact= numFact;
-        this.fechaFact= fechaFact;
-        this.total= total;
-        this.cedula= cedula;
-        this.nit=nit;
-        this.items= items;
     }
     
     public static DefaultTableModel tablaCompra(){
@@ -83,6 +76,32 @@ public class Compra{
         };
         return tabla;
     }
+    
+    public ArrayList<ItemCompra> getItemsCompra(int numFact){
+        ArrayList<ItemCompra> registros = new ArrayList<ItemCompra>();
+        String sql = "SELECT dc.id, i.nombre, dc.cantidad, dc.precio from detalle_compra dc "+
+                     "INNER JOIN insumo i ON dc.id = i.id "+
+                     "INNER JOIN compra c ON c.num=dc.num AND c.num="+numFact;
+        System.out.println(sql);
+        ArrayList<HashMap> res= this.con.query(sql);
+        if(!res.isEmpty()){
+            for (HashMap item : res) {
+                ItemCompra aux;
+                int id = Integer.parseInt(item.get("id").toString());
+                String nombre = item.get("nombre").toString();
+                int cantidad = Integer.parseInt(item.get("cantidad").toString());
+                float precioU = Float.parseFloat(item.get("precio").toString());
+                float totalPrecio = cantidad * precioU;
+                aux = new ItemCompra(id, nombre, cantidad, precioU, totalPrecio);
+                registros.add(aux);
+            }
+        }
+        return registros;
+    }
+    
+    public String getNit() {
+        return nit;
+    }
 
     public String getCedula() {
         return cedula;
@@ -94,10 +113,6 @@ public class Compra{
         return fecha;
     }
 
-    public Object[][] getItems() {
-        return items;
-    }
-
     public int getNumFact() {
         return numFact;
     }
@@ -106,40 +121,26 @@ public class Compra{
         return total;
     }
     
-    public static Compra existe(String numFact){
-        SimpleDateFormat formateador= new SimpleDateFormat("yyyy-MM-dd", new Locale("es_ES"));
+    public static Compra existe(int numFact){
+        Compra compra = new Compra();
+        SimpleDateFormat formateador= new SimpleDateFormat("yyyy-MM-dd");
         java.util.Date fecha= null;
         Conexion c= new Conexion();
-        Object [][] itemsCompra;
-        ArrayList<String []> insumos= Insumo.getInsumos();
         
         ArrayList<HashMap> res= c.query("SELECT fecha, total, cedula, nit from compra where num="+numFact);
         if(!res.isEmpty()){
-            ArrayList<HashMap> res1= c.query("SELECT * FROM detalle_compra where num="+numFact);
-            itemsCompra= new Object[res1.size()][3];
-            int i=0;
-            while(i < res1.size()){
-                for(String [] insumo: insumos){
-                    if(insumo[0].equals(res1.get(i).get("id"))){
-                        itemsCompra[i][0]=insumo[1];
-                        itemsCompra[i][1]=res1.get(i).get("cantidad");
-                        itemsCompra[i][2]=res1.get(i).get("precio");                        
-                        break;
-                    }
-                }
-                i++;
-            }
+            ArrayList<ItemCompra> registrosCompra = compra.getItemsCompra(numFact);
             try {
-                fecha= formateador.parse(res.get(0).get("fecha").toString());
+                fecha = (java.util.Date) formateador.parse(res.get(0).get("fecha").toString());
             } catch (ParseException ex) {
                 Logger.getLogger(Compra.class.getName()).log(Level.SEVERE, null, ex);
             }
-            return new Compra(Integer.parseInt(numFact),
-                              new java.util.Date(fecha.getTime()),
+            return new Compra(numFact,
+                              new Date(),
                               Double.parseDouble(res.get(0).get("total")+""),
                               res.get(0).get("cedula")+"",
                               res.get(0).get("nit")+"",
-                              itemsCompra,'a');
+                              registrosCompra);
         }
         return null;
     }

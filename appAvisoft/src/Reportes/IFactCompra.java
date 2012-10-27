@@ -13,10 +13,10 @@ import net.sf.jasperreports.view.JasperViewer;
 
 
 public class IFactCompra {
-    //Direccion para la imagen
-    private final String logotipo= "/Images/logo.png";
     //Se establece la conexion a la base de datos
     private Conexion con= new Conexion();
+    private final String logoSena= "/Images/sena.png";
+    private final String logoAvisoft= "/Images/logo.png";
     
     public void ver_Reporte(int numFactura){
         JasperReport repor;
@@ -29,8 +29,9 @@ public class IFactCompra {
             //Parametros de entrada
             Map<String, Object> parametros= new HashMap<String, Object>();
             parametros.clear();
-            parametros.put("logo", this.getClass().getResourceAsStream(logotipo));
             parametros.put("numFac", numFactura);
+            parametros.put("logoSena", getClass().getResourceAsStream(logoSena));
+            parametros.put("logoAvisoft", getClass().getResourceAsStream(logoAvisoft));
             re= JasperFillManager.fillReport(repor, parametros, con.getConnection());
             JasperViewer.viewReport(re, false);
             con.cerrar();
