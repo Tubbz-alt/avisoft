@@ -73,6 +73,7 @@ public class GUICompra extends Interfaz {
         cmbCedulaVen.setSelectedItem(compra.getCedula());
         cargarTabla();
         txtTotalCompra.setText(String.valueOf(compra.getTotal()));
+        ccbFecha.setDate(compra.getFecha());
         
         setLocationRelativeTo(null);
     }

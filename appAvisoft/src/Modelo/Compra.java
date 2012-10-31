@@ -100,6 +100,10 @@ public class Compra{
         String fecha=formateador.format(fechaFact.getTime());
         return fecha;
     }
+    
+    public Date getFecha () {
+        return fechaFact;
+    }
 
     public int getNumFact() {
         return numFact;
