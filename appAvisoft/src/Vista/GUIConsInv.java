@@ -26,6 +26,10 @@ public class GUIConsInv extends Interfaz{
         this.setSize(700, 410);
         setLocationRelativeTo(null);
     }
+
+    public GUIPrincipal getPadre() {
+        return p;
+    }
     
     private void cargarTablaIns(){
         AbstractTableModel datosIns= Insumo.tablaIns();
@@ -55,7 +59,7 @@ public class GUIConsInv extends Interfaz{
         TableColumn column = tablaCom.getColumnModel().getColumn(2);
 		    /***************A�ADADO LAS CLASES EDITAR y VISTA PREVIA**************************/
 		    column.setCellRenderer(new MyTableRenderer.ButtonsRenderer());
-		    column.setCellEditor(new MyTableRenderer.ButtonsEditor(tablaCom));
+		    column.setCellEditor(new MyTableRenderer.ButtonsEditor(tablaCom, this));
     }
 
     /** This method is called from within the constructor to

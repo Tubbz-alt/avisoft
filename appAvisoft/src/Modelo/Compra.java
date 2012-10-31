@@ -31,21 +31,27 @@ public class Compra{
     public Compra(){
     }
     
-    public Compra(int numFact, Date fechaFact, double total, String cedula, String nit, ArrayList<ItemCompra> itemsCompra) {
+    private Compra(int numFact, Date fechaFact, double total, String cedula, String nit, ArrayList<ItemCompra> itemsCompra) {
         this.numFact = numFact;
         this.fechaFact = fechaFact;
         this.total = total;
         this.cedula = cedula;
         this.nit= nit;
         this.itemsCompra= itemsCompra;
-        
-        if(Compra.existe(numFact) == null){
-            this.con.query("INSERT INTO compra VALUES ("+numFact+", '"+new java.sql.Date(fechaFact.getTime())+"', "+total+", '"+cedula+"', '"+nit+"')");
+    }
+    
+    public static Compra create (int numFact, Date fechaFact, double total, String cedula, String nit, ArrayList<ItemCompra> itemsCompra) {
+        Compra compra = Compra.existe(numFact);
+        Conexion c = new Conexion();
+        if(compra == null){
+            c.query("INSERT INTO compra VALUES ("+numFact+", '"+new java.sql.Date(fechaFact.getTime())+"', "+total+", '"+cedula+"', '"+nit+"')");
             for(ItemCompra item: itemsCompra){
-                this.con.query("INSERT INTO detalle_compra VALUES ('"+numFact+"', '"+item.getId()+"', '"+
+                c.query("INSERT INTO detalle_compra VALUES ('"+numFact+"', '"+item.getId()+"', '"+
                                item.getCantidad()+"', '"+item.getPrecioUnt()+"');");
             }
+            compra = new Compra (numFact, fechaFact, total, cedula, nit, itemsCompra);
         }
+        return compra;
     }
     
     public static DefaultTableModel tablaCompra(){
@@ -76,27 +82,9 @@ public class Compra{
         };
         return tabla;
     }
-    
-    public ArrayList<ItemCompra> getItemsCompra(int numFact){
-        ArrayList<ItemCompra> registros = new ArrayList<ItemCompra>();
-        String sql = "SELECT dc.id, i.nombre, dc.cantidad, dc.precio from detalle_compra dc "+
-                     "INNER JOIN insumo i ON dc.id = i.id "+
-                     "INNER JOIN compra c ON c.num=dc.num AND c.num="+numFact;
-        System.out.println(sql);
-        ArrayList<HashMap> res= this.con.query(sql);
-        if(!res.isEmpty()){
-            for (HashMap item : res) {
-                ItemCompra aux;
-                int id = Integer.parseInt(item.get("id").toString());
-                String nombre = item.get("nombre").toString();
-                int cantidad = Integer.parseInt(item.get("cantidad").toString());
-                float precioU = Float.parseFloat(item.get("precio").toString());
-                float totalPrecio = cantidad * precioU;
-                aux = new ItemCompra(id, nombre, cantidad, precioU, totalPrecio);
-                registros.add(aux);
-            }
-        }
-        return registros;
+
+    public ArrayList<ItemCompra> getItemsCompra() {
+        return itemsCompra;
     }
     
     public String getNit() {
@@ -122,25 +110,41 @@ public class Compra{
     }
     
     public static Compra existe(int numFact){
-        Compra compra = new Compra();
         SimpleDateFormat formateador= new SimpleDateFormat("yyyy-MM-dd");
-        java.util.Date fecha= null;
-        Conexion c= new Conexion();
+        Conexion c = new Conexion();
         
-        ArrayList<HashMap> res= c.query("SELECT fecha, total, cedula, nit from compra where num="+numFact);
+        ArrayList<HashMap> res = c.query("SELECT fecha, total, cedula, nit from compra where num="+numFact);
         if(!res.isEmpty()){
-            ArrayList<ItemCompra> registrosCompra = compra.getItemsCompra(numFact);
-            try {
-                fecha = (java.util.Date) formateador.parse(res.get(0).get("fecha").toString());
-            } catch (ParseException ex) {
-                Logger.getLogger(Compra.class.getName()).log(Level.SEVERE, null, ex);
+            ArrayList<ItemCompra> registrosCompra = new ArrayList<ItemCompra>();
+            String sql = "SELECT dc.id, i.nombre, dc.cantidad, dc.precio from detalle_compra dc "+
+                         "INNER JOIN insumo i ON dc.id = i.id "+
+                         "INNER JOIN compra c ON c.num=dc.num AND c.num="+numFact;
+            System.out.println(sql);
+            ArrayList<HashMap> registros = c.query(sql);
+            if(!registros.isEmpty()){
+                for (HashMap item : registros) {
+                    ItemCompra aux;
+                    int id = Integer.parseInt(item.get("id").toString());
+                    String nombre = item.get("nombre").toString();
+                    int cantidad = Integer.parseInt(item.get("cantidad").toString());
+                    float precioU = Float.parseFloat(item.get("precio").toString());
+                    float totalPrecio = cantidad * precioU;
+                    aux = new ItemCompra(id, nombre, cantidad, precioU, totalPrecio);
+                    registrosCompra.add(aux);
+                }
             }
-            return new Compra(numFact,
-                              new Date(),
+            try {
+                System.out.println(res.get(0).get("fecha"));
+                Date fecha = formateador.parse(res.get(0).get("fecha").toString());
+                return new Compra(numFact,
+                              fecha,
                               Double.parseDouble(res.get(0).get("total")+""),
                               res.get(0).get("cedula")+"",
                               res.get(0).get("nit")+"",
                               registrosCompra);
+            } catch (ParseException ex) {
+                Logger.getLogger(Compra.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         return null;
     }

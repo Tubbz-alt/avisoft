@@ -16,7 +16,6 @@ import javax.swing.ButtonModel;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
@@ -176,7 +175,7 @@ public class MyTableRenderer {
 	}
 	/*******************************************/
 	public static class ButtonsEditor extends ButtonsPanel implements TableCellEditor {
-	    public ButtonsEditor(final JTable table) {
+	    public ButtonsEditor(final JTable table, final GUIConsInv p) {
 	        super();
 	       
 	        MouseListener ml = new MouseAdapter() {
@@ -198,7 +197,7 @@ public class MyTableRenderer {
 	                int row = table.convertRowIndexToModel(table.getEditingRow());
                         int o = Integer.parseInt(table.getModel().getValueAt(row, 0).toString());
                         fireEditingStopped();
-                        new GUICompra(o).setVisible(true);
+                        new GUICompra(p, o).setVisible(true);
 	            }
 	        });
 

@@ -58,8 +58,11 @@ public class GUICompra extends Interfaz {
         cargarTabla();
    }
     
-    public GUICompra(int numFact){
-        initComponents();cargarInsumos();
+    public GUICompra(GUIConsInv padre, int numFact){
+        initComponents();
+        this.p= padre.getPadre();
+        this.p.forms.add(this);
+        cargarInsumos();
         cargarProveedores();
         btnGuardar.setText("Actualizar");
         btnGuardar.setIcon(new ImageIcon(getClass().getResource("/Images/Update.png")));
@@ -134,7 +137,7 @@ public class GUICompra extends Interfaz {
             this.model.anhadeItem(new ItemCompra(0, null, 0, 0, 0));
         }
         else{
-            ArrayList<ItemCompra> items= compra.getItemsCompra(compra.getNumFact());
+            ArrayList<ItemCompra> items= compra.getItemsCompra();
             for(ItemCompra item: items){
                 this.model.anhadeItem(item);
             }
@@ -518,7 +521,7 @@ public class GUICompra extends Interfaz {
                 }
             }
             if(!cedula.equals("")){
-                new Compra(numFact, fechaFact, totalCompra, cedula, cmbNIT.getSelectedItem().toString(), items);
+                Compra.create(numFact, fechaFact, totalCompra, cedula, cmbNIT.getSelectedItem().toString(), items);
                 int facturaNueva= JOptionPane.showConfirmDialog(this, "Exito: se ha ingresado una \n nueva orden de compra... \n "+
                                                                 "¿Desea crear una nueva factura?");
                 if(JOptionPane.OK_OPTION==facturaNueva){
