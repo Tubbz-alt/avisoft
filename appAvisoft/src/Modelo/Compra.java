@@ -54,6 +54,44 @@ public class Compra{
         return compra;
     }
     
+    public void setItemsCompra(ArrayList<ItemCompra> itemsCompra) {
+        int sizeOriginal = this.itemsCompra.size();
+        int sizeCopia = itemsCompra.size();
+        for (int i=0; i<sizeOriginal; i++) {
+            ItemCompra ico = this.itemsCompra.get(i);
+            ItemCompra icc = itemsCompra.get(i);
+            if (!ico.equals(icc)) {
+                int id = ico.getId();
+                double cantidad = icc.getCantidad();
+                double precio = icc.getPrecioUnt();
+                if (id != icc.getId()) {
+                    this.con.query("DELETE FROM detalle_compra WHERE num = "+this.numFact+" AND id = "+id);
+                    this.con.query("INSERT INTO detalle_compra VALUES ('"+this.numFact+"', '"+id+"', '"+
+                               cantidad+"', '"+precio+"')");
+                } else {
+                    String update = "UPPDATE detalle_compra SET ";
+                    if (cantidad != ico.getCantidad()) {
+                        update += "cantidad = "+cantidad;
+                    }
+                    if (precio != ico.getPrecioUnt()) {
+                        update += "precio = "+precio;
+                    }
+                    this.con.query( update+" WHERE num = "+this.numFact+" AND id = "+id);
+                }
+            }
+        }
+        if (sizeOriginal < sizeCopia) {
+            String insert = "INSERT INTO detalle_compra VALUES ";
+            for (int i=sizeOriginal; i<sizeCopia; i++) {
+                ItemCompra icc = itemsCompra.get(i);
+                insert += "('"+this.numFact+"', '"+icc.getId()+"', '"+
+                               icc.getCantidad()+"', '"+icc.getPrecioUnt()+"')";
+            }
+            this.con.query(insert);
+        }
+        this.itemsCompra = itemsCompra;
+    }
+    
     public static DefaultTableModel tablaCompra(){
         DefaultTableModel tabla;
         Conexion con= new Conexion();
