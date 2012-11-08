@@ -92,26 +92,26 @@ public class Compra{
         this.itemsCompra = itemsCompra;
     }
     
-    public static DefaultTableModel tablaCompra(){
+    public static DefaultTableModel tablaCompra(String condicion){
         DefaultTableModel tabla;
         Conexion con= new Conexion();
-        String[] ColumnName={"Num. Factura", "Proveedor", "Opciones"};
-        ArrayList<HashMap> res= con.query("SELECT c.num, p.nombres, p.apellidos, e.razon_social "+
-                                          "FROM compra c "+
-                                          "INNER JOIN persona p ON c.cedula= p.cedula "+
-                                          "INNER JOIN empresa e ON c.nit= e.nit");
+        String[] ColumnName={"Num. Factura", "Proveedor", "Fecha", "Opciones"};
+        ArrayList<HashMap> res= con.query("SELECT c.num, c.fecha, p.nombres, p.apellidos, e.razon_social "+
+                                          "FROM compra c, persona p, empresa e WHERE "+
+                                          "c.cedula= p.cedula AND c.nit= e.nit"+condicion+" ORDER BY c.fecha DESC");
         Object [][] datos= new Object[res.size()][ColumnName.length];
         int i=0;
         for (HashMap fila : res) {
             datos[i][0]= fila.get("num").toString();
             datos[i][1]= fila.get("razon_social").toString() +", "+fila.get("nombres").toString()+" "+fila.get("apellidos").toString();
-            datos[i][2]= "";
+            datos[i][2]= fila.get("fecha").toString();
+            datos[i][3]= "";
             i++;
         }
         tabla= new DefaultTableModel(datos, ColumnName){
             @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return columnIndex==2;
+                return columnIndex==3;
             }
             @Override
             public Class<?> getColumnClass(int c){

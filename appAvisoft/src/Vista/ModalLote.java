@@ -50,9 +50,9 @@ public class ModalLote extends javax.swing.JDialog {
         jLabel4 = new javax.swing.JLabel();
         spnCantidad = new javax.swing.JSpinner();
         jLabel1 = new javax.swing.JLabel();
-        cmbInicio = new de.wannawork.jcalendar.JCalendarComboBox();
         jLabel2 = new javax.swing.JLabel();
-        cmbFinal = new de.wannawork.jcalendar.JCalendarComboBox();
+        cmbFinal = new com.toedter.calendar.JDateChooser();
+        cmbInicio = new com.toedter.calendar.JDateChooser();
         jButton4 = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
@@ -102,15 +102,7 @@ public class ModalLote extends javax.swing.JDialog {
 
         jLabel1.setText("Fecha Inicio:");
 
-        cmbInicio.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                cmbInicioStateChanged(evt);
-            }
-        });
-
         jLabel2.setText("Fecha Final:");
-
-        cmbFinal.setEnabled(false);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -125,12 +117,12 @@ public class ModalLote extends javax.swing.JDialog {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(spnCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(cmbInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cmbInicio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(29, 29, 29)
                         .addComponent(jLabel2)
-                        .addGap(18, 18, 18)
-                        .addComponent(cmbFinal, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(46, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cmbFinal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -138,9 +130,9 @@ public class ModalLote extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel1)
-                    .addComponent(cmbInicio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2)
                     .addComponent(cmbFinal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
+                    .addComponent(cmbInicio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
@@ -294,19 +286,19 @@ public class ModalLote extends javax.swing.JDialog {
 
         jLabel11.setText("40 W (1 Bombillo para 400 Pollos)");
 
-        equipo.setFont(new java.awt.Font("Tahoma", 1, 11));
+        equipo.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         equipo.setText("EQUIPO");
 
-        tipo.setFont(new java.awt.Font("Tahoma", 1, 11));
+        tipo.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         tipo.setText("TIPO");
 
-        cantidad1.setFont(new java.awt.Font("Tahoma", 1, 11));
+        cantidad1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         cantidad1.setText("CANTIDAD");
 
         txtCilindros.setEditable(false);
         txtCilindros.setHorizontalAlignment(javax.swing.JTextField.CENTER);
 
-        jLabel12.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel12.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel12.setText("CILINDROS");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -448,9 +440,7 @@ public class ModalLote extends javax.swing.JDialog {
                         .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 8, Short.MAX_VALUE))))
+                            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(183, 183, 183)
                         .addComponent(jButton4)
@@ -616,8 +606,8 @@ public class ModalLote extends javax.swing.JDialog {
     private javax.swing.ButtonGroup bgCriadoras;
     private javax.swing.ButtonGroup bgVentiladores;
     private javax.swing.JLabel cantidad1;
-    private de.wannawork.jcalendar.JCalendarComboBox cmbFinal;
-    private de.wannawork.jcalendar.JCalendarComboBox cmbInicio;
+    private com.toedter.calendar.JDateChooser cmbFinal;
+    private com.toedter.calendar.JDateChooser cmbInicio;
     private javax.swing.JRadioButton electrica;
     private javax.swing.JLabel equipo;
     private javax.swing.JRadioButton gas;

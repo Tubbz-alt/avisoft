@@ -8,8 +8,10 @@ package Vista;
 import Modelo.Compra;
 import Modelo.Insumo;
 import Modelo.Proveedor;
+import java.text.SimpleDateFormat;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultCellEditor;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
@@ -17,13 +19,13 @@ import javax.swing.table.TableColumn;
 
 public class GUIConsInv extends Interfaz{
     private GUIPrincipal p;
+    private DefaultTableModel datosCompra= Compra.tablaCompra("");
 
     /** Creates new form GUIConsInv */
     public GUIConsInv(GUIPrincipal principal) {
         initComponents();
         this.p=principal;
         this.p.forms.add(this);
-        this.setSize(700, 410);
         setLocationRelativeTo(null);
     }
 
@@ -43,20 +45,21 @@ public class GUIConsInv extends Interfaz{
         this.tablaPro.setDefaultRenderer(Boolean.class, new MyTableRenderer.ImageRenderer());
     }
     
-    private void cargarTablaCompra(){        
-        DefaultTableModel datosCompra= Compra.tablaCompra();
+    private void cargarTablaCompra(){
         this.tablaCom.setModel(datosCompra);
-        this.tablaCom.getColumnModel().getColumn(0).setMaxWidth(40);
-        this.tablaCom.getColumnModel().getColumn(0).setMinWidth(40);
-        this.tablaCom.getColumnModel().getColumn(1).setMaxWidth(400);
-        this.tablaCom.getColumnModel().getColumn(1).setMinWidth(400);
+        this.tablaCom.getColumnModel().getColumn(0).setMaxWidth(100);
+        this.tablaCom.getColumnModel().getColumn(0).setMinWidth(100);
+        this.tablaCom.getColumnModel().getColumn(1).setMaxWidth(320);
+        this.tablaCom.getColumnModel().getColumn(1).setMinWidth(320);
+        this.tablaCom.getColumnModel().getColumn(2).setMaxWidth(100);
+        this.tablaCom.getColumnModel().getColumn(2).setMinWidth(100);
         this.tablaCom.setRowHeight(43);// el tama�o de las celulas o celdas
         JTextField textField = new JTextField();
         textField.setBorder(BorderFactory.createEmptyBorder());
         DefaultCellEditor editor = new DefaultCellEditor(textField);
         editor.setClickCountToStart(1);
         //this.tablaCom.getColumn(this.tablaCom.getColumnName(1)).setCellEditor(new MyTableRenderer.ButtonsEditor(tablaCom));
-        TableColumn column = tablaCom.getColumnModel().getColumn(2);
+        TableColumn column = tablaCom.getColumnModel().getColumn(3);
 		    /***************A�ADADO LAS CLASES EDITAR y VISTA PREVIA**************************/
 		    column.setCellRenderer(new MyTableRenderer.ButtonsRenderer());
 		    column.setCellEditor(new MyTableRenderer.ButtonsEditor(tablaCom, this));
@@ -81,6 +84,14 @@ public class GUIConsInv extends Interfaz{
         jPanel3 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         tablaCom = new javax.swing.JTable();
+        jPanel4 = new javax.swing.JPanel();
+        cmbColumna = new javax.swing.JComboBox();
+        txtBusca = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        jdcFechaInicio = new com.toedter.calendar.JDateChooser();
+        jLabel2 = new javax.swing.JLabel();
+        jdcFechaFinal = new com.toedter.calendar.JDateChooser();
+        btnBusca = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Consultar Inventario");
@@ -156,6 +167,62 @@ public class GUIConsInv extends Interfaz{
 
         jPanel3.add(jScrollPane3, java.awt.BorderLayout.CENTER);
 
+        cmbColumna.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Numero factura", "Nom. Empresa", "Cedula Prov." }));
+
+        jLabel1.setText("Fecha desde:");
+
+        jLabel2.setText("Fecha hasta:");
+
+        btnBusca.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/view_after.png"))); // NOI18N
+        btnBusca.setBorderPainted(false);
+        btnBusca.setContentAreaFilled(false);
+        btnBusca.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnBusca.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscaActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(cmbColumna, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtBusca, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel1)
+                .addGap(7, 7, 7)
+                .addComponent(jdcFechaInicio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel2)
+                .addGap(4, 4, 4)
+                .addComponent(jdcFechaFinal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnBusca, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(109, Short.MAX_VALUE))
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnBusca)
+                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jdcFechaInicio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(cmbColumna, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtBusca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2))
+                        .addComponent(jdcFechaFinal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jPanel3.add(jPanel4, java.awt.BorderLayout.PAGE_START);
+
         jTabbedPane1.addTab("Compras", jPanel3);
 
         getContentPane().add(jTabbedPane1, java.awt.BorderLayout.CENTER);
@@ -170,16 +237,52 @@ public class GUIConsInv extends Interfaz{
         this.cargarTablaCompra();
     }//GEN-LAST:event_formWindowOpened
 
+    private void btnBuscaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscaActionPerformed
+        // TODO add your handling code here:
+        String textoBusqueda= txtBusca.getText().trim();
+        SimpleDateFormat formatoDeFecha = new SimpleDateFormat("yyyy-MM-dd");
+        if(!textoBusqueda.equals("") && jdcFechaInicio.getDate()!= null && jdcFechaFinal!= null){
+            if(cmbColumna.getSelectedIndex()== 1){
+                datosCompra= Compra.tablaCompra(" AND e.razon_social LIKE '"+textoBusqueda+"%' AND c.fecha BETWEEN '"+formatoDeFecha.format(jdcFechaInicio.getDate())+
+                                                "' AND '"+formatoDeFecha.format(jdcFechaFinal.getDate())+"'");
+            }
+            else{
+                try{
+                    int num= Integer.parseInt(textoBusqueda);
+                    if(cmbColumna.getSelectedIndex()== 0){
+                        datosCompra= Compra.tablaCompra(" AND c.num= "+textoBusqueda+" AND c.fecha BETWEEN '"+formatoDeFecha.format(jdcFechaInicio.getDate())+
+                                                "' AND '"+formatoDeFecha.format(jdcFechaFinal.getDate())+"'");
+                    }
+                    if(cmbColumna.getSelectedIndex()== 2){
+                        datosCompra= Compra.tablaCompra(" AND c.cedula= "+textoBusqueda+" AND c.fecha BETWEEN '"+formatoDeFecha.format(jdcFechaInicio.getDate())+
+                                                "' AND '"+formatoDeFecha.format(jdcFechaFinal.getDate())+"'");
+                    }
+                }catch(NumberFormatException ex){
+                    JOptionPane.showMessageDialog(this, "Debe ingresar solo numeros", "Advertencia", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        }
+        this.cargarTablaCompra();
+    }//GEN-LAST:event_btnBuscaActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnBusca;
+    private javax.swing.JComboBox cmbColumna;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private com.toedter.calendar.JDateChooser jdcFechaFinal;
+    private com.toedter.calendar.JDateChooser jdcFechaInicio;
     private javax.swing.JTable tablaCom;
     private javax.swing.JTable tablaIns;
     private javax.swing.JTable tablaPro;
+    private javax.swing.JTextField txtBusca;
     // End of variables declaration//GEN-END:variables
 }
