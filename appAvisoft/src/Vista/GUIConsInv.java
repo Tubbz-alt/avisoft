@@ -202,7 +202,7 @@ public class GUIConsInv extends Interfaz{
                 .addComponent(jdcFechaFinal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnBusca, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(109, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -241,24 +241,32 @@ public class GUIConsInv extends Interfaz{
         // TODO add your handling code here:
         String textoBusqueda= txtBusca.getText().trim();
         SimpleDateFormat formatoDeFecha = new SimpleDateFormat("yyyy-MM-dd");
-        if(!textoBusqueda.equals("") && jdcFechaInicio.getDate()!= null && jdcFechaFinal!= null){
-            if(cmbColumna.getSelectedIndex()== 1){
-                datosCompra= Compra.tablaCompra(" AND e.razon_social LIKE '"+textoBusqueda+"%' AND c.fecha BETWEEN '"+formatoDeFecha.format(jdcFechaInicio.getDate())+
-                                                "' AND '"+formatoDeFecha.format(jdcFechaFinal.getDate())+"'");
+        int num=0;
+
+        if(!textoBusqueda.equals("") && (cmbColumna.getSelectedIndex()==0 || cmbColumna.getSelectedIndex()==2)){
+            try{
+                num= Integer.parseInt(textoBusqueda);
+            }catch(NumberFormatException ex){
+                JOptionPane.showMessageDialog(this, "Debe ingresar solo numeros", "Advertencia", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+
+        String [] sql = {" AND c.num= "+num,
+            " AND e.razon_social LIKE '"+textoBusqueda+"%'",
+            " AND c.cedula= "+num };
+
+        if(!textoBusqueda.equals("") && jdcFechaInicio.getDate()!= null && jdcFechaFinal.getDate()!= null){
+            datosCompra= Compra.tablaCompra(sql[cmbColumna.getSelectedIndex()]+" AND c.fecha BETWEEN '"+formatoDeFecha.format(jdcFechaInicio.getDate())+
+                "' AND '"+formatoDeFecha.format(jdcFechaFinal.getDate())+"'");
+        }
+        else{
+            if(!textoBusqueda.equals("") && jdcFechaInicio.getDate()== null && jdcFechaFinal.getDate()== null){
+                datosCompra= Compra.tablaCompra(sql[cmbColumna.getSelectedIndex()]);
             }
             else{
-                try{
-                    int num= Integer.parseInt(textoBusqueda);
-                    if(cmbColumna.getSelectedIndex()== 0){
-                        datosCompra= Compra.tablaCompra(" AND c.num= "+textoBusqueda+" AND c.fecha BETWEEN '"+formatoDeFecha.format(jdcFechaInicio.getDate())+
-                                                "' AND '"+formatoDeFecha.format(jdcFechaFinal.getDate())+"'");
-                    }
-                    if(cmbColumna.getSelectedIndex()== 2){
-                        datosCompra= Compra.tablaCompra(" AND c.cedula= "+textoBusqueda+" AND c.fecha BETWEEN '"+formatoDeFecha.format(jdcFechaInicio.getDate())+
-                                                "' AND '"+formatoDeFecha.format(jdcFechaFinal.getDate())+"'");
-                    }
-                }catch(NumberFormatException ex){
-                    JOptionPane.showMessageDialog(this, "Debe ingresar solo numeros", "Advertencia", JOptionPane.ERROR_MESSAGE);
+                if(textoBusqueda.equals("") && jdcFechaInicio.getDate()!= null && jdcFechaFinal.getDate()!= null){
+                    datosCompra= Compra.tablaCompra(" AND c.fecha BETWEEN '"+formatoDeFecha.format(jdcFechaInicio.getDate())+
+                        "' AND '"+formatoDeFecha.format(jdcFechaFinal.getDate())+"'");
                 }
             }
         }

@@ -521,7 +521,7 @@ public class GUICompra extends Interfaz {
                     items.add(item);
                 }
             }
-            if(!cedula.equals("")){
+            if(!cedula.equals("") && btnGuardar.getText().equals("Grabar")){
                 Compra.create(numFact, fechaFact, totalCompra, cedula, cmbNIT.getSelectedItem().toString(), items);
                 int facturaNueva= JOptionPane.showConfirmDialog(this, "Exito: se ha ingresado una \n nueva orden de compra... \n "+
                                                                 "¿Desea crear una nueva factura?");
@@ -532,7 +532,29 @@ public class GUICompra extends Interfaz {
                 else{this.dispose();}
             }
             else{
-                javax.swing.JOptionPane.showMessageDialog(this, "Se ha generado un error al crear la factura de compra", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+                if(!cedula.equals("") && btnGuardar.getText().equals("Actualizar")){
+                    if(!compra.getCedula().equals(cedula)){
+                        compra.setCedula(cedula);
+                    }
+                    if(!compra.getFecha().equals(fechaFact)){
+                        compra.setFechaFact(fechaFact);
+                    }
+                    if(compra.getTotal() != totalCompra){
+                        compra.setTotal(totalCompra);
+                    }
+                    if(!compra.getNit().equals(cmbNIT.getSelectedItem())){
+                        compra.setNit(cmbNIT.getSelectedItem().toString());
+                    }
+                    if(!compra.getItemsCompra().equals(items)){
+                        compra.setItemsCompra(items);
+                    }
+                    JOptionPane.showMessageDialog(this, "Exito... Se guardaron las modificaciones", "Actualización", JOptionPane.INFORMATION_MESSAGE);
+                    this.dispose();
+                }
+                else{
+                    javax.swing.JOptionPane.showMessageDialog(this, "Se ha generado un error al crear la factura de compra", "Error", 
+                                                              javax.swing.JOptionPane.ERROR_MESSAGE);
+                }
             }
         }
     }//GEN-LAST:event_btnGuardarActionPerformed
