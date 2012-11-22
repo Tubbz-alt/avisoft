@@ -70,14 +70,16 @@ public class Compra{
                     this.con.query("INSERT INTO detalle_compra VALUES ('"+this.numFact+"', '"+id+"', '"+
                                cantidad+"', '"+precio+"')");
                 } else {
-                    String update = "UPPDATE detalle_compra SET ";
+                    String update = "UPDATE detalle_compra SET ";
                     if (cantidad != ico.getCantidad()) {
-                        update += "cantidad = '"+cantidad+"'";
+                        update += "cantidad = '"+cantidad+"', ";
                     }
                     if (precio != ico.getPrecioUnt()) {
-                        update += "precio = '"+precio+"'";
+                        update += "precio = '"+precio+"', ";
                     }
-                    this.con.query( update+" WHERE num = '"+this.numFact+"' AND id = '"+id+"'");
+                    if (!update.equals("UPDATE detalle_compra SET ")) {
+                        this.con.query( update.substring(-2) +" WHERE num = '"+this.numFact+"' AND id = '"+id+"'");
+                    }
                 }
             }
         }

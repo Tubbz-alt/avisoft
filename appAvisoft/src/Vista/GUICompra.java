@@ -43,7 +43,6 @@ public class GUICompra extends Interfaz {
     private ArrayList<HashMap> proveedores;
     private ArrayList<String[]> vendedores;
     private ModeloTabla model;
-    private double totalCompra=0;
     private Compra compra;
 
     /** Creates new form GUICompra */
@@ -71,8 +70,8 @@ public class GUICompra extends Interfaz {
         txtNumFact.setText(String.valueOf(compra.getNumFact()));
         cmbNIT.setSelectedItem(compra.getNit());
         cmbCedulaVen.setSelectedItem(compra.getCedula());
+        txtTotalCompra.setText(compra.getTotal()+"");
         cargarTabla();
-        txtTotalCompra.setText(String.valueOf(compra.getTotal()));
         ccbFecha.setDate(compra.getFecha());
         
         setLocationRelativeTo(null);
@@ -103,7 +102,7 @@ public class GUICompra extends Interfaz {
     }
     
     private void inicializarTabla(){
-        this.model= new ModeloTabla();
+        this.model= new ModeloTabla(txtTotalCompra);
         tabla.setModel(model);
         tabla.getColumnModel().getColumn(1).setCellEditor(new DefaultCellEditor(cmbInsumos));
         KeyStroke tab = KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0);
@@ -122,8 +121,6 @@ public class GUICompra extends Interfaz {
             @Override
             public void keyReleased(KeyEvent ke) {
                 if (model.rowAdd) {
-                    totalCompra+= (Float) tabla.getValueAt(tabla.getRowCount()-2, 4);
-                    txtTotalCompra.setText(totalCompra+"");
                     tabla.changeSelection ( tabla.getRowCount () - 1, 0, false, false );
                     model.rowAdd = false;
                 }
@@ -386,6 +383,8 @@ public class GUICompra extends Interfaz {
                 }
             });
 
+            ccbFecha.setDate(new java.util.Date());
+
             javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
             jPanel3.setLayout(jPanel3Layout);
             jPanel3Layout.setHorizontalGroup(
@@ -393,18 +392,14 @@ public class GUICompra extends Interfaz {
                 .addGroup(jPanel3Layout.createSequentialGroup()
                     .addContainerGap()
                     .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanel3Layout.createSequentialGroup()
-                            .addComponent(jLabel9)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(ccbFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(jPanel3Layout.createSequentialGroup()
-                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel8)
-                                .addComponent(jLabel1))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(cmbNIT, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(cmbCedulaVen, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addComponent(jLabel9)
+                        .addComponent(jLabel8)
+                        .addComponent(jLabel1))
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(cmbNIT, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE)
+                        .addComponent(ccbFecha, javax.swing.GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE)
+                        .addComponent(cmbCedulaVen, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE))
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -418,12 +413,13 @@ public class GUICompra extends Interfaz {
             jPanel3Layout.setVerticalGroup(
                 jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel3Layout.createSequentialGroup()
-                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addContainerGap()
+                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(ccbFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel9)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtNumFact, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel11))
-                        .addComponent(ccbFecha, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel11)))
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                     .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel8)
@@ -452,7 +448,7 @@ public class GUICompra extends Interfaz {
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                             .addGap(12, 12, 12)
                             .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 261, Short.MAX_VALUE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 291, Short.MAX_VALUE)
                             .addComponent(jLabel10)
                             .addGap(6, 6, 6)
                             .addComponent(txtTotalCompra, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -482,12 +478,7 @@ public class GUICompra extends Interfaz {
     private void jmiEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiEliminarActionPerformed
         // TODO add your handling code here:
         int filas= tabla.getRowCount()-1;
-        for(int i= filas; i> -1; i--){
-            if(tabla.isRowSelected(i)){
-                totalCompra-= Float.parseFloat(tabla.getValueAt(i, 4).toString());
-                this.model.borraItem(i);
-            }
-        }
+        this.model.borraItem(tabla.getSelectedRow());
         if(filas<tabla.getRowCount()){
             javax.swing.JOptionPane.showMessageDialog(null, "No se ha seleccionado ningún \n item para borrar",
                                                       "Aviso", javax.swing.JOptionPane.ERROR_MESSAGE);
@@ -495,17 +486,17 @@ public class GUICompra extends Interfaz {
         if(tabla.getRowCount() == 0){
             this.model.anhadeItem(new ItemCompra(0, null, 0, 0, 0));
         }
-        txtTotalCompra.setText(totalCompra+"");
     }//GEN-LAST:event_jmiEliminarActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         // TODO add your handling code here:
         int numFact= Integer.parseInt(txtNumFact.getText());
+        double totalCompra = Double.valueOf(txtTotalCompra.getText());
         java.util.Date fechaFact= ccbFecha.getDate();
         String cedula=cmbCedulaVen.getSelectedItem().toString();
         ArrayList<ItemCompra> items = new ArrayList<ItemCompra>();
         
-        if(this.totalCompra==0){
+        if(totalCompra == 0){
             javax.swing.JOptionPane.showMessageDialog(this, "No ha agregado ningún item de insumos", "Advertencia", javax.swing.JOptionPane.ERROR_MESSAGE);
             return;
         }

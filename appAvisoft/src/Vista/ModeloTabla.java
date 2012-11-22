@@ -12,6 +12,13 @@ public class ModeloTabla extends AbstractTableModel{
     private ArrayList<ItemCompra> registros= new ArrayList<ItemCompra>();
     private String [] columnNames= {"Id", "Nombre Ins.", "Cantidad", "Precio Unt.", "Total"};
     public boolean rowAdd = false;
+    private javax.swing.JTextField txtTotal;
+    private double total;
+    
+    public ModeloTabla (javax.swing.JTextField txtTotal) {
+        this.txtTotal = txtTotal;
+        this.total = Double.valueOf(txtTotal.getText());
+    }
     
     public ArrayList<ItemCompra> getRegistros(){
         return registros;
@@ -101,6 +108,7 @@ public class ModeloTabla extends AbstractTableModel{
     @Override
     public void setValueAt(Object aValue, int rowIndex, int columnIndex){
         ItemCompra item= registros.get(rowIndex);
+        float subtotal;
         if (aValue == null) {
             this.setValueAt(0, rowIndex, columnIndex);
             return;
@@ -120,13 +128,21 @@ public class ModeloTabla extends AbstractTableModel{
                 break;
             case 2:
                 int nuevaCantidad= Integer.valueOf(value);
+                subtotal = item.getPrecioUnt()*nuevaCantidad;
+                total -= item.getTotal();
+                total += subtotal;
                 item.setCantidad(nuevaCantidad);
-                item.setTotal(item.getPrecioUnt()*nuevaCantidad);
+                item.setTotal(subtotal);
+                txtTotal.setText(total+"");
                 break;
             case 3:
                 float nuevoPrecio= Float.valueOf(value);
+                subtotal = item.getCantidad()*nuevoPrecio;
+                total -= item.getTotal();
+                total += subtotal;
                 item.setPrecioUnt(nuevoPrecio);
-                item.setTotal(item.getCantidad()*nuevoPrecio);
+                item.setTotal(subtotal);
+                txtTotal.setText(total+"");
                 break;
             case 4:
                 item.getTotal();
@@ -199,6 +215,8 @@ public class ModeloTabla extends AbstractTableModel{
     
     public void borraItem(int fila){
         // Se borra la fila 
+        total -= registros.get(fila).getTotal();
+        txtTotal.setText(total+"");
         registros.remove(fila);
         fireTableDataChanged();
     }
