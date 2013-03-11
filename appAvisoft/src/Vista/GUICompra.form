@@ -22,6 +22,9 @@
       </SubComponents>
     </Container>
     <Component class="com.jidesoft.swing.AutoCompletionComboBox" name="cmbInsumos">
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cmbInsumosActionPerformed"/>
+      </Events>
     </Component>
   </NonVisualComponents>
   <Properties>

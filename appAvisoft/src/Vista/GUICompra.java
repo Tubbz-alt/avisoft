@@ -143,10 +143,9 @@ public class GUICompra extends Interfaz {
     }    
     
     private void cargarInsumos(){
-        this.insumos= new ArrayList<String[]>();
         this.insumos= Insumo.getInsumos();
         for (String[] insumo : insumos){
-            cmbInsumos.addItem(insumo[1]);
+            cmbInsumos.addItem(insumo[0]+": "+insumo[1]);
         }
     }
     
@@ -296,6 +295,12 @@ public class GUICompra extends Interfaz {
                 }
             });
             jpmTabla.add(jmiEliminar);
+
+            cmbInsumos.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    cmbInsumosActionPerformed(evt);
+                }
+            });
 
             setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
             setTitle("Recepción de insumos");
@@ -585,6 +590,16 @@ public class GUICompra extends Interfaz {
             cmbCedulaVen.setSelectedIndex(index);
         }
     }//GEN-LAST:event_cmbVendedorItemStateChanged
+
+    private void cmbInsumosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbInsumosActionPerformed
+        // TODO add your handling code here:
+        if (tabla.getRowCount() != 0) {
+            int index = cmbInsumos.getSelectedIndex();
+            if (index != -1) {
+                tabla.setValueAt(insumos.get(index)[0], model.getLastRow(), 0);
+            }
+        }
+    }//GEN-LAST:event_cmbInsumosActionPerformed
 
     /**
      * @param args the command line arguments

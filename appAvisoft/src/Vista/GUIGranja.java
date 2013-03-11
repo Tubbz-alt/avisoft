@@ -82,6 +82,8 @@ public class GUIGranja extends Interfaz {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        popMenuGranja = new javax.swing.JPopupMenu();
+        menuDelete = new javax.swing.JMenuItem();
         txtNombre = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
@@ -114,6 +116,10 @@ public class GUIGranja extends Interfaz {
         tblGalpon = new javax.swing.JTable();
         btnAceptar = new javax.swing.JButton();
         btnLimpiar = new javax.swing.JButton();
+
+        menuDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/Delete.png"))); // NOI18N
+        menuDelete.setText("Eliminar");
+        popMenuGranja.add(menuDelete);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Crear Granja");
@@ -361,6 +367,7 @@ public class GUIGranja extends Interfaz {
                 return canEdit [columnIndex];
             }
         });
+        tblGalpon.setComponentPopupMenu(popMenuGranja);
         jScrollPane1.setViewportView(tblGalpon);
         tblGalpon.getColumnModel().getColumn(2).setMinWidth(150);
         tblGalpon.getColumnModel().getColumn(3).setMinWidth(100);
@@ -603,6 +610,8 @@ public class GUIGranja extends Interfaz {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblcm;
+    private javax.swing.JMenuItem menuDelete;
+    private javax.swing.JPopupMenu popMenuGranja;
     private javax.swing.JTable tblGalpon;
     private javax.swing.JTextField txtArea;
     private javax.swing.JTextField txtAreaGalpon;

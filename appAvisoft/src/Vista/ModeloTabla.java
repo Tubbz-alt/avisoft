@@ -14,14 +14,20 @@ public class ModeloTabla extends AbstractTableModel{
     public boolean rowAdd = false;
     private javax.swing.JTextField txtTotal;
     private double total;
+    private int lastRow;
     
     public ModeloTabla (javax.swing.JTextField txtTotal) {
         this.txtTotal = txtTotal;
         this.total = Double.valueOf(txtTotal.getText());
+        this.lastRow = 0;
     }
     
     public ArrayList<ItemCompra> getRegistros(){
         return registros;
+    }
+    
+    public int getLastRow () {
+        return lastRow;
     }
 
     @Override
@@ -116,15 +122,16 @@ public class ModeloTabla extends AbstractTableModel{
         String value = aValue.toString();
         switch(columnIndex){
             case 0:
-                item.getId();
-                break;
-            case 1:
-                int cod = this.getCodigoInsumo(aValue.toString());
-                if(itemExiste(cod)){
+                int cod = Integer.parseInt(value);
+                Insumo ins = Insumo.existe(value);
+                if (ins == null || itemExiste(cod)) {
                     return;
                 }
-                item.setNombre(aValue.toString());
+                item.setNombre(ins.getNombre());
                 item.setId(cod);
+                break;
+            case 1:
+                this.lastRow = rowIndex;
                 break;
             case 2:
                 int nuevaCantidad= Integer.valueOf(value);
@@ -174,22 +181,10 @@ public class ModeloTabla extends AbstractTableModel{
         }
     }
     
-    private int getCodigoInsumo(String nombre){
-        int codigo= 0;
-        for (String [] insumo : Insumo.getInsumos()) {
-                if(insumo[1].equals(nombre)){
-                    codigo= Integer.valueOf(insumo[0].toString());
-                }
-        }
-        return codigo;
-    }
-    
     private boolean itemExiste(int id){
         if(registros.size()!=1){
                     for(ItemCompra aux: registros){
                         if(aux.getId() == id){
-                            javax.swing.JOptionPane.showMessageDialog(null, "El item "+aux.getNombre()+" ya existe. Por favor modificar item",
-                                                                      "Advertencia", javax.swing.JOptionPane.INFORMATION_MESSAGE);
                             return true;
                         }
                     }

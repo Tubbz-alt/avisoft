@@ -248,6 +248,9 @@ public class GUILogin extends Interfaz {
             this.dispose();
         } else {
             javax.swing.JOptionPane.showMessageDialog(this, res, "Error Login", javax.swing.JOptionPane.ERROR_MESSAGE);
+            txtUsuario.setText(null);
+            txtClave.setText(null);
+            txtUsuario.requestFocus();
         }
     }
     

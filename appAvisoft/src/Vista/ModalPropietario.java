@@ -10,19 +10,19 @@
  */
 
 package Vista;
-
+import Modelo.Persona;
 
 /**
  *
  * @author Adobe
  */
-public class ModalPropietario extends javax.swing.JDialog{
+public class ModalPropietario extends Interfaz {
 
     /** Creates new form registroCliente */
     public ModalPropietario(javax.swing.JFrame parent, boolean modal) {
-        super(parent, modal);
         initComponents();
         setLocationRelativeTo(null);
+        btnEstablecer.setVisible(false);
     }
 
     /** This method is called from within the constructor to
@@ -46,9 +46,9 @@ public class ModalPropietario extends javax.swing.JDialog{
         nombrec = new javax.swing.JTextField();
         cedulac = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
+        btnAction = new javax.swing.JButton();
+        btnClear = new javax.swing.JButton();
+        btnEstablecer = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -68,6 +68,36 @@ public class ModalPropietario extends javax.swing.JDialog{
         jLabel4.setText("Dirección:");
 
         jLabel5.setText("Telefono:");
+
+        direccionc.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                direccioncFocusLost(evt);
+            }
+        });
+
+        telefonoc.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                telefonocFocusLost(evt);
+            }
+        });
+
+        apellidoc.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                apellidocFocusLost(evt);
+            }
+        });
+
+        nombrec.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                nombrecFocusLost(evt);
+            }
+        });
+
+        cedulac.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                cedulacFocusLost(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -117,17 +147,27 @@ public class ModalPropietario extends javax.swing.JDialog{
                 .addContainerGap(18, Short.MAX_VALUE))
         );
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/add_user.png"))); // NOI18N
-        jButton1.setToolTipText("Registrar propietario");
-        jButton1.setPreferredSize(new java.awt.Dimension(48, 48));
+        btnAction.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/add_user.png"))); // NOI18N
+        btnAction.setToolTipText("Registrar propietario");
+        btnAction.setPreferredSize(new java.awt.Dimension(48, 48));
+        btnAction.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActionActionPerformed(evt);
+            }
+        });
 
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/Clear.png"))); // NOI18N
-        jButton2.setToolTipText("Limpiar campos");
-        jButton2.setPreferredSize(new java.awt.Dimension(48, 48));
+        btnClear.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/Clear.png"))); // NOI18N
+        btnClear.setToolTipText("Limpiar campos");
+        btnClear.setPreferredSize(new java.awt.Dimension(48, 48));
+        btnClear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnClearActionPerformed(evt);
+            }
+        });
 
-        jButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/delete_user.png"))); // NOI18N
-        jButton5.setToolTipText("Eliminar propietario");
-        jButton5.setPreferredSize(new java.awt.Dimension(48, 48));
+        btnEstablecer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/est_user.png"))); // NOI18N
+        btnEstablecer.setToolTipText("Establecer como propietario");
+        btnEstablecer.setPreferredSize(new java.awt.Dimension(48, 48));
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -136,20 +176,20 @@ public class ModalPropietario extends javax.swing.JDialog{
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnAction, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnEstablecer, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnAction, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(btnEstablecer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Granjas"));
@@ -218,14 +258,153 @@ public class ModalPropietario extends javax.swing.JDialog{
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnActionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActionActionPerformed
+        // TODO add your handling code here:
+        String cedula = cedulac.getText().trim();
+        String nombre = nombrec.getText().trim();
+        String apellido = apellidoc.getText().trim();
+        String direccion = direccionc.getText().trim();
+        String telefono = telefonoc.getText().trim();
+        boolean error = false;
+        
+        if(cedula.isEmpty()){
+            showError(cedulac, "No se ha digitado la cedula del propietario");
+            error=true;
+        }
+        if(nombre.isEmpty()){
+            showError(nombrec, "No se han digitado los nombres del propietario");
+            error=true;
+        }
+        if(direccion.isEmpty()){
+            showError(direccionc, "No se ha digitado la dirección del propietario");
+            error=true;
+        }
+        if(apellido.isEmpty()){
+            showError(apellidoc, "No se han digitado los apellidos del propietario");
+            error=true;
+        }
+        if(telefono.isEmpty()){
+            showError(telefonoc, "No se ha digitado el teléfono del propietario");
+            error=true;
+        }
+        
+        if(error) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Por favor revise los campos", "Error en el formulario", javax.swing.JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        if (btnEstablecer.isVisible()) {
+            this.actualizarUsuario(cedula, nombre, apellido, direccion, telefono);
+        } else {
+            this.crearUsuario(cedula, nombre, apellido, direccion, telefono);
+        }
+        
+    }//GEN-LAST:event_btnActionActionPerformed
+
+    private void cedulacFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_cedulacFocusLost
+        // TODO add your handling code here:
+        String cedula = cedulac.getText();
+        if (!cedula.isEmpty()) {
+            Persona p = Persona.existe(cedula);
+            if (p != null) {
+                normalizeInput(apellidoc);
+                normalizeInput(nombrec);
+                normalizeInput(direccionc);
+                normalizeInput(telefonoc);
+                this.apellidoc.setText(p.getApellidos());
+                this.nombrec.setText(p.getNombres());
+                this.direccionc.setText(p.getDireccion());
+                this.telefonoc.setText(p.getTelefono());
+                btnAction.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/edit_user.png")));
+                cedulac.setEditable(false);
+            }
+        }
+        normalizeInput(cedulac);
+    }//GEN-LAST:event_cedulacFocusLost
+
+    private void nombrecFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_nombrecFocusLost
+        // TODO add your handling code here:
+        if(!nombrec.getText().isEmpty()){
+            normalizeInput(nombrec);
+        }
+    }//GEN-LAST:event_nombrecFocusLost
+
+    private void apellidocFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_apellidocFocusLost
+        // TODO add your handling code here:
+        if(!apellidoc.getText().isEmpty()){
+            normalizeInput(apellidoc);
+        }
+    }//GEN-LAST:event_apellidocFocusLost
+
+    private void direccioncFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_direccioncFocusLost
+        // TODO add your handling code here:
+        if(!direccionc.getText().isEmpty()){
+            normalizeInput(direccionc);
+        }
+    }//GEN-LAST:event_direccioncFocusLost
+
+    private void telefonocFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_telefonocFocusLost
+        // TODO add your handling code here:
+        if(!telefonoc.getText().isEmpty()){
+            normalizeInput(telefonoc);
+        }
+    }//GEN-LAST:event_telefonocFocusLost
+
+    private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
+        // TODO add your handling code here:
+        limpiar();
+    }//GEN-LAST:event_btnClearActionPerformed
+    
+    private void limpiar () {
+        cedulac.setText(null);
+        nombrec.setText(null);
+        apellidoc.setText(null);
+        direccionc.setText(null);
+        telefonoc.setText(null);
+        cedulac.setEditable(true);
+    }
+    
+    private void actualizarUsuario (String cedula, String nombre, String apellido, String direccion, String telefono) {
+        Persona p = Persona.existe(cedula);
+        boolean ac = false;
+        
+        if (!p.getDireccion().equals(direccion)) {
+            p.setDireccion(direccion);
+            ac = true;
+        }
+        if (!p.getNombres().equals(nombre)) {
+            p.setNombres(nombre);
+            ac = true;
+        }
+        if (!p.getApellidos().equals(apellido)) {
+            p.setDireccion(direccion);
+            ac = true;
+        }
+        if (!p.getTelefono().equals(telefono)) {
+            p.setTelefono(telefono);
+            ac = true;
+        }
+        
+        if (ac) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Sus datos han sido actualizados correctamente");
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(this, "No se ha modificado ningún dato", "Datos no modificados", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+        }
+        
+    }
+    
+    private void crearUsuario (String cedula, String nombre, String apellido, String direccion, String telefono) {
+        Persona.create(cedula, nombre, apellido, direccion, telefono);
+        javax.swing.JOptionPane.showMessageDialog(this, "Se ha creado el propietario exitosamente");
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField apellidoc;
+    private javax.swing.JButton btnAction;
+    private javax.swing.JButton btnClear;
+    private javax.swing.JButton btnEstablecer;
     private javax.swing.JTextField cedulac;
     private javax.swing.JTextField direccionc;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

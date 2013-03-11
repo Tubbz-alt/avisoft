@@ -35,6 +35,10 @@ public class Proveedor extends Persona {
             this.telEmp = res.get(0).get("telefono")+"";
             this.dirEmp = res.get(0).get("direccion")+"";
         }
+        res = this.con.query("SELECT COUNT(cedula) as num FROM persona WHERE cedula = '"+cedula+"'");
+        if(Integer.parseInt(res.get(0).get("num")+"") == 0) {
+            super.create(cedula, nombres, apellidos, direccion, telefono);
+        }
         res = this.con.query("SELECT COUNT(*) as num FROM empresa_proveedor WHERE cedula = '"+cedula+"' AND nit= '"+nit+"';");
         if(Integer.parseInt(res.get(0).get("num")+"") == 0) {
             this.estado = "1";

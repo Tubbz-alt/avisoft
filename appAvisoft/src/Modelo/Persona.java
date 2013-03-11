@@ -13,7 +13,7 @@ import java.util.logging.Logger;
  *
  * @author zirex
  */
-public abstract class Persona {
+public class Persona {
     
     protected Conexion con;
     protected String cedula;
@@ -22,23 +22,35 @@ public abstract class Persona {
     protected String direccion;
     protected String telefono;
 
-    public Persona(String cedula, String nombres, String apellidos, String direccion, String telefono) {
+    protected Persona(String cedula, String nombres, String apellidos, String direccion, String telefono) {
         this.con = new Conexion();
-        ArrayList<HashMap> res = this.con.query("SELECT nombres, apellidos, telefono, direccion FROM persona WHERE cedula ='"+cedula+"'");
-        if(res.isEmpty()){
-            this.con.query("INSERT INTO persona (cedula, nombres, apellidos, telefono, direccion) VALUES('"+cedula+"', '"+nombres+"', '"+apellidos+"', '"+telefono+"', '"+direccion+"')");
-            this.cedula = cedula;
-            this.nombres = nombres;
-            this.apellidos = apellidos;
-            this.direccion = direccion;
-            this.telefono = telefono;
-        } else {
-            this.cedula = cedula;
-            this.nombres = res.get(0).get("nombres")+"";
-            this.apellidos = res.get(0).get("apellidos")+"";
-            this.direccion = res.get(0).get("direccion")+"";
-            this.telefono = res.get(0).get("telefono")+"";
+        this.cedula = cedula;
+        this.nombres = nombres;
+        this.apellidos = apellidos;
+        this.direccion = direccion;
+        this.telefono = telefono;
+    }
+    
+    public static Persona create (String cedula, String nombres, String apellidos, String direccion, String telefono) {
+        Conexion con = new Conexion ();
+        System.out.println("OK");
+        con.query("INSERT INTO persona (cedula, nombres, apellidos, telefono, direccion) VALUES('"+cedula+"', '"+nombres+"', '"+apellidos+"', '"+telefono+"', '"+direccion+"')");
+        return new Persona(cedula, nombres, apellidos, direccion, telefono);
+    }
+    
+    public static Persona existe (String cedula) {
+        Conexion con = new Conexion ();
+        ArrayList<HashMap> res = con.query("SELECT nombres, apellidos, telefono, direccion FROM persona WHERE cedula ='"+cedula+"'");
+        if (!res.isEmpty()) {
+            return new Persona(
+                    cedula,
+                    res.get(0).get("nombres")+"",
+                    res.get(0).get("apellidos")+"",
+                    res.get(0).get("direccion")+"",
+                    res.get(0).get("telefono")+""
+            );
         }
+        return null;
     }
 
     public String getApellidos() {
