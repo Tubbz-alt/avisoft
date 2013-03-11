@@ -40,6 +40,7 @@ public class GUIPrincipal extends Interfaz {
         jMenuBar3 = new javax.swing.JMenuBar();
         jMenu4 = new javax.swing.JMenu();
         menuNuevaGranja = new javax.swing.JMenuItem();
+        menuProp = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
         jMenuItem3 = new javax.swing.JMenuItem();
@@ -65,6 +66,14 @@ public class GUIPrincipal extends Interfaz {
             }
         });
         jMenu4.add(menuNuevaGranja);
+
+        menuProp.setText("Propietarios");
+        menuProp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuPropActionPerformed(evt);
+            }
+        });
+        jMenu4.add(menuProp);
 
         jMenuBar3.add(jMenu4);
 
@@ -203,6 +212,11 @@ public class GUIPrincipal extends Interfaz {
         // TODO add your handling code here:
         new GUIConsInv(this).setVisible(true);
     }//GEN-LAST:event_jMenuItem5ActionPerformed
+
+    private void menuPropActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuPropActionPerformed
+        // TODO add your handling code here:
+        new ModalPropietario(this).setVisible(true);
+    }//GEN-LAST:event_menuPropActionPerformed
     
     @Override
     public java.awt.Image getIconImage() {
@@ -228,6 +242,7 @@ public class GUIPrincipal extends Interfaz {
     private javax.swing.JMenuItem menuConf;
     private javax.swing.JMenu menuLog;
     private javax.swing.JMenuItem menuNuevaGranja;
+    private javax.swing.JMenuItem menuProp;
     private javax.swing.JMenuItem menuSalir;
     // End of variables declaration//GEN-END:variables
 }

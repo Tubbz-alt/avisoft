@@ -18,8 +18,11 @@ import Modelo.Persona;
  */
 public class ModalPropietario extends Interfaz {
 
+    private boolean guardar = true;
+    private boolean establecer = true;
+    private Persona persona;
     /** Creates new form registroCliente */
-    public ModalPropietario(javax.swing.JFrame parent, boolean modal) {
+    public ModalPropietario(javax.swing.JFrame parent) {
         initComponents();
         setLocationRelativeTo(null);
         btnEstablecer.setVisible(false);
@@ -55,6 +58,7 @@ public class ModalPropietario extends Interfaz {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Propietario de granja");
+        setIconImage(getIconImage());
         setResizable(false);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -165,9 +169,14 @@ public class ModalPropietario extends Interfaz {
             }
         });
 
-        btnEstablecer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/est_user.png"))); // NOI18N
+        btnEstablecer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/prop_user.png"))); // NOI18N
         btnEstablecer.setToolTipText("Establecer como propietario");
         btnEstablecer.setPreferredSize(new java.awt.Dimension(48, 48));
+        btnEstablecer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEstablecerActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -293,10 +302,10 @@ public class ModalPropietario extends Interfaz {
             return;
         }
         
-        if (btnEstablecer.isVisible()) {
-            this.actualizarUsuario(cedula, nombre, apellido, direccion, telefono);
-        } else {
+        if (guardar) {
             this.crearUsuario(cedula, nombre, apellido, direccion, telefono);
+        } else {
+            this.actualizarUsuario(cedula, nombre, apellido, direccion, telefono);
         }
         
     }//GEN-LAST:event_btnActionActionPerformed
@@ -305,18 +314,21 @@ public class ModalPropietario extends Interfaz {
         // TODO add your handling code here:
         String cedula = cedulac.getText();
         if (!cedula.isEmpty()) {
-            Persona p = Persona.existe(cedula);
-            if (p != null) {
+            persona = Persona.existe(cedula);
+            if (persona != null) {
                 normalizeInput(apellidoc);
                 normalizeInput(nombrec);
                 normalizeInput(direccionc);
                 normalizeInput(telefonoc);
-                this.apellidoc.setText(p.getApellidos());
-                this.nombrec.setText(p.getNombres());
-                this.direccionc.setText(p.getDireccion());
-                this.telefonoc.setText(p.getTelefono());
+                this.apellidoc.setText(persona.getApellidos());
+                this.nombrec.setText(persona.getNombres());
+                this.direccionc.setText(persona.getDireccion());
+                this.telefonoc.setText(persona.getTelefono());
                 btnAction.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/edit_user.png")));
+                btnAction.setToolTipText("Modificar datos");
                 cedulac.setEditable(false);
+                btnEstablecer.setVisible(true);
+                guardar = false;
             }
         }
         normalizeInput(cedulac);
@@ -354,6 +366,17 @@ public class ModalPropietario extends Interfaz {
         // TODO add your handling code here:
         limpiar();
     }//GEN-LAST:event_btnClearActionPerformed
+
+    private void btnEstablecerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEstablecerActionPerformed
+        // TODO add your handling code here:
+        if (establecer) {
+            btnEstablecer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/nprop_user.png")));
+            establecer = false;
+        } else {
+            btnEstablecer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/prop.png")));
+            establecer = true;
+        }
+    }//GEN-LAST:event_btnEstablecerActionPerformed
     
     private void limpiar () {
         cedulac.setText(null);
@@ -362,26 +385,30 @@ public class ModalPropietario extends Interfaz {
         direccionc.setText(null);
         telefonoc.setText(null);
         cedulac.setEditable(true);
+        btnAction.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/add_user.png")));
+        btnEstablecer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/prop_user.png")));
+        guardar = true;
+        establecer = true;
+        btnEstablecer.setVisible(false);
     }
     
     private void actualizarUsuario (String cedula, String nombre, String apellido, String direccion, String telefono) {
-        Persona p = Persona.existe(cedula);
         boolean ac = false;
         
-        if (!p.getDireccion().equals(direccion)) {
-            p.setDireccion(direccion);
+        if (!persona.getDireccion().equals(direccion)) {
+            persona.setDireccion(direccion);
             ac = true;
         }
-        if (!p.getNombres().equals(nombre)) {
-            p.setNombres(nombre);
+        if (!persona.getNombres().equals(nombre)) {
+            persona.setNombres(nombre);
             ac = true;
         }
-        if (!p.getApellidos().equals(apellido)) {
-            p.setDireccion(direccion);
+        if (!persona.getApellidos().equals(apellido)) {
+            persona.setDireccion(direccion);
             ac = true;
         }
-        if (!p.getTelefono().equals(telefono)) {
-            p.setTelefono(telefono);
+        if (!persona.getTelefono().equals(telefono)) {
+            persona.setTelefono(telefono);
             ac = true;
         }
         
@@ -396,6 +423,16 @@ public class ModalPropietario extends Interfaz {
     private void crearUsuario (String cedula, String nombre, String apellido, String direccion, String telefono) {
         Persona.create(cedula, nombre, apellido, direccion, telefono);
         javax.swing.JOptionPane.showMessageDialog(this, "Se ha creado el propietario exitosamente");
+        btnEstablecer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/nprop_user.png")));
+        btnEstablecer.setVisible(true);
+        establecer = false;
+    }
+    
+    @Override
+    public java.awt.Image getIconImage() {
+        java.awt.Image retValue = java.awt.Toolkit.getDefaultToolkit().
+                getImage(ClassLoader.getSystemResource("Images/prop_user.png"));
+        return retValue;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

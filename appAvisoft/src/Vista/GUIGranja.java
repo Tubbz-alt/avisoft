@@ -460,7 +460,7 @@ public class GUIGranja extends Interfaz {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        new ModalPropietario(this, true).setVisible(true);
+        new ModalPropietario(this).setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void cmbDptoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbDptoActionPerformed
