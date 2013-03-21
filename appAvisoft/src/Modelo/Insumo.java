@@ -7,7 +7,6 @@ package Modelo;
 import java.util.ArrayList;
 import java.util.HashMap;
 import javax.swing.table.AbstractTableModel;
-import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -17,41 +16,63 @@ public class Insumo {
     private Conexion con;
     private String id;
     private String nombre;
-    private String tipo;
     private int cantidad;
     private String medida;
     private String estado;
+    private String nombre_tipo;
 
-    public Insumo(String id, String nombre, String tipo, int cantidad, String medida) {
+    public Insumo(String id, String nombre, int cantidad, String medida, String nombre_tipo) {
         this.con= new Conexion();
         ArrayList<HashMap> res= this.con.query("SELECT * FROM insumo WHERE id='"+id+"';");
         if(res.isEmpty()){
-            this.con.query("INSERT INTO insumo (id, nombre, tipo, cantidad, medida) VALUES('"+id+"', '"+nombre+"', '"+tipo+"', "+cantidad+", '"+medida+"');");
+            this.con.query("INSERT INTO insumo (id, nombre, cantidad, medida, nombre_tipo) VALUES('"+id+"', '"+nombre+"', "+cantidad+", '"+medida+"', '"+nombre_tipo+"');");
             this.id = id;
             this.nombre = nombre;
-            this.tipo = tipo;
             this.cantidad = cantidad;
             this.medida = medida;
             this.estado= "1";
+            this.nombre_tipo = nombre_tipo;
         }
         else{
             this.id= res.get(0).get("id")+"";
             this.nombre= res.get(0).get("nombre").toString();
-            this.tipo= res.get(0).get("tipo")+"";
             this.cantidad= Integer.valueOf(res.get(0).get("cantidad")+"");
             this.medida= res.get(0).get("medida").toString();
             this.estado= res.get(0).get("estado").toString();
+            this.nombre_tipo= res.get(0).get("nombre_tipo")+"";
         }
     }
     
-    public Insumo(String id, String nombre, String tipo, int cantidad, String medida, String estado) {
+    public Insumo(String id, String nombre, int cantidad, String medida, String estado, String nombre_tipo) {
         this.con=new Conexion();
         this.id = id;
         this.nombre = nombre;
-        this.tipo = tipo;
         this.cantidad = cantidad;
         this.medida = medida;
         this.estado= estado;
+        this.nombre_tipo= nombre_tipo;
+    }
+    
+    public static boolean addTipo(String tipo){
+        Conexion con = new Conexion();
+        ArrayList<HashMap> res= con.query("SELECT * FROM tipo WHERE nombre_tipo= '"+tipo+"';");
+        if(res.isEmpty()){
+            con.query("INSERT INTO tipo VALUES ('"+tipo+"');");
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+    
+    public static ArrayList<String> consulTipo(){
+        Conexion con= new Conexion();
+        ArrayList<String> tipos= new ArrayList<String>();
+        ArrayList<HashMap> res= con.query("SELECT * FROM tipo");
+        for (HashMap tipo : res) {
+            tipos.add(tipo.get("nombre_tipo").toString());
+        }
+        return tipos;
     }
     
     public static ArrayList<String[]> getInsumos() {
@@ -59,7 +80,7 @@ public class Insumo {
         ArrayList<String[]> ins = new ArrayList<String[]>();
         ArrayList<HashMap> inms = con.query("SELECT * FROM insumo WHERE estado= 1");
         for (HashMap inm: inms) {
-            String m[] = {inm.get("id").toString(), inm.get("nombre").toString(), inm.get("tipo").toString(), inm.get("cantidad").toString(), inm.get("medida").toString()};
+            String m[] = {inm.get("id").toString(), inm.get("nombre").toString(), inm.get("nombre_tipo").toString(), inm.get("cantidad").toString(), inm.get("medida").toString()};
             ins.add(m);
         }
         return ins;
@@ -80,7 +101,7 @@ public class Insumo {
                 datos= new Object[res.size()][ColumnName.length];
                 int i=0;
                 for (HashMap fila : res) {
-                    String [] col= {fila.get("id").toString(), fila.get("nombre").toString(), fila.get("tipo").toString(),
+                    String [] col= {fila.get("id").toString(), fila.get("nombre").toString(), fila.get("nombre_tipo").toString(),
                                     fila.get("cantidad").toString(), fila.get("medida").toString(), fila.get("estado").toString()};
                     for(int j=0; j<ColumnName.length; j++){
                         if(j !=5){
@@ -170,7 +191,7 @@ public class Insumo {
     }
 
     public String getTipo() {
-        return tipo;
+        return nombre_tipo;
     }
 
     public void setEstado(String estado) {
@@ -183,9 +204,9 @@ public class Insumo {
         this.medida = medida;
     }
 
-    public void setTipo(String tipo) {
-        this.con.query("UPDATE insumo SET tipo='"+tipo+"' WHERE id='"+this.id+"';");
-        this.tipo = tipo;
+    public void setTipo(String nombre_tipo) {
+        this.con.query("UPDATE insumo SET nombre_tipo='"+nombre_tipo+"' WHERE id='"+this.id+"';");
+        this.nombre_tipo = nombre_tipo;
     }
 
     public void setCantidad(int cantidad, int opc) {
@@ -206,13 +227,13 @@ public class Insumo {
     
     public static Insumo existe(String id){
         Conexion c= new Conexion();
-        ArrayList<HashMap> res= c.query("SELECT nombre, tipo, cantidad, medida, estado FROM insumo WHERE id= '"+id+"';");
+        ArrayList<HashMap> res= c.query("SELECT nombre, nombre_tipo, cantidad, medida, estado FROM insumo WHERE id= '"+id+"';");
         if(!res.isEmpty()){
-            return new Insumo(id, res.get(0).get("nombre")+"", 
-                              res.get(0).get("tipo").toString(),
+            return new Insumo(id, res.get(0).get("nombre")+"",
                               Integer.parseInt(res.get(0).get("cantidad")+""),
                               res.get(0).get("medida").toString(),
-                              res.get(0).get("estado")+"");
+                              res.get(0).get("estado")+"", 
+                              res.get(0).get("nombre_tipo").toString());
         }
         return null;
     }
@@ -230,7 +251,7 @@ public class Insumo {
 
     @Override
     public String toString() {
-        return "Insumo{" + "id=" + id + ", nombre=" + nombre + ", tipo=" + tipo + ", cantidad=" + cantidad + ", medida=" + medida + ", estado=" + estado + '}';
+        return "Insumo{" + "id=" + id + ", nombre=" + nombre + ", tipo=" + nombre_tipo + ", cantidad=" + cantidad + ", medida=" + medida + ", estado=" + estado + '}';
     }
     
 }

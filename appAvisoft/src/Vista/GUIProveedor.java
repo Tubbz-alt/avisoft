@@ -11,6 +11,7 @@
 package Vista;
 
 import Modelo.Proveedor;
+import java.util.ArrayList;
 import java.util.HashMap;
 import javax.swing.JOptionPane;
 
@@ -24,7 +25,6 @@ public class GUIProveedor extends Interfaz {
         this.p.forms.add(this);
         setLocationRelativeTo(null);
         btnConfig.setVisible(false);
-        proveedores= new HashMap();
     }
     
     private void limpiar(){
@@ -94,24 +94,15 @@ public class GUIProveedor extends Interfaz {
             error=true;
         }
         
-        if(error)
+        if(error) {
             JOptionPane.showMessageDialog(this, "Por favor revise los campos", "Error en el formulario", javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
         
         return !error;
     }
     
     private Proveedor validacion(String ced){
-        Proveedor pro=(Proveedor) proveedores.get(ced);
-        if(pro != null){
-            return pro;
-        }
-        else{
-            pro= Proveedor.existe(ced);
-            if(pro != null){
-                proveedores.put(pro.getCedula(), pro);
-            }            
-            return pro;
-            }
+        return Proveedor.proveedor(ced);
     }
 
     /** This method is called from within the constructor to
@@ -152,6 +143,11 @@ public class GUIProveedor extends Interfaz {
         setTitle("Crear proveedor");
         setIconImage(getIconImage());
         setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Datos del Proveedor"));
 
@@ -234,7 +230,7 @@ public class GUIProveedor extends Interfaz {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtTlfVendedor, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtDirVendedor, javax.swing.GroupLayout.DEFAULT_SIZE, 244, Short.MAX_VALUE)))
+                            .addComponent(txtDirVendedor, javax.swing.GroupLayout.DEFAULT_SIZE, 264, Short.MAX_VALUE)))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel6)
@@ -243,8 +239,8 @@ public class GUIProveedor extends Interfaz {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtCedula, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtNombres, javax.swing.GroupLayout.DEFAULT_SIZE, 245, Short.MAX_VALUE)
-                            .addComponent(txtApellidos, javax.swing.GroupLayout.DEFAULT_SIZE, 245, Short.MAX_VALUE))))
+                            .addComponent(txtNombres, javax.swing.GroupLayout.DEFAULT_SIZE, 262, Short.MAX_VALUE)
+                            .addComponent(txtApellidos, javax.swing.GroupLayout.DEFAULT_SIZE, 262, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -344,7 +340,7 @@ public class GUIProveedor extends Interfaz {
                             .addComponent(jLabel3))
                         .addGap(4, 4, 4)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtDireccion, javax.swing.GroupLayout.DEFAULT_SIZE, 231, Short.MAX_VALUE)
+                            .addComponent(txtDireccion, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)
                             .addComponent(txtTlf, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap())
         );
@@ -410,10 +406,12 @@ public class GUIProveedor extends Interfaz {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnLimpiar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 182, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnAceptar)))
                 .addContainerGap())
         );
@@ -446,44 +444,32 @@ public class GUIProveedor extends Interfaz {
         if(!validarCamposProv()){
             return;
         }
+        Proveedor pro= validacion(cedula);
         String [] empresa= Proveedor.getEmpresa(nit);
         if(btnAceptar.getText().equals("Guardar")){
-            Proveedor pro= validacion(cedula);
-            if(pro==null){
-                if(empresa == null || empresa[1].equals(razonSocial)){
-                    pro= new Proveedor(nit, razonSocial, tlfEm, dirEm, cedula,
-                                       nombres, apellidos, dirVen, tlfVen);
-                    proveedores.put(cedula, pro);
-                    JOptionPane.showMessageDialog(this, "Exito: Se agrego un nuevo proveedor...");
-                    limpiar();
-                }
-                else{
-                    JOptionPane.showMessageDialog(this, "El nit ya existe con el nombre de otra empresa", "Advertensia", JOptionPane.INFORMATION_MESSAGE);
-                }
+            if(empresa == null || empresa[1].equals(razonSocial)){
+                new Proveedor(nit, razonSocial, tlfEm, dirEm, cedula,
+                                   nombres, apellidos, dirVen, tlfVen);
+                JOptionPane.showMessageDialog(this, "Exito: Se agrego un nuevo proveedor...");
+                limpiar();
             }
             else{
-                JOptionPane.showMessageDialog(this, "Error: El proveedor ya existe... \n "
-                                              + "Debe dar clic en el boton buscar "
-                                              + "y digitar la cedula del proveedor \n sí desea ubicarlo en otra empresa.",
-                                              "Advertencia", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "El nit ya existe con el nombre de otra empresa", "Advertensia", JOptionPane.INFORMATION_MESSAGE);
             }
         }
         else{
-            Proveedor pr= (Proveedor) proveedores.get(cedula);
-            if(pr.getNit().equals(nit)){
-                pr.setRazonSocial(razonSocial);
-                pr.setDirEmp(dirEm);
-                pr.setTelEmp(tlfEm);
-                pr.setNombres(nombres);
-                pr.setApellidos(apellidos);
-                pr.setDireccion(dirVen);
-                pr.setTelefono(tlfVen);
+            if(pro.getNit().equals(nit)){
+                pro.setRazonSocial(razonSocial);
+                pro.setDirEmp(dirEm);
+                pro.setTelEmp(tlfEm);
+                pro.setNombres(nombres);
+                pro.setApellidos(apellidos);
+                pro.setDireccion(dirVen);
+                pro.setTelefono(tlfVen);
             }
             else{
-                pr.setEstado("0");
-                pr= new Proveedor(nit, razonSocial, tlfEm, dirEm, cedula,
+                new Proveedor(nit, razonSocial, tlfEm, dirEm, cedula,
                                   nombres, apellidos, dirVen, tlfVen);
-                proveedores.put(cedula, pr);
             }
             JOptionPane.showMessageDialog(this, "Exito: Se actualizo el proveedor...");
             limpiar();
@@ -597,24 +583,28 @@ public class GUIProveedor extends Interfaz {
                 normalizeInput(txtDireccion);
                 normalizeInput(txtTlf);
                 
-                txtNit.setText(pro.getNit());
-                txtRazonSocial.setText(pro.getRazonSocial());
-                txtDireccion.setText(pro.getDirEmp());
-                txtTlf.setText(pro.getTelEmp());
                 txtCedula.setText(pro.getCedula());
                 txtNombres.setText(pro.getNombres());
                 txtApellidos.setText(pro.getApellidos());
                 txtDirVendedor.setText(pro.getDireccion());
                 txtTlfVendedor.setText(pro.getTelefono());
-
-                txtNit.setEditable(false);
+               
+                if(pro.getEstado().equals("1")){
+                    txtNit.setText(pro.getNit());
+                    txtRazonSocial.setText(pro.getRazonSocial());
+                    txtDireccion.setText(pro.getDirEmp());
+                    txtTlf.setText(pro.getTelEmp());
+                    txtNit.setEditable(false);
+                    txtRazonSocial.setEditable(false);
+                    txtDireccion.setEditable(false);
+                    txtTlf.setEditable(false);
+                    btnAceptar.setText("Actualizar");
+                    btnAceptar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/Update.png")));
+                    btnConfig.setVisible(true);
+                }
+                
                 txtCedula.setEditable(false);
-                txtRazonSocial.setEditable(false);
-                txtDireccion.setEditable(false);
-                txtTlf.setEditable(false);
-                btnAceptar.setText("Actualizar");
-                btnAceptar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/Update.png")));
-                btnConfig.setVisible(true);
+                
             }
             normalizeInput(txtCedula);
         }
@@ -653,6 +643,11 @@ public class GUIProveedor extends Interfaz {
         if(evt.getKeyCode()== evt.VK_ENTER)
             txtCedula.transferFocus();
     }//GEN-LAST:event_txtCedulaKeyPressed
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        // TODO add your handling code here:
+        proveedores= new HashMap();
+    }//GEN-LAST:event_formWindowOpened
 
     @Override
     public java.awt.Image getIconImage(){

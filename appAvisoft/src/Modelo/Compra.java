@@ -47,7 +47,7 @@ public class Compra{
             for(ItemCompra item: itemsCompra){
                 c.query("INSERT INTO detalle_compra VALUES ('"+numFact+"', '"+item.getId()+"', '"+
                                item.getCantidad()+"', '"+item.getPrecioUnt()+"');");
-                c.query("UPDATE insumo SET cantidad+="+item.getCantidad()+" WHERE id="+item.getId());
+                c.query("UPDATE insumo SET cantidad=cantidad+"+item.getCantidad()+" WHERE id="+item.getId());
             }
             compra = new Compra (numFact, fechaFact, total, cedula, nit, itemsCompra);
         }

@@ -1,4 +1,4 @@
-<?xml version="1.1" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
 
 <Form version="1.3" maxVersion="1.7" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <Properties>
@@ -11,6 +11,9 @@
   <SyntheticProperties>
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
   </SyntheticProperties>
+  <Events>
+    <EventHandler event="windowOpened" listener="java.awt.event.WindowListener" parameters="java.awt.event.WindowEvent" handler="formWindowOpened"/>
+  </Events>
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
     <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="false"/>
@@ -54,7 +57,7 @@
                   <Component id="btnLimpiar" alignment="3" min="-2" pref="33" max="-2" attributes="0"/>
                   <Component id="btnAceptar" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace max="32767" attributes="0"/>
+              <EmptySpace pref="20" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -91,12 +94,21 @@
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="txtNombre" pref="313" max="32767" attributes="0"/>
-                              <Group type="102" alignment="0" attributes="0">
-                                  <Component id="txtCantidad" min="-2" pref="63" max="-2" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="cmbMedida" min="-2" max="-2" attributes="0"/>
+                              <Group type="102" attributes="0">
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Group type="102" attributes="0">
+                                          <Component id="txtCantidad" min="-2" pref="63" max="-2" attributes="0"/>
+                                          <EmptySpace max="-2" attributes="0"/>
+                                          <Component id="cmbMedida" min="-2" max="-2" attributes="0"/>
+                                      </Group>
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <Component id="cmbTipo" min="-2" pref="156" max="-2" attributes="0"/>
+                                          <EmptySpace max="-2" attributes="0"/>
+                                          <Component id="btnAddTipo" min="-2" pref="23" max="-2" attributes="0"/>
+                                      </Group>
+                                  </Group>
+                                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                               </Group>
-                              <Component id="cmbTipo" alignment="0" min="-2" pref="156" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
@@ -121,9 +133,12 @@
                       <Component id="txtNombre" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="cmbTipo" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="btnAddTipo" alignment="0" min="-2" pref="26" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="cmbTipo" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
                   </Group>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
@@ -192,6 +207,25 @@
           </Properties>
         </Component>
         <Component class="com.jidesoft.swing.AutoCompletionComboBox" name="cmbTipo">
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new com.jidesoft.swing.AutoCompletionComboBox(){&#xa;    public void addItem(Object anObject) {&#xa;        int size = ((DefaultComboBoxModel) dataModel).getSize();&#xa;        Object obj;&#xa;        boolean added = false;&#xa;        for (int i=0; i&lt;size; i++) {&#xa;            obj = dataModel.getElementAt(i);&#xa;            int compare = anObject.toString().compareToIgnoreCase(obj.toString());&#xa;            if (compare &lt;= 0) { // if anObject less than or equal obj&#xa;                super.insertItemAt(anObject, i);&#xa;                added = true;&#xa;                break;&#xa;            }&#xa;        }&#xa;&#xa;        if (!added) {&#xa;            super.addItem(anObject);&#xa;        }&#xa;    }&#xa;}"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodePre" type="java.lang.String" value="// http://tech.chitgoks.com/2009/11/13/sort-jcombobox-items/ fuente"/>
+          </AuxValues>
+        </Component>
+        <Component class="javax.swing.JButton" name="btnAddTipo">
+          <Properties>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/Images/Category_add.png"/>
+            </Property>
+            <Property name="borderPainted" type="boolean" value="false"/>
+            <Property name="contentAreaFilled" type="boolean" value="false"/>
+            <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+              <Color id="Cursor de mano"/>
+            </Property>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAddTipoActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>

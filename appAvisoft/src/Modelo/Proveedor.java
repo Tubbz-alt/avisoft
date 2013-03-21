@@ -6,6 +6,7 @@ package Modelo;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import javax.swing.JOptionPane;
 import javax.swing.table.AbstractTableModel;
 
 /**
@@ -188,15 +189,21 @@ public class Proveedor extends Persona {
             public void setValueAt(Object aValue, int rowIndex, int columnIndex){
                 if(columnIndex == 5){
                     boolean value= Boolean.parseBoolean(aValue.toString());
+                    Proveedor p= Proveedor.proveedor(this.cons[rowIndex][2].toString());
                     String estado= "0";
                     if(value == true){
                         estado= "1";
                     }
-                    Proveedor p= Proveedor.existe(this.cons[rowIndex][2].toString());
-                    p.setEstado(estado);
-                    this.cons[rowIndex][columnIndex]= value;
-                    // Disparamos el Evento TableDataChanged (La tabla ha cambiado)
-                    //fireTableCellUpdated(rowIndex, columnIndex);
+                    if(!p.getEstado().equals("1") || value == false){
+                        p= Proveedor.existe(this.cons[rowIndex][2].toString(), this.cons[rowIndex][0].toString());
+                        p.setEstado(estado);
+                        this.cons[rowIndex][columnIndex]= value;
+                        // Disparamos el Evento TableDataChanged (La tabla ha cambiado)
+                        //fireTableCellUpdated(rowIndex, columnIndex);
+                    }
+                    else{
+                        JOptionPane.showMessageDialog(null, "El proveedor debe estar activo solo una vez", "Error", JOptionPane.INFORMATION_MESSAGE);
+                    }
                 }
             }
             
@@ -224,17 +231,44 @@ public class Proveedor extends Persona {
     }
 
     public void setEstado(String estado) {
-        this.con.query("UPDATE empresa_proveedor SET estado = '"+estado+"' WHERE cedula ='"+this.cedula+"'");
+        this.con.query("UPDATE empresa_proveedor SET estado = '"+estado+"' WHERE cedula ='"+this.cedula+"' AND NIT ='"+this.nit+"'");
         this.estado = estado;
     }
     
-    public static Proveedor existe (String cedula) {
+    public static Proveedor existe (String cedula, String nit) {
         Conexion c = new Conexion();
-        ArrayList<HashMap> res = c.query("SELECT p.nombres, p.apellidos, p.direccion, p.telefono, pro.estado, e.nit, e.razon_social, e.direccion as dir_emp, e.telefono as tel_emp FROM empresa e, persona p, empresa_proveedor pro WHERE pro.nit = e.nit AND pro.cedula = p.cedula AND p.cedula = '"+cedula+"'");
+        ArrayList<HashMap> res = c.query("SELECT p.nombres, p.apellidos, p.direccion, p.telefono, pro.estado, e.nit, e.razon_social, e.direccion as dir_emp, e.telefono as tel_emp FROM empresa e, persona p, empresa_proveedor pro WHERE pro.nit = e.nit AND pro.cedula = p.cedula AND pro.cedula = '"+cedula+"' AND pro.NIT= '"+nit+"'");
         if(!res.isEmpty()) {
             return new Proveedor(res.get(0).get("nit")+"", res.get(0).get("razon_social")+"", res.get(0).get("tel_emp")+"", res.get(0).get("dir_emp")+"", cedula, res.get(0).get("nombres")+"", res.get(0).get("apellidos")+"", res.get(0).get("direccion")+"", res.get(0).get("telefono")+"", res.get(0).get("estado")+"");
         }
         return null;
+    }
+    
+    public static Proveedor proveedor(String cedula){
+        Conexion c= new Conexion();
+        ArrayList<HashMap> res= c.query("SELECT p.cedula, p.nombres, p.apellidos, p.telefono, p.direccion, e.NIT, e.razon_social, e.telefono AS tel_emp, e.direccion AS dir_emp, ep.estado "+
+                                        "FROM persona p "+
+                                        "LEFT OUTER JOIN empresa_proveedor AS ep ON p.cedula= ep.cedula "+
+                                        "LEFT OUTER JOIN empresa AS e ON ep.NIT= e.NIT "+
+                                        "WHERE p.cedula= '"+cedula+"'");
+        Proveedor p= null;
+        if(!res.isEmpty()){
+            for (HashMap pro : res) {
+                if(pro.get("estado")!= null){
+                    if(!pro.get("estado").equals("0")){
+                        p= new Proveedor(pro.get("nit")+"", pro.get("razon_social")+"", pro.get("tel_emp")+"", pro.get("dir_emp")+"", pro.get("cedula")+"", pro.get("nombres")+"", pro.get("apellidos")+"", pro.get("direccion")+"", pro.get("telefono")+"", pro.get("estado")+"");
+                        break;
+                    }
+                    else{
+                        p= new Proveedor(pro.get("nit")+"", pro.get("razon_social")+"", pro.get("tel_emp")+"", pro.get("dir_emp")+"", pro.get("cedula")+"", pro.get("nombres")+"", pro.get("apellidos")+"", pro.get("direccion")+"", pro.get("telefono")+"", pro.get("estado")+"");
+                    }
+                }
+                else{
+                    p= new Proveedor(pro.get("nit")+"", pro.get("razon_social")+"", pro.get("tel_emp")+"", pro.get("dir_emp")+"", pro.get("cedula")+"", pro.get("nombres")+"", pro.get("apellidos")+"", pro.get("direccion")+"", pro.get("telefono")+"", pro.get("estado")+"");
+                }
+            }
+        }
+        return p;
     }
     
     public static String [] getEmpresa(String nit){

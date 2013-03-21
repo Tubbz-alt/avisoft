@@ -11,7 +11,11 @@
 package Vista;
 
 import Modelo.Insumo;
+import com.jidesoft.swing.AutoCompletionComboBox;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 
 /**
@@ -63,11 +67,6 @@ public class GUIInsumo extends Interfaz {
             error=true;
         }
         
-        if(cmbTipo.getSelectedIndex() == 0){
-            showError(cmbTipo, "No ha seleccionado ningun tipo de insumo");
-            error=true;
-        }
-        
         if(txtCantidad.getText().isEmpty()){
             showError(txtCantidad, "No ha ingresado una cantidad para el insumo");
             error=true;
@@ -99,13 +98,39 @@ public class GUIInsumo extends Interfaz {
         txtCantidad = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         cmbMedida = new javax.swing.JComboBox();
-        cmbTipo = new com.jidesoft.swing.AutoCompletionComboBox();
+        // http://tech.chitgoks.com/2009/11/13/sort-jcombobox-items/ fuente
+        cmbTipo = new com.jidesoft.swing.AutoCompletionComboBox(){
+            public void addItem(Object anObject) {
+                int size = ((DefaultComboBoxModel) dataModel).getSize();
+                Object obj;
+                boolean added = false;
+                for (int i=0; i<size; i++) {
+                    obj = dataModel.getElementAt(i);
+                    int compare = anObject.toString().compareToIgnoreCase(obj.toString());
+                    if (compare <= 0) { // if anObject less than or equal obj
+                        super.insertItemAt(anObject, i);
+                        added = true;
+                        break;
+                    }
+                }
+
+                if (!added) {
+                    super.addItem(anObject);
+                }
+            }
+        };
+        btnAddTipo = new javax.swing.JButton();
         btnLimpiar = new javax.swing.JButton();
         btnAceptar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Gestionar Insumos");
         setIconImage(getIconImage());
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
@@ -142,6 +167,16 @@ public class GUIInsumo extends Interfaz {
 
         cmbMedida.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Kg.", "gr.", "mts.", "cms." }));
 
+        btnAddTipo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/Category_add.png"))); // NOI18N
+        btnAddTipo.setBorderPainted(false);
+        btnAddTipo.setContentAreaFilled(false);
+        btnAddTipo.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnAddTipo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddTipoActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -164,10 +199,16 @@ public class GUIInsumo extends Interfaz {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtNombre, javax.swing.GroupLayout.DEFAULT_SIZE, 313, Short.MAX_VALUE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(txtCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(cmbMedida, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(cmbTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(txtCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(cmbMedida, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(cmbTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(btnAddTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(0, 0, Short.MAX_VALUE)))))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -184,9 +225,11 @@ public class GUIInsumo extends Interfaz {
                     .addComponent(jLabel2)
                     .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(cmbTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnAddTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel3)
+                        .addComponent(cmbTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
@@ -238,7 +281,7 @@ public class GUIInsumo extends Interfaz {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnLimpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnAceptar))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
 
         pack();
@@ -259,14 +302,15 @@ public class GUIInsumo extends Interfaz {
         //no repitamos tantas funciones si podemos almacenarlas y no usemos to upperCase
         String codigo = txtCodigo.getText().trim();
         String nombre = txtNombre.getText().trim();
-        String tipo = cmbTipo.getSelectedItem().toString();
+        String tipo = "";
         String cantidad = txtCantidad.getText().trim();
         String medida = cmbMedida.getSelectedItem().toString();
         if(!validarInsumo()){
             return;
         }
         if(this.btnAceptar.getText().equals("Guardar")){
-            Insumo ins= new Insumo(codigo, nombre, tipo, Integer.parseInt(cantidad), medida);
+            tipo=cmbTipo.getSelectedItem().toString();
+            Insumo ins= new Insumo(codigo, nombre, Integer.parseInt(cantidad), medida, tipo);
             JOptionPane.showMessageDialog(null, "Exito: Se registro un nuevo insumo...");
             this.insumos.put(ins.getId(), ins);
             limpiar();
@@ -321,6 +365,33 @@ public class GUIInsumo extends Interfaz {
         }
     }//GEN-LAST:event_txtCodigoKeyPressed
 
+    private void btnAddTipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddTipoActionPerformed
+        // TODO add your handling code here:
+        String tipo= JOptionPane.showInputDialog(this, "Nuevo tipo", "Tipo", JOptionPane.QUESTION_MESSAGE);
+        if(tipo !=null){
+            if(!tipo.isEmpty()){
+                if(Insumo.addTipo(tipo)){
+                    cmbTipo.addItem(tipo);
+                }
+                else{
+                    JOptionPane.showMessageDialog(this, "El nombre ya existe, debe seleccionarlo", "Advertencia", JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
+            else{
+                JOptionPane.showMessageDialog(this, "Debe digitar un nombre para el nuevo tipo", "Advertencia", JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
+        
+    }//GEN-LAST:event_btnAddTipoActionPerformed
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        // TODO add your handling code here:
+        ArrayList<String> tipos= Insumo.consulTipo();
+        for (String tipo : tipos) {
+            cmbTipo.addItem(tipo);
+        }
+    }//GEN-LAST:event_formWindowOpened
+
     @Override
     public java.awt.Image getIconImage() {
         java.awt.Image retValue = java.awt.Toolkit.getDefaultToolkit().
@@ -334,6 +405,7 @@ public class GUIInsumo extends Interfaz {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAceptar;
+    private javax.swing.JButton btnAddTipo;
     private javax.swing.JButton btnLimpiar;
     private javax.swing.JComboBox cmbMedida;
     private com.jidesoft.swing.AutoCompletionComboBox cmbTipo;
