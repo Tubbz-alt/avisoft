@@ -25,16 +25,16 @@ public class GUIGranja extends Interfaz {
     private ArrayList<String> depar;
     private ArrayList<String[]> muni;
     private javax.swing.table.DefaultTableModel model;
-    private int cont;
     private int areaGalpones;
+    private int capacidad;
     private HashMap lotes;
     
     /** Creates new form GUIGranja */
     public GUIGranja(GUIPrincipal principal) {
         if(log != null) {
             this.p = principal;
-            this.cont = 1;
             this.areaGalpones= 0;
+            this.capacidad = 0;
             this.depar = new ArrayList<String>();
             this.muni = new ArrayList<String[]>();
             this.lotes = new HashMap();
@@ -52,6 +52,10 @@ public class GUIGranja extends Interfaz {
 
     public HashMap getLotes() {
         return lotes;
+    }
+    
+    public GUIPrincipal getPrincipal () {
+        return this.p;
     }
     
     public int getTipo(){
@@ -100,11 +104,9 @@ public class GUIGranja extends Interfaz {
         txtMpio = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
         cmbTemp = new javax.swing.JComboBox();
-        jLabel12 = new javax.swing.JLabel();
         cmbDpto = new com.jidesoft.swing.AutoCompletionComboBox();
         cmbMpio = new com.jidesoft.swing.AutoCompletionComboBox();
         jLabel6 = new javax.swing.JLabel();
-        txtProp = new javax.swing.JTextField();
         cmbProp = new com.jidesoft.swing.AutoCompletionComboBox();
         jButton1 = new javax.swing.JButton();
         cmbTipo = new javax.swing.JComboBox();
@@ -112,13 +114,27 @@ public class GUIGranja extends Interfaz {
         jLabel3 = new javax.swing.JLabel();
         txtArea = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
+        cmbCedProp = new com.jidesoft.swing.AutoCompletionComboBox();
+        jLabel12 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblGalpon = new javax.swing.JTable();
         btnAceptar = new javax.swing.JButton();
         btnLimpiar = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel9 = new javax.swing.JLabel();
+        txtAreaLibre = new javax.swing.JTextField();
+        lblcm1 = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
+        txtCap = new javax.swing.JTextField();
+        jLabel14 = new javax.swing.JLabel();
 
         menuDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/Delete.png"))); // NOI18N
         menuDelete.setText("Eliminar");
+        menuDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuDeleteActionPerformed(evt);
+            }
+        });
         popMenuGranja.add(menuDelete);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -135,6 +151,9 @@ public class GUIGranja extends Interfaz {
         lblcm.setText("<html> m<sup style='font-size:8px'>2</sup></html>");
 
         txtAreaGalpon.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtAreaGalponKeyPressed(evt);
+            }
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtAreaGalponKeyTyped(evt);
             }
@@ -157,19 +176,21 @@ public class GUIGranja extends Interfaz {
                 .addComponent(jLabel7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(txtAreaGalpon, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(10, 10, 10)
-                .addComponent(lblcm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(lblcm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(10, 10, 10)
                 .addComponent(cmdAgregarGalpon)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 9, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(lblcm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(cmdAgregarGalpon)
-                .addComponent(txtAreaGalpon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 9, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cmdAgregarGalpon)
+                    .addComponent(txtAreaGalpon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblcm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jLabel2.setText("Dirección:");
@@ -202,9 +223,11 @@ public class GUIGranja extends Interfaz {
         jLabel11.setText("Clima:");
 
         cmbTemp.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Elija clima", "Calido", "Frio" }));
-
-        jLabel12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/info.png"))); // NOI18N
-        jLabel12.setToolTipText("Al cambiar este valor se cambiara en todas las granjas del municipio");
+        cmbTemp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbTempActionPerformed(evt);
+            }
+        });
 
         cmbDpto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -220,9 +243,9 @@ public class GUIGranja extends Interfaz {
 
         jLabel6.setText("Propietario:");
 
-        txtProp.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtPropKeyTyped(evt);
+        cmbProp.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cmbPropItemStateChanged(evt);
             }
         });
 
@@ -243,12 +266,24 @@ public class GUIGranja extends Interfaz {
 
         txtArea.setMaximumSize(new java.awt.Dimension(6, 20));
         txtArea.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtAreaKeyReleased(evt);
+            }
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtAreaKeyTyped(evt);
             }
         });
 
         jLabel10.setText("<html> m<sup style='font-size:8px'>2</sup></html>");
+
+        cmbCedProp.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cmbCedPropItemStateChanged(evt);
+            }
+        });
+
+        jLabel12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/info.png"))); // NOI18N
+        jLabel12.setToolTipText("Al cambiar este valor se cambiara en todas las granjas del municipio");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -283,65 +318,60 @@ public class GUIGranja extends Interfaz {
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel3)
                                     .addComponent(jLabel8))))
-                        .addGap(10, 10, 10)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(txtProp, javax.swing.GroupLayout.DEFAULT_SIZE, 89, Short.MAX_VALUE)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(cmbCedProp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(cmbProp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jButton1))
-                            .addComponent(cmbTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(txtArea, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(21, 21, 21))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(cmbTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(cmbTemp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel12)
-                        .addContainerGap())))
+                        .addComponent(jLabel12)))
+                .addContainerGap(93, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(cmbProp, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(txtProp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cmbTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtArea, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jButton1)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel2)
                             .addComponent(txtDireccion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel6))
+                            .addComponent(jLabel6)
+                            .addComponent(cmbCedProp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cmbProp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel4)
                             .addComponent(txtDpto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(cmbDpto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel8))
+                            .addComponent(jLabel8)
+                            .addComponent(cmbTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(8, 8, 8)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel5)
                             .addComponent(txtMpio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(cmbMpio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(cmbTemp)
-                    .addComponent(jLabel11))
-                .addContainerGap())
+                            .addComponent(jLabel3)
+                            .addComponent(txtArea, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, 22, Short.MAX_VALUE)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jLabel11)
+                                .addComponent(cmbTemp)))))
+                .addGap(19, 19, 19))
         );
 
         tblGalpon.setModel(new javax.swing.table.DefaultTableModel(
@@ -349,11 +379,11 @@ public class GUIGranja extends Interfaz {
 
             },
             new String [] {
-                "Número", "Area", "Cantidad (Pollos)", "Agregar Lote"
+                "Número", "Area (m2)", "Cantidad (Pollos)", "Agregar Lote"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
+                java.lang.Byte.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
                 false, false, false, true
@@ -368,16 +398,76 @@ public class GUIGranja extends Interfaz {
             }
         });
         tblGalpon.setComponentPopupMenu(popMenuGranja);
+        tblGalpon.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        tblGalpon.setRowHeight(20);
         jScrollPane1.setViewportView(tblGalpon);
-        tblGalpon.getColumnModel().getColumn(2).setMinWidth(150);
-        tblGalpon.getColumnModel().getColumn(3).setMinWidth(100);
+        tblGalpon.getColumnModel().getColumn(0).setPreferredWidth(30);
+        tblGalpon.getColumnModel().getColumn(3).setMinWidth(80);
+        tblGalpon.getColumnModel().getColumn(3).setMaxWidth(80);
 
         btnAceptar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/Save_1.png"))); // NOI18N
         btnAceptar.setText("Guardar");
         btnAceptar.setToolTipText("Guarda y actualiza un insumo");
+        btnAceptar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAceptarActionPerformed(evt);
+            }
+        });
 
         btnLimpiar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/Clear.png"))); // NOI18N
         btnLimpiar.setText("Limpiar");
+        btnLimpiar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLimpiarActionPerformed(evt);
+            }
+        });
+
+        jLabel9.setText("Area Libre:");
+
+        txtAreaLibre.setEditable(false);
+
+        lblcm1.setText("<html> m<sup style='font-size:8px'>2</sup></html>");
+
+        jLabel13.setText("Capacidad total:");
+
+        txtCap.setEditable(false);
+
+        jLabel14.setText("Pollos");
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel13)
+                    .addComponent(jLabel9))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(txtCap)
+                    .addComponent(txtAreaLibre, javax.swing.GroupLayout.DEFAULT_SIZE, 60, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel14)
+                    .addComponent(lblcm1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(62, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel9)
+                    .addComponent(txtAreaLibre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblcm1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel13)
+                    .addComponent(txtCap, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel14))
+                .addContainerGap())
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -386,22 +476,23 @@ public class GUIGranja extends Interfaz {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 402, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(91, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(537, Short.MAX_VALUE)
-                .addComponent(btnLimpiar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnAceptar)
-                .addContainerGap())
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(btnLimpiar)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(btnAceptar))
+                        .addGroup(layout.createSequentialGroup()
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -412,17 +503,17 @@ public class GUIGranja extends Interfaz {
                     .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(17, 17, 17)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 179, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnAceptar)
-                            .addComponent(btnLimpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 51, Short.MAX_VALUE)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnAceptar)
+                    .addComponent(btnLimpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -434,11 +525,6 @@ public class GUIGranja extends Interfaz {
         soloNum(evt);
     }//GEN-LAST:event_txtDptoKeyTyped
 
-    private void txtPropKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPropKeyTyped
-        // TODO add your handling code here:
-        soloNum(evt);
-    }//GEN-LAST:event_txtPropKeyTyped
-
     private void txtMpioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtMpioKeyTyped
         // TODO add your handling code here:
         soloNum(evt);
@@ -446,21 +532,22 @@ public class GUIGranja extends Interfaz {
 
     private void txtDptoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtDptoFocusLost
         // TODO add your handling code here:
-        try {
-            int cod = Integer.parseInt(txtDpto.getText().trim());
-            if(cod>0 && cod<depar.size()) {
-                cmbDpto.setSelectedIndex(cod);
-            } else {
-                javax.swing.JOptionPane.showMessageDialog(this, "Codigo Incorrecto", "ERROR!!", javax.swing.JOptionPane.ERROR_MESSAGE);
-            }
-        } catch(NumberFormatException e) {
-            return;
-        }
+//        try {
+//            int cod = Integer.parseInt(txtDpto.getText().trim());
+//            if(cod>0 && cod<depar.size()) {
+//                cmbDpto.setSelectedIndex(cod);
+//            } else {
+//                javax.swing.JOptionPane.showMessageDialog(this, "Codigo Incorrecto", "ERROR!!", javax.swing.JOptionPane.ERROR_MESSAGE);
+//            }
+//        } catch(NumberFormatException e) {
+//            return;
+//        }
     }//GEN-LAST:event_txtDptoFocusLost
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        new ModalPropietario(this).setVisible(true);
+        ModalPropietario GUIProp = new ModalPropietario(this);
+        GUIProp.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void cmbDptoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbDptoActionPerformed
@@ -497,30 +584,7 @@ public class GUIGranja extends Interfaz {
     }//GEN-LAST:event_cmbMpioActionPerformed
 
     private void cmdAgregarGalponActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdAgregarGalponActionPerformed
-        normalizeInput(cmbTipo);
-        normalizeInput(txtArea);
-        normalizeInput(cmbTemp);
-        normalizeInput(txtAreaGalpon);
-        if(txtArea.isEnabled()) {
-            if(validarGalpon()) {
-                txtArea.setEnabled(false);
-                cmbTemp.setEnabled(false);
-                cmbTipo.setEnabled(false);
-            } else {
-                return;
-            }
-        }
-        int area = Integer.parseInt(txtAreaGalpon.getText().trim());
-        int resp = (cmbTemp.getSelectedIndex()==1)?area*8:area*10;
-
-        areaGalpones += area;
-        if(areaGalpones > Integer.parseInt(txtArea.getText().trim())){
-            javax.swing.JOptionPane.showMessageDialog(this, "Has Alcanzado el Limite de Galpones");
-            areaGalpones -= area;
-            return;
-        }
-        
-        model.addRow(new Object[]{cont++,area, resp, "add"});
+        agregarGalpon();
     }//GEN-LAST:event_cmdAgregarGalponActionPerformed
 
     private void txtAreaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAreaKeyTyped
@@ -533,6 +597,135 @@ public class GUIGranja extends Interfaz {
         soloNum(evt);
     }//GEN-LAST:event_txtAreaGalponKeyTyped
 
+    private void menuDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuDeleteActionPerformed
+        // TODO add your handling code here:
+        int rows[] = tblGalpon.getSelectedRows();
+        int len = rows.length-1;
+        
+        if(len != -1){
+            for (;len>=0; len--) {
+                int row = rows[len];
+                capacidad -= Integer.parseInt(tblGalpon.getValueAt(row, 2)+"");
+                areaGalpones -= Integer.parseInt(tblGalpon.getValueAt(row, 1)+"");//obteniendo el area de la fila
+                this.model.removeRow(row);
+                //ordenando los números de los galpones
+                int numRows = tblGalpon.getRowCount();
+                for (;row<numRows; row++) {
+                    tblGalpon.setValueAt(row+1, row, 0);
+                }
+            }
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(null, "No se ha seleccionado ningún \n item para borrar",
+                                                      "Aviso", javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
+        
+        int filas= tblGalpon.getRowCount();
+        if (filas == 0) {
+            cmbTemp.setEnabled(true);
+            cmbTipo.setEnabled(true);
+            txtArea.setEnabled(true);
+            cmbDpto.setEnabled(true);
+            cmbMpio.setEnabled(true);
+            txtCap.setText(null);
+        } else {
+            txtCap.setText(capacidad+"");
+        }
+        txtAreaLibre.setText( (Integer.parseInt(txtArea.getText())-areaGalpones)+"" );
+    }//GEN-LAST:event_menuDeleteActionPerformed
+
+    private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
+        // TODO add your handling code here:
+        String nombre = this.txtNombre.getText();
+        String direccion = this.txtDireccion.getText();
+        int propietario = Integer.parseInt(cmbCedProp.getSelectedItem()+"");
+        int dpto = Integer.parseInt(this.txtDpto.getText());
+        int mpio = Integer.parseInt(this.txtMpio.getText());
+        char clima = (char) this.cmbTemp.getSelectedIndex();
+        char tipo = (char) this.cmbTipo.getSelectedIndex();
+        double area = Double.parseDouble(this.txtArea.getText());
+        String person = log.getUser();
+
+        
+        Granja gra = new Granja(nombre, direccion, propietario, dpto, mpio, clima, tipo, area, person);
+        javax.swing.JOptionPane.showMessageDialog(this, "Exito: Se Registro una Nueva Granja...");
+    }//GEN-LAST:event_btnAceptarActionPerformed
+
+    private void txtAreaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAreaKeyReleased
+        // TODO add your handling code here:
+        txtAreaLibre.setText( txtArea.getText() );
+    }//GEN-LAST:event_txtAreaKeyReleased
+
+    private void txtAreaGalponKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAreaGalponKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
+            agregarGalpon();
+        }
+    }//GEN-LAST:event_txtAreaGalponKeyPressed
+
+    private void cmbTempActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbTempActionPerformed
+        // TODO add your handling code here:
+        if (cmbMpio.getSelectedItem() == null) {
+            showError(cmbTemp, "Debe encontrarse seleccionado un municipio.");
+            cmbTemp.setSelectedIndex(0);
+        } else {
+            normalizeInput(cmbTemp);
+        }
+    }//GEN-LAST:event_cmbTempActionPerformed
+
+    private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
+        // TODO add your handling code here:
+        limpiar();
+    }//GEN-LAST:event_btnLimpiarActionPerformed
+
+    private void cmbPropItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cmbPropItemStateChanged
+        // TODO add your handling code here:
+        int index = cmbProp.getSelectedIndex();
+        if (index != cmbCedProp.getSelectedIndex()) {
+            cmbCedProp.setSelectedIndex(index);
+        }
+    }//GEN-LAST:event_cmbPropItemStateChanged
+
+    private void cmbCedPropItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cmbCedPropItemStateChanged
+        // TODO add your handling code here:
+        int index = cmbCedProp.getSelectedIndex();
+        if (index != cmbProp.getSelectedIndex()) {
+            cmbProp.setSelectedIndex(index);
+        }
+    }//GEN-LAST:event_cmbCedPropItemStateChanged
+
+    private void limpiar () {
+        cmbTemp.setSelectedIndex(0);
+        cmbTipo.setSelectedIndex(0);
+        cmbDpto.setSelectedItem(null);
+        cmbMpio.setSelectedItem(null);
+        cmbProp.setSelectedItem(null);
+        txtArea.setText(null);
+        txtAreaGalpon.setText(null);
+        txtAreaLibre.setText(null);
+        txtCap.setText(null);
+        txtDireccion.setText(null);
+        txtDpto.setText(null);
+        txtMpio.setText(null);
+        txtNombre.setText(null);
+        cmbCedProp.setSelectedIndex(0);
+        cmbMpio.setEnabled(true);
+        cmbDpto.setEnabled(true);
+        cmbTemp.setEnabled(true);
+        cmbTipo.setEnabled(true);
+        txtArea.setEnabled(true);
+        normalizeInput(cmbTipo);
+        normalizeInput(txtArea);
+        normalizeInput(cmbTemp);
+        normalizeInput(txtAreaGalpon);
+        removeTable();
+    }
+    
+    private void removeTable() {
+        for (int numRows = tblGalpon.getRowCount()-1; numRows>=0; numRows--) {
+            model.removeRow(numRows);
+        }
+    }
+    
     @Override
     public java.awt.Image getIconImage() {
         java.awt.Image retValue = java.awt.Toolkit.getDefaultToolkit().
@@ -574,6 +767,40 @@ public class GUIGranja extends Interfaz {
         return !error;
     }
     
+    private void agregarGalpon () {
+        normalizeInput(cmbTipo);
+        normalizeInput(txtArea);
+        normalizeInput(cmbTemp);
+        normalizeInput(txtAreaGalpon);
+        if(txtArea.isEnabled()) {
+            if(validarGalpon()) {
+                txtArea.setEnabled(false);
+                cmbTemp.setEnabled(false);
+                cmbTipo.setEnabled(false);
+                cmbMpio.setEnabled(false);
+                cmbDpto.setEnabled(false);
+            } else {
+                return;
+            }
+        }
+        int area = Integer.parseInt(txtAreaGalpon.getText().trim());
+        int resp = (cmbTemp.getSelectedIndex()==1)?area*8:area*10;
+
+        areaGalpones += area;
+        if(areaGalpones > Integer.parseInt(txtArea.getText().trim())){
+            javax.swing.JOptionPane.showMessageDialog(this, "Has Alcanzado el Limite de Galpones");
+            areaGalpones -= area;
+            return;
+        }
+        
+        model.addRow(new Object[]{tblGalpon.getRowCount()+1,area, resp, "add"});
+        //buscando un metodo para que solo me seleccione la ultima fila
+        tblGalpon.selectAll();
+        capacidad += resp;
+        txtAreaLibre.setText( (Integer.parseInt(txtArea.getText())-areaGalpones)+"" );
+        txtCap.setText(capacidad+"");
+    }
+    
     private void cargar() {
         ArrayList<String[]> dptos = Granja.getDepartamentos();
         depar.add(null);
@@ -582,12 +809,26 @@ public class GUIGranja extends Interfaz {
             depar.add(dpto[0]);
             cmbDpto.addItem(dpto[1]);
         }
+        
+        cargarPropietarios();
     }
     
+    public void cargarPropietarios () {
+        cmbProp.removeAllItems();
+        cmbCedProp.removeAllItems();
+        cmbProp.addItem(null);
+        cmbCedProp.addItem(null);
+        ArrayList<String[]> props = Granja.getPropietarios();
+        for (String[] prop: props) {
+            cmbProp.addItem(prop[1]+" "+prop[2]);
+            cmbCedProp.addItem(prop[0]);
+        }
+    }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAceptar;
     private javax.swing.JButton btnLimpiar;
+    private com.jidesoft.swing.AutoCompletionComboBox cmbCedProp;
     private com.jidesoft.swing.AutoCompletionComboBox cmbDpto;
     private com.jidesoft.swing.AutoCompletionComboBox cmbMpio;
     private com.jidesoft.swing.AutoCompletionComboBox cmbProp;
@@ -599,6 +840,8 @@ public class GUIGranja extends Interfaz {
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -606,19 +849,23 @@ public class GUIGranja extends Interfaz {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblcm;
+    private javax.swing.JLabel lblcm1;
     private javax.swing.JMenuItem menuDelete;
     private javax.swing.JPopupMenu popMenuGranja;
     private javax.swing.JTable tblGalpon;
     private javax.swing.JTextField txtArea;
     private javax.swing.JTextField txtAreaGalpon;
+    private javax.swing.JTextField txtAreaLibre;
+    private javax.swing.JTextField txtCap;
     private javax.swing.JTextField txtDireccion;
     private javax.swing.JTextField txtDpto;
     private javax.swing.JTextField txtMpio;
     private javax.swing.JTextField txtNombre;
-    private javax.swing.JTextField txtProp;
     // End of variables declaration//GEN-END:variables
 }

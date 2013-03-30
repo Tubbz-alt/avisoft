@@ -102,7 +102,10 @@ public class GUIConsInv extends Interfaz{
             }
         });
 
+        jTabbedPane1.setForeground(new java.awt.Color(51, 51, 51));
         jTabbedPane1.setTabPlacement(javax.swing.JTabbedPane.LEFT);
+        jTabbedPane1.setDoubleBuffered(true);
+        jTabbedPane1.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
 
         jPanel1.setLayout(new java.awt.BorderLayout());
 
@@ -202,7 +205,7 @@ public class GUIConsInv extends Interfaz{
                 .addComponent(jdcFechaFinal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnBusca, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(248, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

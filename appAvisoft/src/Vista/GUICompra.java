@@ -540,10 +540,9 @@ public class GUICompra extends Interfaz {
                     }
                     if(!compra.getNit().equals(cmbNIT.getSelectedItem())){
                         compra.setNit(cmbNIT.getSelectedItem().toString());
-                    }                    
+                    }
                     if(!compra.getItemsCompra().equals(items)){
                         compra.setItemsCompra(items);
-                        System.out.println("Entro");
                     }
                     JOptionPane.showMessageDialog(this, "Exito... Se guardaron las modificaciones", "Actualización", JOptionPane.INFORMATION_MESSAGE);
                     this.dispose();

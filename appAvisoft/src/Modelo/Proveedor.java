@@ -6,7 +6,6 @@ package Modelo;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import javax.swing.JOptionPane;
 import javax.swing.table.AbstractTableModel;
 
 /**
@@ -21,8 +20,8 @@ public class Proveedor extends Persona {
     private String dirEmp;
     private String estado;
 
-    public Proveedor(String nit, String razonSocial, String telEmp, String dirEmp, String cedula, String nombres, String apellidos, String direccion, String telefono) {
-        super(cedula, nombres, apellidos, direccion, telefono);
+    public Proveedor(String nit, String razonSocial, String telEmp, String dirEmp, String cedula, String nombres, String apellidos, String direccion, String telefono, boolean isProp) {
+        super(cedula, nombres, apellidos, direccion, telefono, isProp);
         ArrayList<HashMap> res = this.con.query("SELECT razon_social, telefono, direccion FROM empresa WHERE nit = '"+nit+"'");
         if(res.isEmpty()) {
             this.con.query("INSERT INTO empresa (nit, razon_social, telefono, direccion) VALUES ('"+nit+"', '"+razonSocial+"', '"+telefono+"', '"+direccion+"')");
@@ -38,7 +37,7 @@ public class Proveedor extends Persona {
         }
         res = this.con.query("SELECT COUNT(cedula) as num FROM persona WHERE cedula = '"+cedula+"'");
         if(Integer.parseInt(res.get(0).get("num")+"") == 0) {
-            super.create(cedula, nombres, apellidos, direccion, telefono);
+            con.query("INSERT INTO persona (cedula, nombres, apellidos, telefono, direccion, prop) VALUES('"+cedula+"', '"+nombres+"', '"+apellidos+"', '"+telefono+"', '"+direccion+"', '0')");
         }
         res = this.con.query("SELECT COUNT(*) as num FROM empresa_proveedor WHERE cedula = '"+cedula+"' AND nit= '"+nit+"';");
         if(Integer.parseInt(res.get(0).get("num")+"") == 0) {
@@ -47,8 +46,8 @@ public class Proveedor extends Persona {
         }
     }
 
-    private Proveedor(String nit, String razonSocial, String telEmp, String dirEmp, String cedula, String nombres, String apellidos, String direccion, String telefono, String estado) {
-        super(cedula, nombres, apellidos, direccion, telefono);
+    private Proveedor(String nit, String razonSocial, String telEmp, String dirEmp, String cedula, String nombres, String apellidos, String direccion, String telefono, String estado, boolean isProp) {
+        super(cedula, nombres, apellidos, direccion, telefono, isProp);
         this.nit = nit;
         this.razonSocial = razonSocial;
         this.telEmp = telEmp;
@@ -202,7 +201,7 @@ public class Proveedor extends Persona {
                         //fireTableCellUpdated(rowIndex, columnIndex);
                     }
                     else{
-                        JOptionPane.showMessageDialog(null, "El proveedor debe estar activo solo una vez", "Error", JOptionPane.INFORMATION_MESSAGE);
+                        javax.swing.JOptionPane.showMessageDialog(null, "El proveedor debe estar activo solo una vez", "Error", javax.swing.JOptionPane.INFORMATION_MESSAGE);
                     }
                 }
             }
@@ -237,16 +236,28 @@ public class Proveedor extends Persona {
     
     public static Proveedor existe (String cedula, String nit) {
         Conexion c = new Conexion();
-        ArrayList<HashMap> res = c.query("SELECT p.nombres, p.apellidos, p.direccion, p.telefono, pro.estado, e.nit, e.razon_social, e.direccion as dir_emp, e.telefono as tel_emp FROM empresa e, persona p, empresa_proveedor pro WHERE pro.nit = e.nit AND pro.cedula = p.cedula AND pro.cedula = '"+cedula+"' AND pro.NIT= '"+nit+"'");
+        ArrayList<HashMap> res = c.query("SELECT p.nombres, p.apellidos, p.direccion, p.telefono, pro.estado, e.nit, e.razon_social, e.direccion as dir_emp, e.telefono as tel_emp, p.prop FROM empresa e, persona p, empresa_proveedor pro WHERE pro.nit = e.nit AND pro.cedula = p.cedula AND p.cedula = '"+cedula+"' AND pro.NIT= '"+nit+"'");
         if(!res.isEmpty()) {
-            return new Proveedor(res.get(0).get("nit")+"", res.get(0).get("razon_social")+"", res.get(0).get("tel_emp")+"", res.get(0).get("dir_emp")+"", cedula, res.get(0).get("nombres")+"", res.get(0).get("apellidos")+"", res.get(0).get("direccion")+"", res.get(0).get("telefono")+"", res.get(0).get("estado")+"");
+            HashMap prov = res.get(0);
+            return new Proveedor(res.get(0).get("nit")+"",
+                    prov.get("razon_social")+"",
+                    prov.get("tel_emp")+"",
+                    prov.get("dir_emp")+"",
+                    cedula,
+                    prov.get("nombres")+"",
+                    prov.get("apellidos")+"",
+                    prov.get("direccion")+"",
+                    prov.get("telefono")+"",
+                    prov.get("estado")+"",
+                    ( Integer.parseInt(prov.get("prop")+"") == 1 )
+            );
         }
         return null;
     }
     
     public static Proveedor proveedor(String cedula){
         Conexion c= new Conexion();
-        ArrayList<HashMap> res= c.query("SELECT p.cedula, p.nombres, p.apellidos, p.telefono, p.direccion, e.NIT, e.razon_social, e.telefono AS tel_emp, e.direccion AS dir_emp, ep.estado "+
+        ArrayList<HashMap> res= c.query("SELECT p.cedula, p.nombres, p.apellidos, p.telefono, p.direccion, e.NIT, e.razon_social, e.telefono AS tel_emp, e.direccion AS dir_emp, ep.estado, p.prop "+
                                         "FROM persona p "+
                                         "LEFT OUTER JOIN empresa_proveedor AS ep ON p.cedula= ep.cedula "+
                                         "LEFT OUTER JOIN empresa AS e ON ep.NIT= e.NIT "+
@@ -256,15 +267,50 @@ public class Proveedor extends Persona {
             for (HashMap pro : res) {
                 if(pro.get("estado")!= null){
                     if(!pro.get("estado").equals("0")){
-                        p= new Proveedor(pro.get("nit")+"", pro.get("razon_social")+"", pro.get("tel_emp")+"", pro.get("dir_emp")+"", pro.get("cedula")+"", pro.get("nombres")+"", pro.get("apellidos")+"", pro.get("direccion")+"", pro.get("telefono")+"", pro.get("estado")+"");
+                        p= new Proveedor(pro.get("nit")+"",
+                                         pro.get("razon_social")+"",
+                                         pro.get("tel_emp")+"",
+                                         pro.get("dir_emp")+"",
+                                         pro.get("cedula")+"",
+                                         pro.get("nombres")+"",
+                                         pro.get("apellidos")+"",
+                                         pro.get("direccion")+"",
+                                         pro.get("telefono")+"",
+                                         pro.get("estado")+"",
+                                         ( Integer.parseInt(pro.get("prop")+"") == 1 )
+                        );
                         break;
                     }
                     else{
-                        p= new Proveedor(pro.get("nit")+"", pro.get("razon_social")+"", pro.get("tel_emp")+"", pro.get("dir_emp")+"", pro.get("cedula")+"", pro.get("nombres")+"", pro.get("apellidos")+"", pro.get("direccion")+"", pro.get("telefono")+"", pro.get("estado")+"");
+                        p= new Proveedor(
+                                pro.get("nit")+"",
+                                pro.get("razon_social")+"",
+                                pro.get("tel_emp")+"",
+                                pro.get("dir_emp")+"",
+                                pro.get("cedula")+"",
+                                pro.get("nombres")+"",
+                                pro.get("apellidos")+"",
+                                pro.get("direccion")+"",
+                                pro.get("telefono")+"",
+                                pro.get("estado")+"",
+                                ( Integer.parseInt(pro.get("prop")+"") == 1 )
+                         );
                     }
                 }
                 else{
-                    p= new Proveedor(pro.get("nit")+"", pro.get("razon_social")+"", pro.get("tel_emp")+"", pro.get("dir_emp")+"", pro.get("cedula")+"", pro.get("nombres")+"", pro.get("apellidos")+"", pro.get("direccion")+"", pro.get("telefono")+"", pro.get("estado")+"");
+                    p= new Proveedor(
+                            pro.get("nit")+"",
+                            pro.get("razon_social")+"",
+                            pro.get("tel_emp")+"",
+                            pro.get("dir_emp")+"",
+                            pro.get("cedula")+"",
+                            pro.get("nombres")+"",
+                            pro.get("apellidos")+"",
+                            pro.get("direccion")+"",
+                            pro.get("telefono")+"",
+                            pro.get("estado")+"",
+                            ( Integer.parseInt(pro.get("prop")+"") == 1 )
+                    );
                 }
             }
         }

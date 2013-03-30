@@ -11,7 +11,6 @@
 package Vista;
 
 import Modelo.Proveedor;
-import java.util.ArrayList;
 import java.util.HashMap;
 import javax.swing.JOptionPane;
 
@@ -449,7 +448,7 @@ public class GUIProveedor extends Interfaz {
         if(btnAceptar.getText().equals("Guardar")){
             if(empresa == null || empresa[1].equals(razonSocial)){
                 new Proveedor(nit, razonSocial, tlfEm, dirEm, cedula,
-                                   nombres, apellidos, dirVen, tlfVen);
+                                   nombres, apellidos, dirVen, tlfVen, false);
                 JOptionPane.showMessageDialog(this, "Exito: Se agrego un nuevo proveedor...");
                 limpiar();
             }
@@ -469,7 +468,7 @@ public class GUIProveedor extends Interfaz {
             }
             else{
                 new Proveedor(nit, razonSocial, tlfEm, dirEm, cedula,
-                                  nombres, apellidos, dirVen, tlfVen);
+                                  nombres, apellidos, dirVen, tlfVen, false);
             }
             JOptionPane.showMessageDialog(this, "Exito: Se actualizo el proveedor...");
             limpiar();

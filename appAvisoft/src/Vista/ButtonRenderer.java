@@ -4,6 +4,8 @@
  */
 package Vista;
 
+import java.awt.Color;
+
 /**
  *
  * @author Kraken
@@ -24,8 +26,10 @@ public class ButtonRenderer extends javax.swing.JButton implements javax.swing.t
               setBackground(javax.swing.UIManager.getColor("Button.background"));
         }
         setEnabled(true);
+        setContentAreaFilled(false);
         if(value.equals("add")) {
             setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/plus.png")));
+            setToolTipText("Agregar lote");
         } else if (value.equals("block")) {
             setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/block.png")));
             setEnabled(false);

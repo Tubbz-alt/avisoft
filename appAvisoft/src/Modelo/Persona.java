@@ -21,33 +21,37 @@ public class Persona {
     protected String apellidos;
     protected String direccion;
     protected String telefono;
+    protected boolean isProp;
 
-    protected Persona(String cedula, String nombres, String apellidos, String direccion, String telefono) {
+    protected Persona(String cedula, String nombres, String apellidos, String direccion, String telefono, boolean isProp) {
         this.con = new Conexion();
         this.cedula = cedula;
         this.nombres = nombres;
         this.apellidos = apellidos;
         this.direccion = direccion;
         this.telefono = telefono;
+        this.isProp = isProp;
     }
     
     public static Persona create (String cedula, String nombres, String apellidos, String direccion, String telefono) {
         Conexion con = new Conexion ();
         System.out.println("OK");
-        con.query("INSERT INTO persona (cedula, nombres, apellidos, telefono, direccion) VALUES('"+cedula+"', '"+nombres+"', '"+apellidos+"', '"+telefono+"', '"+direccion+"')");
-        return new Persona(cedula, nombres, apellidos, direccion, telefono);
+        con.query("INSERT INTO persona (cedula, nombres, apellidos, telefono, direccion, prop) VALUES('"+cedula+"', '"+nombres+"', '"+apellidos+"', '"+telefono+"', '"+direccion+"', '1')");
+        return new Persona(cedula, nombres, apellidos, direccion, telefono, true);
     }
     
     public static Persona existe (String cedula) {
         Conexion con = new Conexion ();
-        ArrayList<HashMap> res = con.query("SELECT nombres, apellidos, telefono, direccion FROM persona WHERE cedula ='"+cedula+"'");
+        ArrayList<HashMap> res = con.query("SELECT nombres, apellidos, telefono, direccion, prop FROM persona WHERE cedula ='"+cedula+"'");
         if (!res.isEmpty()) {
+            HashMap prop = res.get(0);
             return new Persona(
                     cedula,
-                    res.get(0).get("nombres")+"",
-                    res.get(0).get("apellidos")+"",
-                    res.get(0).get("direccion")+"",
-                    res.get(0).get("telefono")+""
+                    prop.get("nombres")+"",
+                    prop.get("apellidos")+"",
+                    prop.get("direccion")+"",
+                    prop.get("telefono")+"",
+                    ( Integer.parseInt(prop.get("prop")+"") == 1 )
             );
         }
         return null;
@@ -71,6 +75,15 @@ public class Persona {
 
     public String getTelefono() {
         return telefono;
+    }
+    
+    public void setPropietario (boolean isProp) {
+        this.con.query("UPDATE persona SET prop = '"+(isProp?'1':'0')+"' WHERE cedula = '"+this.cedula+"'");
+        this.isProp = isProp;
+    }
+    
+    public boolean isPropietario () {
+        return this.isProp;
     }
 
     public void setApellidos(String apellidos) {

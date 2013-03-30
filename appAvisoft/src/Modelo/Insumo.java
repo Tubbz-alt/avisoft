@@ -225,7 +225,7 @@ public class Insumo {
         this.nombre = nombre;
     }
     
-    public static Insumo existe(String id){
+     public static Insumo existe(String id){
         Conexion c= new Conexion();
         ArrayList<HashMap> res= c.query("SELECT nombre, nombre_tipo, cantidad, medida, estado FROM insumo WHERE id= '"+id+"';");
         if(!res.isEmpty()){

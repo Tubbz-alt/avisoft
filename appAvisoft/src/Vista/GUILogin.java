@@ -77,11 +77,21 @@ public class GUILogin extends Interfaz {
                 cmdAceptarActionPerformed(evt);
             }
         });
+        cmdAceptar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                cmdAceptarKeyReleased(evt);
+            }
+        });
 
         cmdCancelar.setText("Cancelar");
         cmdCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cmdCancelarActionPerformed(evt);
+            }
+        });
+        cmdCancelar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                cmdCancelarKeyReleased(evt);
             }
         });
 
@@ -102,6 +112,11 @@ public class GUILogin extends Interfaz {
         cmbClave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cmbClaveActionPerformed(evt);
+            }
+        });
+        cmbClave.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                cmbClaveKeyReleased(evt);
             }
         });
 
@@ -168,8 +183,8 @@ public class GUILogin extends Interfaz {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 152, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 152, Short.MAX_VALUE))
+                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 173, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 173, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -216,6 +231,28 @@ public class GUILogin extends Interfaz {
         // TODO add your handling code here:
         
     }//GEN-LAST:event_formKeyReleased
+
+    private void cmbClaveKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbClaveKeyReleased
+        // TODO add your handling code here:
+        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
+            new ModalClave(this, true).setVisible(true);
+            return;
+        }
+        globalKeyEvents(evt);
+    }//GEN-LAST:event_cmbClaveKeyReleased
+
+    private void cmdAceptarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmdAceptarKeyReleased
+        // TODO add your handling code here:
+        globalKeyEvents(evt);
+    }//GEN-LAST:event_cmdAceptarKeyReleased
+
+    private void cmdCancelarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmdCancelarKeyReleased
+        // TODO add your handling code here:
+        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
+            System.exit(0);
+        }
+        globalKeyEvents(evt);
+    }//GEN-LAST:event_cmdCancelarKeyReleased
 
     /**
      * @param args the command line arguments

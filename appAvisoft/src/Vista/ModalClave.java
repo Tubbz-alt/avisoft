@@ -53,6 +53,11 @@ public class ModalClave extends javax.swing.JDialog {
                 cmdAceptarActionPerformed(evt);
             }
         });
+        cmdAceptar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                cmdAceptarKeyReleased(evt);
+            }
+        });
 
         cmdCancelar.setText("Cancelar");
         cmdCancelar.addActionListener(new java.awt.event.ActionListener() {
@@ -60,10 +65,15 @@ public class ModalClave extends javax.swing.JDialog {
                 cmdCancelarActionPerformed(evt);
             }
         });
+        cmdCancelar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                cmdCancelarKeyReleased(evt);
+            }
+        });
 
         txtUsuario.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                txtUsuarioKeyPressed(evt);
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtUsuarioKeyReleased(evt);
             }
         });
 
@@ -88,8 +98,8 @@ public class ModalClave extends javax.swing.JDialog {
                         .addGap(18, 18, 18)
                         .addComponent(txtUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblError)
-                .addGap(20, 20, 20))
+                .addComponent(lblError, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -97,10 +107,10 @@ public class ModalClave extends javax.swing.JDialog {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(lblError, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 20, Short.MAX_VALUE)
-                    .addComponent(txtUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblError, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 20, Short.MAX_VALUE)
+                    .addComponent(txtUsuario, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cmdCancelar)
@@ -127,18 +137,40 @@ public class ModalClave extends javax.swing.JDialog {
         this.dispose();
     }//GEN-LAST:event_cmdCancelarActionPerformed
 
-    private void txtUsuarioKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtUsuarioKeyPressed
-        // TODO add your handling code here:
-        if(evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
-            recordarClave();
-        }
-    }//GEN-LAST:event_txtUsuarioKeyPressed
-
     private void cmdAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdAceptarActionPerformed
         // TODO add your handling code here:
         recordarClave();
     }//GEN-LAST:event_cmdAceptarActionPerformed
 
+    private void cmdAceptarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmdAceptarKeyReleased
+        // TODO add your handling code here:
+        globalKeyEvents(evt);
+    }//GEN-LAST:event_cmdAceptarKeyReleased
+
+    private void txtUsuarioKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtUsuarioKeyReleased
+        // TODO add your handling code here:
+        globalKeyEvents(evt);
+    }//GEN-LAST:event_txtUsuarioKeyReleased
+
+    private void cmdCancelarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmdCancelarKeyReleased
+        // TODO add your handling code here:
+        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
+            this.dispose();
+        }
+        globalKeyEvents(evt);
+    }//GEN-LAST:event_cmdCancelarKeyReleased
+
+    private void globalKeyEvents(java.awt.event.KeyEvent evt) {
+        switch (evt.getKeyCode()) {
+            case java.awt.event.KeyEvent.VK_ENTER:
+                recordarClave();
+                break;
+            case java.awt.event.KeyEvent.VK_ESCAPE:
+                this.dispose();
+                break;
+        }
+    }
+    
     private void recordarClave() {
         lblError.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/loading.gif")));
         lblError.setToolTipText("Cargando..");

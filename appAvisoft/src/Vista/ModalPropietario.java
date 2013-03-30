@@ -21,8 +21,19 @@ public class ModalPropietario extends Interfaz {
     private boolean guardar = true;
     private boolean establecer = true;
     private Persona persona;
+    private GUIGranja g;
     /** Creates new form registroCliente */
-    public ModalPropietario(javax.swing.JFrame parent) {
+    public ModalPropietario(GUIPrincipal parent) {
+        construct(parent);
+    }
+    
+    public ModalPropietario (GUIGranja granja) {
+        this.g = granja;
+        construct(granja.getPrincipal());
+    }
+    
+    private void construct (GUIPrincipal p) {
+        p.forms.add(this);
         initComponents();
         setLocationRelativeTo(null);
         btnEstablecer.setVisible(false);
@@ -84,6 +95,11 @@ public class ModalPropietario extends Interfaz {
                 telefonocFocusLost(evt);
             }
         });
+        telefonoc.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                telefonocKeyTyped(evt);
+            }
+        });
 
         apellidoc.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
@@ -100,6 +116,11 @@ public class ModalPropietario extends Interfaz {
         cedulac.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 cedulacFocusLost(evt);
+            }
+        });
+        cedulac.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                cedulacKeyTyped(evt);
             }
         });
 
@@ -193,12 +214,13 @@ public class ModalPropietario extends Interfaz {
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap()
                 .addComponent(btnAction, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnEstablecer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(btnEstablecer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Granjas"));
@@ -208,11 +230,11 @@ public class ModalPropietario extends Interfaz {
 
             },
             new String [] {
-                "Codigo", "Nombre", "Area", "Otra"
+                "Nombre", "Dirección", "Area"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, true, false, false
+                false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -257,11 +279,11 @@ public class ModalPropietario extends Interfaz {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
@@ -295,6 +317,9 @@ public class ModalPropietario extends Interfaz {
         if(telefono.isEmpty()){
             showError(telefonoc, "No se ha digitado el teléfono del propietario");
             error=true;
+        } else if (!isPhone(telefono)) {
+            showError(telefonoc, "No se ha digitado un número telefonico valido");
+            error = true;
         }
         
         if(error) {
@@ -305,9 +330,11 @@ public class ModalPropietario extends Interfaz {
         if (guardar) {
             this.crearUsuario(cedula, nombre, apellido, direccion, telefono);
         } else {
-            this.actualizarUsuario(cedula, nombre, apellido, direccion, telefono);
+            this.actualizarUsuario(nombre, apellido, direccion, telefono);
         }
-        
+        if (this.g != null) {
+            this.g.cargarPropietarios();
+        }
     }//GEN-LAST:event_btnActionActionPerformed
 
     private void cedulacFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_cedulacFocusLost
@@ -327,6 +354,10 @@ public class ModalPropietario extends Interfaz {
                 btnAction.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/edit_user.png")));
                 btnAction.setToolTipText("Modificar datos");
                 cedulac.setEditable(false);
+                if (persona.isPropietario()) {
+                    btnEstablecer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/nprop_user.png")));
+                    establecer = !establecer;
+                }
                 btnEstablecer.setVisible(true);
                 guardar = false;
             }
@@ -369,14 +400,27 @@ public class ModalPropietario extends Interfaz {
 
     private void btnEstablecerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEstablecerActionPerformed
         // TODO add your handling code here:
+        persona.setPropietario(establecer);
         if (establecer) {
             btnEstablecer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/nprop_user.png")));
-            establecer = false;
         } else {
-            btnEstablecer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/prop.png")));
-            establecer = true;
+            btnEstablecer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/prop_user.png")));
         }
+        if (this.g != null) {
+            this.g.cargarPropietarios();
+        }
+        establecer = !establecer;
     }//GEN-LAST:event_btnEstablecerActionPerformed
+
+    private void telefonocKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_telefonocKeyTyped
+        // TODO add your handling code here:
+        soloNum(evt);
+    }//GEN-LAST:event_telefonocKeyTyped
+
+    private void cedulacKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cedulacKeyTyped
+        // TODO add your handling code here:
+        soloNum(evt);
+    }//GEN-LAST:event_cedulacKeyTyped
     
     private void limpiar () {
         cedulac.setText(null);
@@ -390,9 +434,10 @@ public class ModalPropietario extends Interfaz {
         guardar = true;
         establecer = true;
         btnEstablecer.setVisible(false);
+        cedulac.requestFocus();
     }
     
-    private void actualizarUsuario (String cedula, String nombre, String apellido, String direccion, String telefono) {
+    private void actualizarUsuario (String nombre, String apellido, String direccion, String telefono) {
         boolean ac = false;
         
         if (!persona.getDireccion().equals(direccion)) {
