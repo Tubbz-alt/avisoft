@@ -54,12 +54,13 @@ public class Compra{
         return compra;
     }
     
-    public void setItemsCompra(ArrayList<ItemCompra> itemsCompra) {
-        int sizeOriginal = this.itemsCompra.size();
-        int sizeCopia = itemsCompra.size();
+    public void setItemsCompra(int numFact) {
+        ArrayList<ItemCompra> itemsBD= Compra.detalleCompraBD(numFact);
+        int sizeOriginal = itemsBD.size();
+        int sizeCopia = this.itemsCompra.size();
         for (int i=0; i<sizeOriginal; i++) {
-            ItemCompra ico = this.itemsCompra.get(i);
-            ItemCompra icc = itemsCompra.get(i);
+            ItemCompra ico = itemsBD.get(i);
+            ItemCompra icc = this.itemsCompra.get(i);
             if (!ico.equals(icc)) {
                 int id = ico.getId();
                 double cantidad = icc.getCantidad();
@@ -72,13 +73,13 @@ public class Compra{
                 } else {
                     String update = "UPDATE detalle_compra SET ";
                     if (cantidad != ico.getCantidad()) {
-                        update += "cantidad = '"+cantidad+"', ";
+                        update += "cantidad = "+cantidad;
                     }
                     if (precio != ico.getPrecioUnt()) {
-                        update += "precio = '"+precio+"', ";
+                        update += ", precio = "+precio;
                     }
                     if (!update.equals("UPDATE detalle_compra SET ")) {
-                        this.con.query( update.substring(-2) +" WHERE num = '"+this.numFact+"' AND id = '"+id+"'");
+                        this.con.query(update+" WHERE num="+this.numFact+" AND id="+id);
                     }
                 }
             }
@@ -86,13 +87,12 @@ public class Compra{
         if (sizeOriginal < sizeCopia) {
             String insert = "INSERT INTO detalle_compra VALUES ";
             for (int i=sizeOriginal; i<sizeCopia; i++) {
-                ItemCompra icc = itemsCompra.get(i);
-                insert += "('"+this.numFact+"', '"+icc.getId()+"', '"+
-                               icc.getCantidad()+"', '"+icc.getPrecioUnt()+"')";
+                ItemCompra icc = this.itemsCompra.get(i);
+                insert += "("+this.numFact+", "+icc.getId()+", "+
+                               icc.getCantidad()+", "+icc.getPrecioUnt()+")";
             }
             this.con.query(insert);
         }
-        this.itemsCompra = itemsCompra;
     }
 
     public void setFechaFact(Date fechaFact) {
@@ -168,29 +168,35 @@ public class Compra{
         return total;
     }
     
+    private static ArrayList<ItemCompra> detalleCompraBD(int numFact){
+        Conexion c = new Conexion();
+        ArrayList<ItemCompra> registrosCompra = new ArrayList<ItemCompra>();
+            String sql = "SELECT dc.id, i.nombre, dc.cantidad, dc.precio from detalle_compra dc "+
+                         "INNER JOIN insumo i ON dc.id = i.id "+
+                         "INNER JOIN compra c ON c.num=dc.num AND c.num="+numFact;
+        ArrayList<HashMap> registros = c.query(sql);
+        if(!registros.isEmpty()){
+            for (HashMap item : registros) {
+                ItemCompra aux;
+                int id = Integer.parseInt(item.get("id").toString());
+                String nombre = item.get("nombre").toString();
+                int cantidad = Integer.parseInt(item.get("cantidad").toString());
+                float precioU = Float.parseFloat(item.get("precio").toString());
+                float totalPrecio = cantidad * precioU;
+                aux = new ItemCompra(id, nombre, cantidad, precioU, totalPrecio);
+                registrosCompra.add(aux);
+            }
+        }
+        return registrosCompra;
+    }
+    
     public static Compra existe(int numFact){
         SimpleDateFormat formateador= new SimpleDateFormat("yyyy-MM-dd");
         Conexion c = new Conexion();
         
         ArrayList<HashMap> res = c.query("SELECT fecha, total, cedula, nit from compra where num="+numFact);
         if(!res.isEmpty()){
-            ArrayList<ItemCompra> registrosCompra = new ArrayList<ItemCompra>();
-            String sql = "SELECT dc.id, i.nombre, dc.cantidad, dc.precio from detalle_compra dc "+
-                         "INNER JOIN insumo i ON dc.id = i.id "+
-                         "INNER JOIN compra c ON c.num=dc.num AND c.num="+numFact;
-            ArrayList<HashMap> registros = c.query(sql);
-            if(!registros.isEmpty()){
-                for (HashMap item : registros) {
-                    ItemCompra aux;
-                    int id = Integer.parseInt(item.get("id").toString());
-                    String nombre = item.get("nombre").toString();
-                    int cantidad = Integer.parseInt(item.get("cantidad").toString());
-                    float precioU = Float.parseFloat(item.get("precio").toString());
-                    float totalPrecio = cantidad * precioU;
-                    aux = new ItemCompra(id, nombre, cantidad, precioU, totalPrecio);
-                    registrosCompra.add(aux);
-                }
-            }
+            ArrayList<ItemCompra> registrosCompra = Compra.detalleCompraBD(numFact);
             try {
                 Date fecha = formateador.parse(res.get(0).get("fecha").toString());
                 return new Compra(numFact,

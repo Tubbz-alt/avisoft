@@ -537,12 +537,10 @@ public class GUICompra extends Interfaz {
                     }
                     if(compra.getTotal() != totalCompra){
                         compra.setTotal(totalCompra);
+                        compra.setItemsCompra(compra.getNumFact());
                     }
                     if(!compra.getNit().equals(cmbNIT.getSelectedItem())){
                         compra.setNit(cmbNIT.getSelectedItem().toString());
-                    }
-                    if(!compra.getItemsCompra().equals(items)){
-                        compra.setItemsCompra(items);
                     }
                     JOptionPane.showMessageDialog(this, "Exito... Se guardaron las modificaciones", "Actualización", JOptionPane.INFORMATION_MESSAGE);
                     this.dispose();
